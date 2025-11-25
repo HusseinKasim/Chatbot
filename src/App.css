@@ -30,3 +30,12 @@
   background-color: #74B3CE;
   color: #FFEEDD;
 }
+
+.userChatBubble {
+  width: 100px;
+  height: 60px;
+  background-color: red;
+  border-radius: 20px;
+  resize: none;
+  overflow: hidden;
+}
