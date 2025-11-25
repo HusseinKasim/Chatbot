@@ -3,7 +3,7 @@ import './App.css'
 
 function App() {
   const [prompt, setPrompt] = useState('');
-  const [userMessage, setUserMessage] = useState() // TEST
+  const [userMessage, setUserMessage] = useState([])
 
   function handleChangePrompt(e) {
     setPrompt(e.target.value);
@@ -23,12 +23,12 @@ function App() {
     setPrompt('');
 
     // Create user chat bubble
-    setUserMessage(<UserChatBubble value={prompt}/>); // TEST
+    setUserMessage(prev => [...prev, prompt]);
   }
 
   return (
     <>
-    <div className='container'>
+    <div className='inputContainer'>
       <UserTextArea value={prompt} onChange={handleChangePrompt}/>
       <SendButton onClick={(e) => {
         if(prompt != null && prompt != ""){ // Check for empty prompt
@@ -37,10 +37,14 @@ function App() {
       }}/>
     </div>
 
-    <div>
-      {userMessage}
+    <div className='chatAreaContainer'>
+      <div className='chatBubblesContainer'>
+        {userMessage.map((message, index) => (
+          <UserChatBubble key={index} value={message} />
+        ))}
+      </div>
     </div>
-    </> // userMessage is a TEST
+    </>
   )
 }
 
@@ -60,10 +64,10 @@ function SendButton({onClick}) {
   )
 }
 
-function UserChatBubble({value}) { // textarea is a TEST
+function UserChatBubble({key, value}) {
   return(
     <>
-    <textarea className='userChatBubble' value={value} readOnly></textarea>
+    <textarea className='userChatBubble' key={key} value={value} readOnly></textarea>
     </>
   )
 }

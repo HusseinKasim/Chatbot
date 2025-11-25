@@ -2,12 +2,29 @@
   background-color: #1C1D21;
 }
 
-.container {
+.inputContainer {
   display: flex;
   position: fixed;
   bottom: 5%;
   left: 20%;
   right: 20%;
+  gap: 20px;
+}
+
+.chatAreaContainer {
+  position: fixed;
+  left: 20%;
+  right: 20%;
+  top: 5%;
+  bottom: 15%;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.chatBubblesContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   gap: 20px;
 }
 
@@ -32,10 +49,12 @@
 }
 
 .userChatBubble {
-  width: 100px;
-  height: 60px;
-  background-color: red;
+  width: 200px;
+  height: 30px;
+  padding: 8px;
+  background-color: #508991;
   border-radius: 20px;
+  border: 1px solid #FFEEDD;
   resize: none;
   overflow: hidden;
 }
