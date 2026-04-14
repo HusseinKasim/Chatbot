@@ -4,26 +4,34 @@ import './App.css'
 function App() {
   const [prompt, setPrompt] = useState('');
   const [userMessage, setUserMessage] = useState([])
+  const [chatbotMessage, setChatbotMessage] = useState([])
 
   function handleChangePrompt(e) {
     setPrompt(e.target.value);
   }
 
-  function sendUserInput(e) {
+  async function sendUserInput(e) {
     e.preventDefault();
 
     // Send prompt to backend via HTTP POST
-    fetch("http://127.0.0.1:8003/capture_prompt", {
+    const response = await fetch("http://127.0.0.1:8003/api/capture-prompt", {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ prompt }),
     })
+
+    // Return and print data from backend
+    const data = await response.json();
+    console.log(data["response"]["prompt"]);
 
     // Clear textarea
     setPrompt('');
 
     // Create user chat bubble
     setUserMessage(prev => [...prev, prompt]);
+
+    // Create chatbot chat bubble
+    setChatbotMessage(prev => [...prev, data["response"]["prompt"]]);
   }
 
   return (
@@ -31,7 +39,8 @@ function App() {
     <div className='inputContainer'>
       <UserTextArea value={prompt} onChange={handleChangePrompt}/>
       <SendButton onClick={(e) => {
-        if(prompt != null && prompt != ""){ // Check for empty prompt
+        // Check for empty prompt
+        if(prompt != null && prompt != ""){ 
           sendUserInput(e);
         }
       }}/>
@@ -43,6 +52,12 @@ function App() {
           <UserChatBubble key={index} value={message} />
         ))}
       </div>
+
+      <div className='chatbotBubblesContainer'>
+      {chatbotMessage.map((message, index) => (
+          <ChatbotChatBubble key={index} value={message} />
+        ))}
+        </div>
     </div>
     </>
   )
@@ -72,9 +87,10 @@ function UserChatBubble({key, value}) {
   )
 }
 
-function ChatbotChatBubble() {
+function ChatbotChatBubble({key, value}) {
   return(
     <>
+    <textarea className='chatbotChatBubble' key={key} value={value} readOnly></textarea>
     </>
   )
 }

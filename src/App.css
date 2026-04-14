@@ -28,6 +28,13 @@
   gap: 20px;
 }
 
+.chatbotBubblesContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
 .userTextArea {
   flex: 1;
   height: 50px;
@@ -53,6 +60,17 @@
   height: 30px;
   padding: 8px;
   background-color: #508991;
+  border-radius: 20px;
+  border: 1px solid #FFEEDD;
+  resize: none;
+  overflow: hidden;
+}
+
+.chatbotChatBubble {
+  width: 200px;
+  height: 30px;
+  padding: 8px;
+  background-color: #c5524a;
   border-radius: 20px;
   border: 1px solid #FFEEDD;
   resize: none;

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+#from langchain.chat_models import HuggingFaceChat
 
 app = FastAPI()
 
@@ -18,7 +19,7 @@ class UserPrompt(BaseModel):
     prompt: str
 
 # HTTP POST endpoint
-@app.post("/capture_prompt")
+@app.post("/api/capture-prompt")
 async def captureUserInput(prompt: UserPrompt):
     print(prompt)
-    return prompt
+    return {"response": prompt}
