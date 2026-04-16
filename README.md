@@ -7,7 +7,6 @@ Basic LLM Chatbot made with React and LangChain.
 ## Tech Stack
   - Frontend: HTML, CSS, JavaScript, React
   - Backend: FastAPI
-  - Real-Time Communication: REST-APIs
   - GenAI Model: LangChain (TO BE ADDED)
   - Containerization: Docker (+ Docker Compose) (TO BE ADDED)
 
