@@ -19,7 +19,7 @@ class UserPrompt(BaseModel):
     prompt: str
 
 # HTTP POST endpoint
-@app.post("/api/capture-prompt")
+@app.post("/api/process-prompt")
 async def captureUserInput(prompt: UserPrompt):
     print(prompt)
     return {"response": prompt}
