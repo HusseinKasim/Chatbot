@@ -30,7 +30,7 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
 ## API Endpoints
 
 ### REST API
-  - `POST /api/capture-prompt` -> sends the user's prompt to the backend and retrieves response
+  - `POST /api/process-prompt` -> sends the user's prompt to the backend and retrieves response
 -----
 
 ## Features
