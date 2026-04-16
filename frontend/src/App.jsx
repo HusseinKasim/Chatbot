@@ -1,5 +1,9 @@
 import { useState } from 'react'
 import './App.css'
+import UserTextArea from './components/UserTestArea'
+import UserChatBubble from './components/UserChatBubble'
+import ChatbotChatBubble from './components/ChatbotChatBubble'
+import SendButton from './components/SendButton'
 
 function App() {
   const [prompt, setPrompt] = useState('');
@@ -63,36 +67,4 @@ function App() {
   )
 }
 
-function UserTextArea({value, onChange}) {
-  return(
-    <>
-    <textarea className='userTextArea' value={value} onChange={onChange} placeholder='Ask a question...'></textarea>
-    </>
-  )
-}
-
-function SendButton({onClick}) {
-  return(
-    <>
-      <button className='sendButton' onClick={onClick}>Send</button>
-    </>
-  )
-}
-
-function UserChatBubble({key, value}) {
-  return(
-    <>
-    <textarea className='userChatBubble' key={key} value={value} readOnly></textarea>
-    </>
-  )
-}
-
-function ChatbotChatBubble({key, value}) {
-  return(
-    <>
-    <textarea className='chatbotChatBubble' key={key} value={value} readOnly></textarea>
-    </>
-  )
-}
-
-export default App
+export default App;
