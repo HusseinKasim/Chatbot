@@ -33,13 +33,13 @@ function App() {
       {
         return(
                 <div className='chatBubblesContainer'>
-                  <UserChatBubble value={message.text} />
+                  <UserChatBubble value={message.content} />
                 </div>
           );
       }
       return(
             <div className='chatbotBubblesContainer'>
-              <ChatbotChatBubble value={message.text} />
+              <ChatbotChatBubble value={message.content} />
             </div>
         );
       }

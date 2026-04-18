@@ -4,12 +4,12 @@ import '../App.css'
 export default function useChat()
 {
     const [messages, setMessages] = useState([
-        {'role': 'chatbot', 'text': 'Hello! Please enter a prompt.'} 
+        {'role': 'chatbot', 'content': 'Hello! Please enter a prompt.'} 
     ])
 
     async function handleUserInput(prompt){
         // Add prompt to messages list
-        setMessages(prev => [...prev, {'role': 'user', 'text': prompt}])
+        setMessages(prev => [...prev, {'role': 'user', 'content': prompt}])
         console.log(prompt);
         
         // Send prompt to backend via HTTP POST
@@ -23,7 +23,7 @@ export default function useChat()
         const data = await response.json();
 
         // Add response to messages list 
-        setMessages(prev => [...prev, {'role': 'chatbot', 'text': data.response.prompt}])
+        setMessages(prev => [...prev, {'role': 'chatbot', 'content': data.response}])
         console.log(data.response.prompt)
     }
 
