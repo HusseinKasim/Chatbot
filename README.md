@@ -1,13 +1,13 @@
 
 # Chatbot
-Basic LLM Chatbot made with React and LangChain. 
+Basic LLM Chatbot made with React and Groq. 
 
 -----
 
 ## Tech Stack
   - Frontend: HTML, CSS, JavaScript, React
   - Backend: FastAPI
-  - GenAI Model: LangChain (TO BE ADDED)
+  - GenAI Model: Groq
   - Containerization: Docker (+ Docker Compose) (TO BE ADDED)
 
 -----
@@ -33,6 +33,6 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
 -----
 
 ## Features
-- Processes user prompts via a LangChain model (TO BE ADDED)
+- Processes user prompts via Groq LLM
 - REST API for handling prompts
 - Docker containerization support (TO BE ADDED)
