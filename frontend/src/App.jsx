@@ -32,7 +32,7 @@ function App() {
       if(message.role === 'user')
       {
         return(
-                <div className='chatBubblesContainer'>
+                <div className='userBubblesContainer'>
                   <UserChatBubble value={message.content} />
                 </div>
           );

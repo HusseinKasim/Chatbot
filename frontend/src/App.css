@@ -21,7 +21,7 @@
   scrollbar-width: none;
 }
 
-.chatBubblesContainer {
+.userBubblesContainer {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
