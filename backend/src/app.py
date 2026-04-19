@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from groq import Groq
+from typing import List
 
 app = FastAPI()
  
@@ -20,23 +21,28 @@ app.add_middleware(
     allow_headers = ["*"],
 )
 
-# Pydantic class
-class UserPrompt(BaseModel):
-    prompt: str
+# Pydantic classes
+class Message(BaseModel):
+    role: str
+    content: str
+
+class ChatMessages(BaseModel):
+    messages: List[Message]
+
 
 # HTTP POST endpoint
 @app.post("/api/process-prompt")
-async def captureUserInput(prompt: UserPrompt):
-    print(prompt)
+async def captureUserInput(chatMessages: ChatMessages):
     chat_completion = client.chat.completions.create(
-        messages=[
+        messages=
+        [
             {
-                'role': 'user',
-                'content': prompt.prompt
-            }
+                'role': msg.role,  
+                'content': msg.content,
+            }   
+            for msg in chatMessages.messages
         ], 
         model='llama-3.3-70b-versatile',
     )
     chatbot_response = chat_completion.choices[0].message.content
-    print(chatbot_response)
     return {"response": chatbot_response}
