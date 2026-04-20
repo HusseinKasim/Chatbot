@@ -5,13 +5,21 @@ import UserTextArea from './components/UserTestArea'
 import UserChatBubble from './components/UserChatBubble'
 import ChatbotChatBubble from './components/ChatbotChatBubble'
 import SendButton from './components/SendButton'
+import SidePanel from './components/SidePanel'
+import ToggleSidePanelButton from './components/ToggleSidePanelButton'
 
 function App() {
   const [prompt, setPrompt] = useState('');
+  const [ toggleSidePanel, setSidePanel ] = useState(true);
   const { messages, handleUserInput } = useChat();
 
   function handlePromptChange(e) {
     setPrompt(e.target.value);
+  }
+
+  function handleToggleState()
+  {
+    setSidePanel(!toggleSidePanel);
   }
 
   return (
@@ -45,6 +53,14 @@ function App() {
       }
     )}
     </div>
+    
+    <div className='utils'>
+      <ToggleSidePanelButton onClick={handleToggleState}/>
+    </div>
+
+    <SidePanel isOpen={toggleSidePanel}>
+      
+    </SidePanel>
     </>
   )
 }
