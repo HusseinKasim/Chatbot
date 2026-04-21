@@ -36,3 +36,9 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
 - Processes user prompts via Groq LLM
 - REST API for handling prompts
 - Docker containerization support (TO BE ADDED)
+-----
+
+## Assets Used
+- [Sidepanel] (https://www.flaticon.com/free-icon/side-menu_5405818?term=side+bar&page=1&position=9&origin=search&related_id=5405818)
+
+- [Send] (https://www.flaticon.com/free-icon/send_876777?term=send&page=1&position=9&origin=search&related_id=876777)
