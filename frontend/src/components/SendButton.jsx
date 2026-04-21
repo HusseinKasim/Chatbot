@@ -5,7 +5,7 @@ export default function SendButton({onClick}) {
   return(
     <>  
       <button className='sendButton' onClick={onClick}>
-        <img src='./assets/send.png'/>
+        <img src='/assets/send.png'/>
       </button>
     </>
   )
