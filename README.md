@@ -7,7 +7,7 @@ Basic LLM Chatbot made with React and Groq.
 ## Tech Stack
   - Frontend: HTML, CSS, JavaScript, React
   - Backend: FastAPI
-  - GenAI Model: Groq API
+  - LLM: Groq API
   - Containerization: Docker (+ Docker Compose) (TO BE ADDED)
 
 -----
