@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import '../App.css'
 
-export default function ToggleSidePanelButton({onClick}) {
+export default function ToggleSidePanelButton({isOpen, onClick}) {
   return(
     <>
-      <button className='toggleSidePanelButton' onClick={onClick}>Toggle Sidepanel </button>
+    <button className={isOpen ? 'toggleSidePanelButtonOpen' : 'toggleSidePanelButtonClose'} onClick={onClick}>
+      <img src='./assets/sidepanel.png'/>
+    </button>
     </>
   )
 }

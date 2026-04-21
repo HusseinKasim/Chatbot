@@ -22,17 +22,31 @@ function App() {
     setSidePanel(!toggleSidePanel);
   }
 
+  function handleSend(prompt)
+  {
+    // Check for empty prompt
+    if(prompt != null && prompt != '')
+    { 
+      handleUserInput(prompt);
+      setPrompt('')
+    }
+  }
+
   return (
     <>
     <div className='inputContainer'>
-      <UserTextArea value={prompt} onChange={handlePromptChange}/>
-      <SendButton onClick={(e) => {
-        // Check for empty prompt
-        if(prompt != null && prompt != ''){ 
-          handleUserInput(prompt);
-          setPrompt('')
+      <div className='textAreaWrapper'>
+      <UserTextArea value={prompt} onChange={handlePromptChange} 
+      onKeyDown={(e) => {
+        if(e.key === 'Enter')
+        {
+          handleSend(prompt);
         }
       }}/>
+      <SendButton onClick={(e) => {
+        handleSend(prompt);
+      }}/>
+      </div>
     </div>
 
     <div className='chatAreaContainer'>
@@ -54,13 +68,14 @@ function App() {
     )}
     </div>
     
-    <div className='utils'>
-      <ToggleSidePanelButton onClick={handleToggleState}/>
-    </div>
-
-    <SidePanel isOpen={toggleSidePanel}>
       
-    </SidePanel>
+
+    <div className='sidePanelContainer'> 
+    <div className='sidePanelWrapper'> 
+      <SidePanel isOpen={toggleSidePanel} />
+      <ToggleSidePanelButton isOpen={toggleSidePanel} onClick={handleToggleState} />
+    </div>
+    </div>  
     </>
   )
 }
