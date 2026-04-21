@@ -8,7 +8,7 @@ Basic LLM Chatbot made with React and Groq.
   - Frontend: HTML, CSS, JavaScript, React
   - Backend: FastAPI
   - LLM: Groq API
-  - Containerization: Docker (+ Docker Compose) (TO BE ADDED)
+  - Containerization: Docker (+ Docker Compose)
 
 -----
 
