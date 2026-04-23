@@ -9,7 +9,7 @@ import SidePanel from './components/SidePanel'
 import ToggleSidePanelButton from './components/ToggleSidePanelButton'
 
 function App() {
-  const [prompt, setPrompt] = useState('');
+  const [ prompt, setPrompt ] = useState('');
   const [ toggleSidePanel, setSidePanel ] = useState(true);
   const { messages, handleUserInput } = useChat();
 
@@ -34,8 +34,17 @@ function App() {
 
   return (
     <>
-    <div className='inputContainer'>
-      <div className='textAreaWrapper'>
+    {/* Sidepanel */}
+    <div className='sidePanelContainer'> 
+    <div className='sidePanelWrapper'> 
+      <SidePanel isOpen={toggleSidePanel} />
+      <ToggleSidePanelButton isOpen={toggleSidePanel} onClick={handleToggleState} />
+    </div>
+    </div>  
+
+    {/* Input Area */}
+    <div className='inputAreaContainer'>
+      <div className='inputAreaWrapper'>
       <UserTextArea value={prompt} onChange={handlePromptChange} 
       onKeyDown={(e) => {
         if(e.key === 'Enter')
@@ -49,6 +58,7 @@ function App() {
       </div>
     </div>
 
+      {/* Chat Area */}
     <div className='chatAreaContainer'>
     {messages.map((message) => {
       if(message.role === 'user')
@@ -67,15 +77,6 @@ function App() {
       }
     )}
     </div>
-    
-      
-
-    <div className='sidePanelContainer'> 
-    <div className='sidePanelWrapper'> 
-      <SidePanel isOpen={toggleSidePanel} />
-      <ToggleSidePanelButton isOpen={toggleSidePanel} onClick={handleToggleState} />
-    </div>
-    </div>  
     </>
   )
 }
