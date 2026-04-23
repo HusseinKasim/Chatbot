@@ -7,20 +7,39 @@ Basic LLM Chatbot made with React and Groq.
 ## Tech Stack
   - Frontend: HTML, CSS, JavaScript, React
   - Backend: FastAPI
-  - GenAI Model: Groq
-  - Containerization: Docker (+ Docker Compose) (TO BE ADDED)
+  - LLM: Groq API
+  - Containerization: Docker (+ Docker Compose)
 
 -----
 
 ## How to Run
-### Frontend
+
+### Option 1: Run the entire project using Docker Compose (Recommended)
 
 ```bash
+docker compose up --build
+```
+
+This option will run the backend at: 
+`http://localhost:8003`
+
+This option will run the frontend at: 
+`http://localhost:5173`
+
+-----
+
+### Option 2: Run each seperately
+
+#### Frontend
+
+```bash
+cd frontend/src
 npm run dev
 ```
 
-### Backend
+#### Backend
 ```bash
+cd backend/src
 python -m uvicorn app:app --host 0.0.0.0 --port 8003
 ```
 
@@ -33,9 +52,9 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
 -----
 
 ## Features
-- Processes user prompts via Groq LLM
+- Processes user prompts via Groq API
 - REST API for handling prompts
-- Docker containerization support (TO BE ADDED)
+- Docker containerization support
 -----
 
 ## Assets Used
