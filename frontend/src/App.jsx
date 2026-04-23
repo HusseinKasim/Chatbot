@@ -34,48 +34,54 @@ function App() {
 
   return (
     <>
-    {/* Sidepanel */}
-    <div className='sidePanelContainer'> 
-    <div className='sidePanelWrapper'> 
-      <SidePanel isOpen={toggleSidePanel} />
-      <ToggleSidePanelButton isOpen={toggleSidePanel} onClick={handleToggleState} />
-    </div>
-    </div>  
+    <div className="container">
+      {/* Sidepanel */}
+      <div className='sidePanelContainer'> 
+        <div className='sidePanelWrapper'> 
+          <SidePanel isOpen={toggleSidePanel} />
+          <div className='sidePanelHeader'>
+            <ToggleSidePanelButton isOpen={toggleSidePanel} onClick={handleToggleState} />
+          </div>
+        </div>
+      </div>  
 
-    {/* Input Area */}
-    <div className='inputAreaContainer'>
-      <div className='inputAreaWrapper'>
-      <UserTextArea value={prompt} onChange={handlePromptChange} 
-      onKeyDown={(e) => {
-        if(e.key === 'Enter')
-        {
+      {/* Input Area */}
+      <div className='inputAreaContainer'>
+        <div className='inputAreaWrapper'>
+        <UserTextArea value={prompt} onChange={handlePromptChange} 
+        onKeyDown={(e) => {
+          if(e.key === 'Enter')
+          {
+            handleSend(prompt);
+          }
+        }}/>
+        <SendButton onClick={(e) => {
           handleSend(prompt);
-        }
-      }}/>
-      <SendButton onClick={(e) => {
-        handleSend(prompt);
-      }}/>
+        }}/>
+        </div>
       </div>
-    </div>
 
-      {/* Chat Area */}
-    <div className='chatAreaContainer'>
-    {messages.map((message) => {
-      if(message.role === 'user')
-      {
+        {/* Chat Area */}
+      <div className='chatAreaContainer'>
+        <div className='bubblesContainer'>
+      {messages.map((message) => {
+        if(message.role === 'user')
+        {
+          return(
+                    <div className='userChatBubbleContainer'>
+                      <UserChatBubble value={message.content} />
+                    </div>
+            );
+        }
         return(
-                <div className='userBubblesContainer'>
-                  <UserChatBubble value={message.content} />
+                <div className='chatbotChatBubbleContainer'>
+                  <ChatbotChatBubble value={message.content} />
                 </div>
           );
-      }
-      return(
-            <div className='chatbotBubblesContainer'>
-              <ChatbotChatBubble value={message.content} />
-            </div>
-        );
-      }
-    )}
+        }
+      )}
+      </div>
+    </div>
     </div>
     </>
   )

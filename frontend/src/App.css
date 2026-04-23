@@ -2,14 +2,18 @@
 /*
   Base
 */
-html, body {
+html, body, #root {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
 }
 
-.doc {
+.container {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  grid-template-rows: 4fr 1fr;
+  height: 100vh;
   background-color: #1C1D21;
 }
 
@@ -21,30 +25,26 @@ html, body {
   Layout 
 */
 .sidePanelContainer {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  width: 15%;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  height: 100%;
+  width: 100%;
 }
 
 .chatAreaContainer {
-  position: fixed;
-  left: 30%;
-  right: 30%;
-  top: 5%;
-  bottom: 25%;
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  justify-content: center;
   overflow-y: auto;
-  scrollbar-width: none;
 }
 
 .inputAreaContainer {
-  position: fixed;
-  bottom: 10%;
-  left: 30%;
-  right: 25%;
-  gap: 20px;
-  width: 45%;
-  max-width: 85%;
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: center;
+  align-self: center;
+  width: 50%;
 }
 
 
@@ -52,12 +52,11 @@ html, body {
   Sidepanel
 */
 .sidePanelWrapper {
-  display: block;
-  width: 100%;
   height: 100%;
+  overflow: auto;
 }
 
-.sidePanelOpen {
+.sidePanel.open {
   overflow: auto;
   height: 100%;
   width: 100%;
@@ -66,7 +65,7 @@ html, body {
   box-shadow: 2px 1px #2e2d2d;
 }
 
-.sidePanelClose {
+.sidePanel.close {
   overflow: auto;
   height: 100%;
   width: 30%;
@@ -75,7 +74,7 @@ html, body {
   box-shadow: 2px 1px #2e2d2d;
 }
 
-.toggleSidePanelButtonOpen {
+.toggleSidePanelButton.open {
   position: absolute;
   right: 15px;
   top: 10px;
@@ -85,7 +84,7 @@ html, body {
   rotate: 180deg;
 }
 
-.toggleSidePanelButtonClose {
+.toggleSidePanelButton.close {
   position: absolute;
   left: 5px;
   top: 13px;
@@ -94,11 +93,7 @@ html, body {
   padding: 0;
 }
 
-.toggleSidePanelButtonOpen img {
-  width: 30px;
-}
-
-.toggleSidePanelButtonClose img {
+.toggleSidePanelButton img {
   width: 30px;
 }
 
@@ -106,36 +101,38 @@ html, body {
 /*
   Chat Area
 */
-.userBubblesContainer {
+.bubblesContainer {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  width: 75%;
+  margin-top: 4%;
   gap: 20px;
 }
 
-.chatbotBubblesContainer {
+.chatbotChatBubbleContainer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 20px;
+}
+
+.userChatBubbleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .userChatBubble {
-  width: 25%;
-  height: auto;
-  padding: 11px;
   background-color: #343636;
   border-radius: 20px;
   border: 0px solid #FFEEDD;
-  resize: none;
-  overflow: hidden;
-  white-space: pre-wrap;
+  padding: 11px 15px 11px 15px;
   word-break: break-word;
-  margin-top: 10px;
 }
 
 .chatbotChatBubble {
-  width: 60%;
+  display: flex;
+  align-items: flex-start;
+  width: 75%;
   height: auto;
   padding: 8px;
   border-radius: 20px;
@@ -145,13 +142,11 @@ html, body {
   word-break: break-word;
 }
 
-
 /*
   Input Area
 */
 .inputAreaWrapper {
   position: relative;
-  width: 100%;
 }
 
 .userTextArea {
