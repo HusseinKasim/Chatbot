@@ -9,6 +9,7 @@ Basic LLM Chatbot made with React and Groq.
   - Backend: FastAPI
   - LLM: Groq API
   - Containerization: Docker (+ Docker Compose)
+  - DB: PostgreSQL
 
 -----
 
@@ -25,6 +26,9 @@ This option will run the backend at:
 
 This option will run the frontend at: 
 `http://localhost:5173`
+
+This option will run the database at: 
+`http://localhost:5432`
 
 -----
 
@@ -54,6 +58,7 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
 ## Features
 - Processes user prompts via Groq API
 - REST API for handling prompts
+- PostgreSQL DB for saving user chats (TO BE ADDED)
 - Docker containerization support
 -----
 
