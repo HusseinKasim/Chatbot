@@ -8,6 +8,7 @@ from typing import List
 import models
 from database import Base, engine, SessionLocal
 from sqlalchemy.orm import Session
+from hash import encrypt_password
 
 app = FastAPI()
  
@@ -34,6 +35,12 @@ class Message(BaseModel):
 class ChatMessages(BaseModel):
     messages: List[Message]
 
+class RegisterData(BaseModel):
+    firstName: str
+    lastName: str
+    email: str
+    password: str
+
 def get_db():
     db = SessionLocal()
     try:
@@ -55,15 +62,18 @@ async def captureUserInput(chatMessages: ChatMessages, db: Session = Depends(get
         ], 
         model='llama-3.3-70b-versatile',
     )
-    
-    ## DB TEST
-    #######################################
-    ##for msg in chatMessages.messages:
-    ##    db_user = models.Chats(chat=msg.content)
-    ##    db.add(db_user)
-    ##    db.commit()
-    ##    db.refresh(db_user)
-    #######################################
 
     chatbot_response = chat_completion.choices[0].message.content
-    return {"response": chatbot_response}
+    return {'response': chatbot_response}
+
+
+@app.post("/api/register")
+async def register(payload: RegisterData, db: Session = Depends(get_db)):
+    # Encrypted password
+    encrypted_password = encrypt_password(payload.password)
+
+    db_user = models.Users(first_name=payload.firstName, last_name=payload.lastName, email=payload.email, password=encrypted_password)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user) 
+    return {'response': "ok"}

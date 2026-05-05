@@ -2,6 +2,29 @@ import { useState } from 'react'
 import '../App.css'
 
 export default function RegisterModal({onLogin, onClose}) {
+    const [ firstName, setFirstName ] = useState('');
+    const [ lastName, setLastName ] = useState('');
+    const [ email, setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
+
+    async function handleRegister() 
+    {
+        // Create data payload
+        const payload = {
+            firstName, 
+            lastName,
+            email,
+            password
+        };
+
+        // Send user data to backend via HTTP POST
+        const response = await fetch('http://127.0.0.1:8003/api/register', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload),
+        })
+    }
+
   return(
     <> 
       <div className='registerModalContainer'>
@@ -13,14 +36,14 @@ export default function RegisterModal({onLogin, onClose}) {
         <div className='modalBody'>
           <div className='loginComponents'>
             <div className='names'>
-                <input type='email' className='firstName' placeholder='First Name'></input>
-                <input type='email' className='lastName' placeholder='Last Name'></input>
+                <input type='email' className='firstName' placeholder='First Name' value={firstName} onChange={(e) => setFirstName(e.target.value)}></input>
+                <input type='email' className='lastName' placeholder='Last Name' value={lastName} onChange={(e) => setLastName(e.target.value)}></input>
             </div>
-            <input type='email' className='emailTextArea' placeholder='Email'></input>
-            <input type='password' className='passwordTextArea' placeholder='Password'></input>
+            <input type='email' className='emailTextArea' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}></input>
+            <input type='password' className='passwordTextArea' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}></input>
             
             <div className='loginButtonDiv'>
-              <button className='modalLoginButton'> Register </button>
+              <button className='modalLoginButton' onClick={() => handleRegister()}> Register </button>
             </div>
         </div>
 
