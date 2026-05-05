@@ -2,6 +2,25 @@ import { useState } from 'react'
 import '../App.css'
 
 export default function LoginModal({onRegister, onClose}) {
+  const [ email, setEmail ] = useState('');
+  const [ password, setPassword ] = useState('');
+
+  async function handleLogin() 
+  {
+      // Create data payload
+      const payload = {
+          email,
+          password
+      };
+
+      // Get user data from backend via HTTP POST
+      const response = await fetch('http://127.0.0.1:8003/api/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload),
+      })
+  }
+
   return(
     <> 
       <div className='loginModalContainer'>
@@ -12,11 +31,11 @@ export default function LoginModal({onRegister, onClose}) {
 
         <div className='modalBody'>
           <div className='loginComponents'>
-            <input type='email' className='emailTextArea' placeholder='Email'></input>
-            <input type='password' className='passwordTextArea' placeholder='Password'></input>
+            <input type='email' className='emailTextArea' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}></input>
+            <input type='password' className='passwordTextArea' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}></input>
             
             <div className='loginButtonDiv'>
-              <button className='modalLoginButton'> Login </button>
+              <button className='modalLoginButton' onClick={() => handleLogin()}> Login </button>
             </div>
         </div>
 
