@@ -50,12 +50,12 @@ html, body, #root {
 
 
 /*
-  Modal
+  Login Modal
 */
 
-.modalContainer {
+.loginModalContainer {
   position: fixed;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
@@ -150,11 +150,59 @@ html, body, #root {
   padding: 2px;
 }
 
+.actions .loginNowButton{
+  background: none;
+  color: blue;
+  padding: 2px;
+}
+
 .modalLoginButton {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+
+/*
+  Register Modal
+*/
+.registerModalContainer {
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  max-width: 60vw;
+  height: 350px;
+  max-height: 80vw;
+
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.loginComponents .names {
+  display: flex;
+  flex-direction: row;
+  gap: 22px
+}
+
+.loginComponents .firstName{ 
+  background-color: lightgrey;
+  color: black;
+  height: 35px;
+  border: none;
+  padding-left: 10px;
+}
+
+.loginComponents .lastName{ 
+  background-color: lightgrey;
+  color: black;
+  height: 35px;
+  border: none;
+  padding-left: 10px;
+}
+
 
 /*
   Sidepanel

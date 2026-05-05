@@ -7,14 +7,16 @@ import ChatbotChatBubble from './components/ChatbotChatBubble'
 import SendButton from './components/SendButton'
 import SidePanel from './components/SidePanel'
 import ToggleSidePanelButton from './components/ToggleSidePanelButton'
-import Modal from './components/LoginModal'
+import LoginModal from './components/LoginModal'
 import LoginButton from './components/LoginButton'
+import RegisterModal from './components/RegisterModal'
 
 function App() {
   const [ prompt, setPrompt ] = useState('');
   const [ toggleSidePanel, setSidePanel ] = useState(true);
   const { messages, handleUserInput } = useChat();
-  const [ toggleModal, setModal ] = useState(false);
+  const [ toggleLoginModal, setLoginModal ] = useState(false);
+  const [ toggleRegisterModal, setRegisterModal ] = useState(false);
 
   function handlePromptChange(e) {
     setPrompt(e.target.value);
@@ -40,7 +42,10 @@ function App() {
     <div className="container">
       
       {/* Login Modal */}
-      {toggleModal && <Modal onClose={() => setModal(false)}/>}
+      {toggleLoginModal && <LoginModal onRegister={() => {setRegisterModal(true); setLoginModal(false);}} onClose={() => setLoginModal(false)}/>}
+
+      {/* Register Modal */}
+      {toggleRegisterModal && <RegisterModal onLogin={() => {setLoginModal(true); setRegisterModal(false)}} onClose={() => setRegisterModal(false)}/>}
       
       {/* Sidepanel */}
       <div className='sidePanelContainer'> 
@@ -50,7 +55,7 @@ function App() {
             <ToggleSidePanelButton isOpen={toggleSidePanel} onClick={handleToggleState} />
           </div>
           <div className='sidePanelBody'>
-            <LoginButton onClick={() => setModal(true)}/>
+            <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false)}}/>
           </div>
         </div>
       </div>  
