@@ -23,6 +23,7 @@ export default function LoginModal({onRegister, onClose}) {
 
   return(
     <> 
+    <div className='modalBackdrop'>
       <div className='loginModalContainer'>
         <div className='modalHeader'>
           <label className='loginTitle'> Login </label>
@@ -46,6 +47,7 @@ export default function LoginModal({onRegister, onClose}) {
 
         </div>
       </div>
+    </div>
     </>
   )
 }

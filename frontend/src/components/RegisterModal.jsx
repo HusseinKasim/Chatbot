@@ -27,6 +27,7 @@ export default function RegisterModal({onLogin, onClose}) {
 
   return(
     <> 
+    <div className='modalBackdrop'>
       <div className='registerModalContainer'>
         <div className='modalHeader'>
           <label className='loginTitle'> Register </label>
@@ -51,9 +52,9 @@ export default function RegisterModal({onLogin, onClose}) {
           <p className='registerText'> Already have an account? </p>
           <button className='registerButton' onClick={onLogin}> Login now!</button>
          </div>
-
         </div>
       </div>
+    </div>
     </>
   )
 }
