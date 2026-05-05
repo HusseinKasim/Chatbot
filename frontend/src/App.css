@@ -7,6 +7,7 @@ html, body, #root {
   padding: 0;
   height: 100%;
   width: 100%;
+  background-color: #1C1D21;
 }
 
 .container {
@@ -14,12 +15,12 @@ html, body, #root {
   grid-template-columns: 1fr 5fr;
   grid-template-rows: 4fr 1fr;
   height: 100vh;
-  background-color: #1C1D21;
 }
 
 * {
    box-sizing: border-box;
 }
+
 
 /*
   Layout 
@@ -49,6 +50,113 @@ html, body, #root {
 
 
 /*
+  Modal
+*/
+
+.modalContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  max-width: 60vw;
+  height: 300px;
+  max-height: 80vw;
+
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modalHeader {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginTitle {
+  color: black;
+  font-size: large;
+  font-weight: bold;
+  margin: 10px;
+}
+
+.closeButton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: black;
+  font-weight: 600;
+  border: black;
+  background: none;
+  border-radius: 10px;
+}
+
+.modalBody {
+  width: 100%;
+  height: 88%;
+  display: flex;
+  flex-direction: column;
+}
+
+.loginComponents {  
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 35px;
+  padding: 0 20px;
+}
+
+.loginComponents .emailTextArea{ 
+  background-color: lightgrey;
+  color: black;
+  height: 35px;
+  border: none;
+  padding-left: 10px;
+}
+
+.loginComponents .passwordTextArea{ 
+  background-color: lightgrey;
+  color: black;
+  height: 35px;
+  border: none;
+  padding-left: 10px;
+}
+
+.loginButtonDiv {
+  align-self: center;
+}
+
+.modalLoginButton{ 
+  margin-top: 15px;
+  padding: 10px 20px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.actions .registerText {
+  color: black;
+}
+
+.actions .registerButton {
+  background: none;
+  color: blue;
+  padding: 2px;
+}
+
+.modalLoginButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*
   Sidepanel
 */
 .sidePanelWrapper {
@@ -62,7 +170,7 @@ html, body, #root {
   width: 100%;
   background-color: #1e1e20;
   box-shadow: 2px 1px #2e2d2d;
-  transition: width 0.2s ease-in; 
+  transition: width 0.2s ease-in;
 }
 
 .sidePanel.close {
@@ -95,6 +203,13 @@ html, body, #root {
 
 .toggleSidePanelButton img {
   width: 30px;
+}
+
+.loginButton {
+  position: absolute;
+  left: 5px;
+  bottom: 13px;
+  padding: 5px;
 }
 
 
@@ -141,6 +256,7 @@ html, body, #root {
   white-space: pre-wrap;
   word-break: break-word;
 }
+
 
 /*
   Input Area
