@@ -14,11 +14,14 @@ export default function LoginModal({onRegister, onClose}) {
       };
 
       // Get user data from backend via HTTP POST
-      const response = await fetch('http://127.0.0.1:8003/api/login', {
+      const response = await fetch('/api/login', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(payload),
+      credentials: 'include'
       })
+
+      {/* MUST REPLACE LOGIN BUTTON WITH LOGOUT BUTTON AND ADD USER NAME AND ICON TO SHOW HE IS LOGGED IN */}
   }
 
   return(

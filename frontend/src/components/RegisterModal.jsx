@@ -18,10 +18,11 @@ export default function RegisterModal({onLogin, onClose}) {
         };
 
         // Send user data to backend via HTTP POST
-        const response = await fetch('http://127.0.0.1:8003/api/register', {
+        const response = await fetch('/api/register', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(payload),
+        credentials: 'include'
         })
     }
 

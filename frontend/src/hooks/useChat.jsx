@@ -15,10 +15,11 @@ export default function useChat()
         console.log(prompt);
         
         // Send prompt to backend via HTTP POST
-        const response = await fetch('http://127.0.0.1:8003/api/process-prompt', {
+        const response = await fetch('/api/process-prompt', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ messages: updatedMessages }),
+        credentials: 'include'
         })
 
         // Return and print data from backend

@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from groq import Groq
@@ -9,6 +9,7 @@ import models
 from database import Base, engine, SessionLocal
 from sqlalchemy.orm import Session
 from hash import encrypt_password, verify_password
+import auth
 
 app = FastAPI()
  
@@ -21,7 +22,7 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins = ["*"],
+    allow_origins = ["http://localhost:5173"],
     allow_credentials = True,
     allow_methods = ["*"],
     allow_headers = ["*"],
@@ -52,9 +53,29 @@ def get_db():
     finally:
         db.close()
 
+def get_current_user(request: Request):
+    token = request.cookies.get('access_token')
+
+    # Guest user
+    if not token:
+        return None
+    
+    try:
+        return auth.verify_token(token)
+    except:
+        return None
+
 # HTTP POST endpoint
 @app.post('/api/process-prompt')
-async def captureUserInput(chatMessages: ChatMessages, db: Session = Depends(get_db)):
+async def captureUserInput(chatMessages: ChatMessages, user = Depends(get_current_user), db: Session = Depends(get_db)):
+    
+    if user:
+        user_id = user['sub']
+    else:
+        user_id = 0
+    
+    print(user_id) # Current user's ID
+
     chat_completion = client.chat.completions.create(
         messages=
         [
@@ -73,25 +94,35 @@ async def captureUserInput(chatMessages: ChatMessages, db: Session = Depends(get
 
 @app.post('/api/register')
 async def register(payload: RegisterData, db: Session = Depends(get_db)):
-    # Encrypt password
-    encrypted_password = encrypt_password(payload.password)
+    if payload.firstName != '' and payload.lastName != '' and payload.email != '' and payload.password != '':
+        # Encrypt password
+        encrypted_password = encrypt_password(payload.password)
 
-    # Store data in database
-    db_user = models.Users(first_name=payload.firstName, last_name=payload.lastName, email=payload.email, password=encrypted_password)
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user) 
-    return {'response': "ok"}
+        # Store data in database
+        db_user = models.Users(first_name=payload.firstName, last_name=payload.lastName, email=payload.email, password=encrypted_password)
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user) 
+        return {'response': "ok"}
 
 
 @app.post('/api/login')
-async def login(payload: LoginData, db: Session = Depends(get_db)):
+async def login(payload: LoginData, response: Response, db: Session = Depends(get_db)):
     # Verify password
     user = db.query(models.Users).filter(models.Users.email == payload.email).first()
     password_verification = verify_password(payload.password, user.password)
 
     if password_verification:
-        # AUTHENTICATE (CREATE AND SEND TOKEN)
-        return {'response': 'authenticated'}
+        token = auth.create_token(user.id)
 
+        response.set_cookie(
+            key='access_token',
+            value=token,
+            httponly=True,
+            secure=False,
+            samesite='lax'
+        )
+
+        return {'response', 'authenticated'}
+    
     return {'response', 'invalid'}
