@@ -21,6 +21,8 @@ export default function LoginModal({onRegister, onClose}) {
       credentials: 'include'
       })
 
+      console.log("Logged in");
+
       {/* MUST REPLACE LOGIN BUTTON WITH LOGOUT BUTTON AND ADD USER NAME AND ICON TO SHOW HE IS LOGGED IN */}
   }
 

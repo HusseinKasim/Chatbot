@@ -269,6 +269,12 @@ html, body, #root {
   padding: 5px;
 }
 
+.logoutButton {
+  position: absolute;
+  left: 100px;
+  bottom: 13px;
+  padding: 5px;
+}
 
 /*
   Chat Area

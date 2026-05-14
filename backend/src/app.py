@@ -46,12 +46,14 @@ class LoginData(BaseModel):
     email: str
     password: str
 
+
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
 
 def get_current_user(request: Request):
     token = request.cookies.get('access_token')
@@ -65,6 +67,7 @@ def get_current_user(request: Request):
     except:
         return None
 
+
 # HTTP POST endpoint
 @app.post('/api/process-prompt')
 async def captureUserInput(chatMessages: ChatMessages, user = Depends(get_current_user), db: Session = Depends(get_db)):
@@ -72,7 +75,7 @@ async def captureUserInput(chatMessages: ChatMessages, user = Depends(get_curren
     if user:
         user_id = user['sub']
     else:
-        user_id = 0
+        user_id = 0 # Handle guest user better
     
     print(user_id) # Current user's ID
 
@@ -104,6 +107,7 @@ async def register(payload: RegisterData, db: Session = Depends(get_db)):
         db.commit()
         db.refresh(db_user) 
         return {'response': "ok"}
+    # Handle Exception: Empty input field/-s
 
 
 @app.post('/api/login')
@@ -125,4 +129,12 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
 
         return {'response', 'authenticated'}
     
+    # Handle exception: Password not verified
     return {'response', 'invalid'}
+
+
+@app.post('/api/logout')
+async def logout(response: Response):
+    response.delete_cookie('access_token')
+    # Handle Exception: cookie does not exist/already deleted
+    return {'response': 'logged out'}

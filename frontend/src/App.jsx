@@ -10,6 +10,7 @@ import ToggleSidePanelButton from './components/ToggleSidePanelButton'
 import LoginModal from './components/LoginModal'
 import LoginButton from './components/LoginButton'
 import RegisterModal from './components/RegisterModal'
+import LogoutButton from './components/LogoutButton'
 
 function App() {
   const [ prompt, setPrompt ] = useState('');
@@ -56,6 +57,7 @@ function App() {
           </div>
           <div className='sidePanelBody'>
             <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false)}}/>
+            <LogoutButton />
           </div>
         </div>
       </div>  
