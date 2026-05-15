@@ -1,30 +1,9 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import '../App.css'
+import AuthContext from '../context/AuthContext.jsx';
 
 export default function LoginModal({onRegister, onClose}) {
-  const [ email, setEmail ] = useState('');
-  const [ password, setPassword ] = useState('');
-
-  async function handleLogin() 
-  {
-      // Create data payload
-      const payload = {
-          email,
-          password
-      };
-
-      // Get user data from backend via HTTP POST
-      const response = await fetch('/api/login', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(payload),
-      credentials: 'include'
-      })
-
-      console.log("Logged in");
-
-      {/* MUST REPLACE LOGIN BUTTON WITH LOGOUT BUTTON AND ADD USER NAME AND ICON TO SHOW HE IS LOGGED IN */}
-  }
+  const { login, email, password, handleEmailChange, handlePasswordChange } = useContext(AuthContext);
 
   return(
     <> 
@@ -37,11 +16,11 @@ export default function LoginModal({onRegister, onClose}) {
 
         <div className='modalBody'>
           <div className='loginComponents'>
-            <input type='email' className='emailTextArea' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}></input>
-            <input type='password' className='passwordTextArea' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}></input>
+            <input type='email' className='emailTextArea' placeholder='Email' value={email} onChange={(e) => handleEmailChange(e)}></input>
+            <input type='password' className='passwordTextArea' placeholder='Password' value={password} onChange={(e) => handlePasswordChange(e)}></input>
             
             <div className='loginButtonDiv'>
-              <button className='modalLoginButton' onClick={() => handleLogin()}> Login </button>
+              <button className='modalLoginButton' onClick={login}> Login </button>
             </div>
         </div>
 

@@ -1,20 +1,13 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import '../App.css'
+import AuthContext from '../context/AuthContext.jsx'
 
 export default function LogoutButton() {
+  const { logout } = useContext(AuthContext);
 
-    async function handleLogout() 
-    {
-      const response = await fetch('/api/logout', {
-      method: 'POST',
-      credentials: 'include'
-      })
-
-      console.log("Logged out");
-  }
   return(
     <>  
-      <button className='logoutButton' onClick={handleLogout}>
+      <button className='logoutButton' onClick={logout}>
         Logout
       </button>
     </>

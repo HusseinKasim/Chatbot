@@ -127,7 +127,7 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
             samesite='lax'
         )
 
-        return {'response', 'authenticated'}
+        return {'response': 'authentificated'}
     
     # Handle exception: Password not verified
     return {'response', 'invalid'}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import './App.css'
 import useChat from './hooks/useChat'
 import UserTextArea from './components/UserTextArea'
@@ -11,6 +11,7 @@ import LoginModal from './components/LoginModal'
 import LoginButton from './components/LoginButton'
 import RegisterModal from './components/RegisterModal'
 import LogoutButton from './components/LogoutButton'
+import AuthContext from './context/AuthContext.jsx'
 
 function App() {
   const [ prompt, setPrompt ] = useState('');
@@ -18,6 +19,9 @@ function App() {
   const { messages, handleUserInput } = useChat();
   const [ toggleLoginModal, setLoginModal ] = useState(false);
   const [ toggleRegisterModal, setRegisterModal ] = useState(false);
+
+  const { user } = useContext(AuthContext);
+
 
   function handlePromptChange(e) {
     setPrompt(e.target.value);
