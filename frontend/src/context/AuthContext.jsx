@@ -59,8 +59,8 @@ export function AuthProvider({children}) {
         })
 
         console.log("Logged in");
+        checkAuth(); // Set user
 
-        // MUST setUser to user_id
         {/* MUST REPLACE LOGIN BUTTON WITH LOGOUT BUTTON AND ADD USER NAME AND ICON TO SHOW HE IS LOGGED IN */}
     }
 
@@ -74,8 +74,24 @@ export function AuthProvider({children}) {
         setUser(null);
     }
 
+    const checkAuth = async () => {
+        const response = await fetch('/api/me', {
+            credentials: 'include'
+        });
+
+        if(response.ok)
+        {
+            const data = await response.json();
+            setUser(data);
+        }
+        else
+        {
+            setUser(null);
+        }
+    }
+
     return(
-        <AuthContext.Provider value={{user, firstName, lastName, email, password, handleFirstNameChange, handleLastNameChange, handleEmailChange, handlePasswordChange, register, login, logout}}>
+        <AuthContext.Provider value={{user, firstName, lastName, email, password, handleFirstNameChange, handleLastNameChange, handleEmailChange, handlePasswordChange, register, login, logout, checkAuth}}>
         {children}
         </AuthContext.Provider>
     );

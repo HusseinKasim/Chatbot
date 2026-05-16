@@ -97,7 +97,7 @@ async def captureUserInput(chatMessages: ChatMessages, user = Depends(get_curren
 
 @app.post('/api/register')
 async def register(payload: RegisterData, db: Session = Depends(get_db)):
-    if payload.firstName != '' and payload.lastName != '' and payload.email != '' and payload.password != '':
+    if payload.firstName != '' and payload.lastName != '' and payload.email != '' and payload.password  != '':
         # Encrypt password
         encrypted_password = encrypt_password(payload.password)
 
@@ -116,6 +116,9 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
     user = db.query(models.Users).filter(models.Users.email == payload.email).first()
     password_verification = verify_password(payload.password, user.password)
 
+    if not user:
+        return {'response', 'invalid'}
+        
     if password_verification:
         token = auth.create_token(user.id)
 
@@ -138,3 +141,11 @@ async def logout(response: Response):
     response.delete_cookie('access_token')
     # Handle Exception: cookie does not exist/already deleted
     return {'response': 'logged out'}
+
+
+@app.get('/api/me')
+async def get_user_info(user=Depends(get_current_user)):
+    if not user:
+        return {'response': None }
+        
+    return {'response': user['sub']}

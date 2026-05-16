@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './App.css'
 import useChat from './hooks/useChat'
 import UserTextArea from './components/UserTextArea'
@@ -20,8 +20,12 @@ function App() {
   const [ toggleLoginModal, setLoginModal ] = useState(false);
   const [ toggleRegisterModal, setRegisterModal ] = useState(false);
 
-  const { user } = useContext(AuthContext);
+  const { user, checkAuth } = useContext(AuthContext);
 
+  // User login persistence after refresh
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
   function handlePromptChange(e) {
     setPrompt(e.target.value);
