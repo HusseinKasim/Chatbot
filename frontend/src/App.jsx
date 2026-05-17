@@ -49,7 +49,6 @@ function App() {
   return (
     <>
     <div className="container">
-      
       {/* Login Modal */}
       {toggleLoginModal && <LoginModal onRegister={() => {setRegisterModal(true); setLoginModal(false);}} onClose={() => setLoginModal(false)}/>}
 
@@ -64,8 +63,8 @@ function App() {
             <ToggleSidePanelButton isOpen={toggleSidePanel} onClick={handleToggleState} />
           </div>
           <div className='sidePanelBody'>
-            <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false)}}/>
-            <LogoutButton />
+            {console.log(user)}
+            {user ?  <LogoutButton /> : <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false)}}/> }
           </div>
         </div>
       </div>  

@@ -114,11 +114,11 @@ async def register(payload: RegisterData, db: Session = Depends(get_db)):
 async def login(payload: LoginData, response: Response, db: Session = Depends(get_db)):
     # Verify password
     user = db.query(models.Users).filter(models.Users.email == payload.email).first()
-    password_verification = verify_password(payload.password, user.password)
-
     if not user:
+        # Handle exception: Email does not exist
         return {'response', 'invalid'}
-        
+    
+    password_verification = verify_password(payload.password, user.password)
     if password_verification:
         token = auth.create_token(user.id)
 

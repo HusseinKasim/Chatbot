@@ -271,7 +271,7 @@ html, body, #root {
 
 .logoutButton {
   position: absolute;
-  left: 100px;
+  left: 5px;
   bottom: 13px;
   padding: 5px;
 }

@@ -58,8 +58,15 @@ export function AuthProvider({children}) {
         credentials: 'include'
         })
 
-        console.log("Logged in");
-        checkAuth(); // Set user
+        const data = await response.json();
+        if(data.response == 'authentificated')
+        {
+            checkAuth(); // Set user
+        }
+        else
+        {
+            console.log('Wrong login info'); // MUST DISPLAY ON UI
+        }
 
         {/* MUST REPLACE LOGIN BUTTON WITH LOGOUT BUTTON AND ADD USER NAME AND ICON TO SHOW HE IS LOGGED IN */}
     }
@@ -79,14 +86,11 @@ export function AuthProvider({children}) {
             credentials: 'include'
         });
 
-        if(response.ok)
+        const data = await response.json();
+        if(data.response != null)
         {
-            const data = await response.json();
             setUser(data);
-        }
-        else
-        {
-            setUser(null);
+            console.log('Logged in');
         }
     }
 
