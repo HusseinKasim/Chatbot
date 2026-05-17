@@ -57,6 +57,9 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
   - `POST /api/process-prompt` -> sends the user's prompt to the backend and retrieves response
   - `POST /api/register` -> registers user account
   - `POST /api/login` -> authentificates user
+  - `POST /api/logout` -> log user out of account
+  - `GET /api/me` -> retrieves user info
+
 -----
 
 ## Features
