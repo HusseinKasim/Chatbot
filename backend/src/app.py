@@ -57,11 +57,10 @@ def get_db():
 
 def get_current_user(request: Request):
     token = request.cookies.get('access_token')
-
     # Guest user
     if not token:
-        return None
-    
+        return None  
+     
     try:
         return auth.verify_token(token)
     except:
@@ -71,12 +70,10 @@ def get_current_user(request: Request):
 # HTTP POST endpoint
 @app.post('/api/process-prompt')
 async def captureUserInput(chatMessages: ChatMessages, user = Depends(get_current_user), db: Session = Depends(get_db)):
-    
     if user:
         user_id = user['sub']
     else:
         user_id = 0 # Handle guest user better
-    
     print(user_id) # Current user's ID
 
     chat_completion = client.chat.completions.create(
@@ -90,7 +87,6 @@ async def captureUserInput(chatMessages: ChatMessages, user = Depends(get_curren
         ], 
         model='llama-3.3-70b-versatile',
     )
-
     chatbot_response = chat_completion.choices[0].message.content
     return {'response': chatbot_response}
 
@@ -102,7 +98,7 @@ async def register(payload: RegisterData, db: Session = Depends(get_db)):
         encrypted_password = encrypt_password(payload.password)
 
         # Store data in database
-        db_user = models.Users(first_name=payload.firstName, last_name=payload.lastName, email=payload.email, password=encrypted_password)
+        db_user = models.Users(first_name=payload.firstName.capitalize(), last_name=payload.lastName.capitalize(), email=payload.email, password=encrypted_password)
         db.add(db_user)
         db.commit()
         db.refresh(db_user) 
@@ -121,7 +117,6 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
     password_verification = verify_password(payload.password, user.password)
     if password_verification:
         token = auth.create_token(user.id)
-
         response.set_cookie(
             key='access_token',
             value=token,
@@ -129,7 +124,6 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
             secure=False,
             samesite='lax'
         )
-
         return {'response': 'authentificated'}
     
     # Handle exception: Password not verified
@@ -144,8 +138,9 @@ async def logout(response: Response):
 
 
 @app.get('/api/me')
-async def get_user_info(user=Depends(get_current_user)):
+async def get_user_info(user=Depends(get_current_user), db: Session = Depends(get_db)):
     if not user:
-        return {'response': None }
-        
-    return {'response': user['sub']}
+        return {'response': None, 'id': None, 'firstname': None, 'lastname': None }
+    
+    current_user = db.query(models.Users).filter(models.Users.id == user['sub']).first()
+    return {'response': 'success', 'id': user['sub'], 'firstname': current_user.first_name, 'lastname': current_user.last_name}

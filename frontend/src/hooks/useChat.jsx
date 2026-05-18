@@ -30,5 +30,12 @@ export default function useChat()
         console.log(data.response.prompt)
     }
 
-    return { messages, handleUserInput };
+    function clearChat(){
+        setMessages([
+            {'role': 'assistant', 'content': 'Hello! Please enter a prompt.'} 
+        ]);
+        console.log("useCHat.jsx works");
+    }
+
+    return { messages, handleUserInput, clearChat };
 }

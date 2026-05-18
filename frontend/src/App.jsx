@@ -12,15 +12,16 @@ import LoginButton from './components/LoginButton'
 import RegisterModal from './components/RegisterModal'
 import LogoutButton from './components/LogoutButton'
 import AuthContext from './context/AuthContext.jsx'
+import UserIcon from './components/UserIcon.jsx'
 
 function App() {
   const [ prompt, setPrompt ] = useState('');
   const [ toggleSidePanel, setSidePanel ] = useState(true);
-  const { messages, handleUserInput } = useChat();
+  const { messages, handleUserInput, clearChat } = useChat();
   const [ toggleLoginModal, setLoginModal ] = useState(false);
   const [ toggleRegisterModal, setRegisterModal ] = useState(false);
 
-  const { user, checkAuth } = useContext(AuthContext);
+  const { user, firstName, lastName, checkAuth } = useContext(AuthContext);
 
   // User login persistence after refresh
   useEffect(() => {
@@ -50,7 +51,7 @@ function App() {
     <>
     <div className="container">
       {/* Login Modal */}
-      {toggleLoginModal && <LoginModal onRegister={() => {setRegisterModal(true); setLoginModal(false);}} onClose={() => setLoginModal(false)}/>}
+      {toggleLoginModal && <LoginModal onRegister={() => {setRegisterModal(true); setLoginModal(false);}} onClose={() => setLoginModal(false)} onLogin={clearChat}/>}
 
       {/* Register Modal */}
       {toggleRegisterModal && <RegisterModal onLogin={() => {setLoginModal(true); setRegisterModal(false)}} onClose={() => setRegisterModal(false)}/>}
@@ -63,8 +64,7 @@ function App() {
             <ToggleSidePanelButton isOpen={toggleSidePanel} onClick={handleToggleState} />
           </div>
           <div className='sidePanelBody'>
-            {console.log(user)}
-            {user ?  <LogoutButton /> : <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false)}}/> }
+            {user ?  <><UserIcon firstName={firstName} lastName={lastName} /><LogoutButton onLogout={clearChat}/></> : <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false)}}/> }
           </div>
         </div>
       </div>  

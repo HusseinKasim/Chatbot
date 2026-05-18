@@ -67,8 +67,6 @@ export function AuthProvider({children}) {
         {
             console.log('Wrong login info'); // MUST DISPLAY ON UI
         }
-
-        {/* MUST REPLACE LOGIN BUTTON WITH LOGOUT BUTTON AND ADD USER NAME AND ICON TO SHOW HE IS LOGGED IN */}
     }
 
     const logout = async () => {
@@ -89,11 +87,14 @@ export function AuthProvider({children}) {
         const data = await response.json();
         if(data.response != null)
         {
-            setUser(data);
+            setUser(data.id);
+            setFirstName(data.firstname);
+            setLastName(data.lastname);
             console.log('Logged in');
         }
     }
 
+    
     return(
         <AuthContext.Provider value={{user, firstName, lastName, email, password, handleFirstNameChange, handleLastNameChange, handleEmailChange, handlePasswordChange, register, login, logout, checkAuth}}>
         {children}

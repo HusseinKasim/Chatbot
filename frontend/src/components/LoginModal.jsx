@@ -2,7 +2,7 @@ import { useState, useContext } from 'react'
 import '../App.css'
 import AuthContext from '../context/AuthContext.jsx';
 
-export default function LoginModal({onRegister, onClose}) {
+export default function LoginModal({onRegister, onClose, onLogin}) {
   const { login, email, password, handleEmailChange, handlePasswordChange } = useContext(AuthContext);
 
   return(
@@ -20,7 +20,10 @@ export default function LoginModal({onRegister, onClose}) {
             <input type='password' className='passwordTextArea' placeholder='Password' value={password} onChange={(e) => handlePasswordChange(e)}></input>
             
             <div className='loginButtonDiv'>
-              <button className='modalLoginButton' onClick={login}> Login </button>
+              <button className='modalLoginButton' onClick={() => {
+                login();
+                onLogin();
+                }}> Login </button>
             </div>
         </div>
 
