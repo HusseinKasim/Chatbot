@@ -17,7 +17,7 @@ class Chats(Base):
     __tablename__ = 'chats'
     
     id = Column(Integer, primary_key=True)
-    chat_title = Column(String)
+    chat_title = Column(String, default='New Chat')
     user_id = Column(Integer, ForeignKey('users.id'), index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
