@@ -306,6 +306,17 @@ html, body, #root {
   padding: 5px;
 }
 
+.userChat {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  left: 5px;
+  bottom: 300px;
+  padding: 5px;
+  background: none;
+  border: none;
+}
+
 /*
   Chat Area
 */

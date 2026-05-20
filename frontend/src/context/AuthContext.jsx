@@ -81,6 +81,7 @@ export function AuthProvider({children}) {
 
     const checkAuth = async () => {
         const response = await fetch('/api/me', {
+            method: 'GET',
             credentials: 'include'
         });
 
@@ -93,7 +94,6 @@ export function AuthProvider({children}) {
             console.log('Logged in');
         }
     }
-
     
     return(
         <AuthContext.Provider value={{user, firstName, lastName, email, password, handleFirstNameChange, handleLastNameChange, handleEmailChange, handlePasswordChange, register, login, logout, checkAuth}}>

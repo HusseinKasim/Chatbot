@@ -13,11 +13,12 @@ import RegisterModal from './components/RegisterModal'
 import LogoutButton from './components/LogoutButton'
 import AuthContext from './context/AuthContext.jsx'
 import UserIcon from './components/UserIcon.jsx'
+import UserChat from './components/UserChat.jsx';
 
 function App() {
   const [ prompt, setPrompt ] = useState('');
   const [ toggleSidePanel, setSidePanel ] = useState(true);
-  const { messages, handleUserInput, clearChat } = useChat();
+  const { messages, handleUserInput, clearChat, chats } = useChat();
   const [ toggleLoginModal, setLoginModal ] = useState(false);
   const [ toggleRegisterModal, setRegisterModal ] = useState(false);
 
@@ -64,7 +65,13 @@ function App() {
             <ToggleSidePanelButton isOpen={toggleSidePanel} onClick={handleToggleState} />
           </div>
           <div className='sidePanelBody'>
-            {user ?  <><UserIcon firstName={firstName} lastName={lastName} /><LogoutButton onLogout={clearChat}/></> : <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false)}}/> }
+            {user ?  <>
+            <UserIcon firstName={firstName} lastName={lastName} />
+            <LogoutButton onLogout={clearChat}/>
+            {chats.map(chat => (
+              <UserChat key={chat.chatID} title={chat.title} />
+            ))}
+            </> : <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false)}}/> }
           </div>
         </div>
       </div>  
@@ -76,6 +83,7 @@ function App() {
         onKeyDown={(e) => {
           if(e.key === 'Enter')
           {
+            e.preventDefault();
             handleSend(prompt);
           }
         }}/>

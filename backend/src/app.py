@@ -78,20 +78,20 @@ async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(ge
     if db.query(models.Users).filter(models.Users.id == user['sub']).first():
 
         if promptData.chatID == 0:
-        #   Add row in chats db, assign chatID, and return chatID
+        # Add row in chats db, assign chatID, and return chatID
             new_chat = models.Chats(chat_title=promptData.prompt[0:25], user_id=user['sub'])
             db.add(new_chat)
             db.commit()
             db.refresh(new_chat)
             promptData.chatID = new_chat.id
 
-        #Add row in messages db to add user's first prompt
+        # Add row in messages db to add user's first prompt
         new_message = models.Messages(role='user', message_text=promptData.prompt, chat_id=promptData.chatID)
         db.add(new_message)
         db.commit()
         db.refresh(new_message)
 
-        #Retrieve roles and chat messages from messages db (via chatID)
+        # Retrieve roles and chat messages from messages db (via chatID)
         messages_query = (db.query(models.Messages).filter(models.Messages.chat_id == promptData.chatID).order_by(models.Messages.created_at.asc()).all())
 
         chat_completion = client.chat.completions.create(
@@ -108,12 +108,12 @@ async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(ge
         
         chatbot_response = chat_completion.choices[0].message.content
 
-        #Add row of bot response into messages db
+        # Add row of bot response into messages db
         new_bot_message = models.Messages(role='assistant', message_text=chatbot_response, chat_id=promptData.chatID)
         db.add(new_bot_message)
         db.commit()
         db.refresh(new_bot_message)
-        
+
         return {'chatID': promptData.chatID, 'response': chatbot_response}
     
     return {'chatID': 0, 'response': 'invalid'}
@@ -190,3 +190,11 @@ async def get_user_info(user=Depends(get_current_user), db: Session = Depends(ge
     
     current_user = db.query(models.Users).filter(models.Users.id == user['sub']).first()
     return {'response': 'success', 'id': user['sub'], 'firstname': current_user.first_name, 'lastname': current_user.last_name}
+
+
+@app.get('/api/get-user-chats')
+async def get_user_chats(user=Depends(get_current_user), db: Session = Depends(get_db)):
+    if db.query(models.Users).filter(models.Users.id == user['sub']).first():
+        chats = [] # PLACEHOLDER
+        return {chats: chats} # PLACEHOLDER
+    return {chats: None} # PLACEHOLDER

@@ -7,9 +7,10 @@ export default function useChat()
     const [messages, setMessages] = useState([
         {'role': 'assistant', 'content': 'Hello! Please enter a prompt.'} 
     ])
-
     const [chatID, setChatID] = useState(0);
-
+    const [chats, setChats] = useState([
+        {'chatID': 0, 'title': 'New Chat'}
+    ])
     const { user } = useContext(AuthContext);
 
     async function handleUserInput(prompt){
@@ -20,6 +21,7 @@ export default function useChat()
         else
         {
             handleLoggedInUserInput(prompt, chatID);
+            updateChatSidebar(chats);
         }
     }
 
@@ -62,16 +64,27 @@ export default function useChat()
         // Return and print data from backend
         const data = await response.json();
         console.log(data.chatID);
-
-        // Update ChatID IF it was null
+        
+        // Update ChatID if it was null
         setChatID(data.chatID);
         
-        // Add response to messages list (role of assistant  and content from backend)
-        setMessages([...messages, {'role': 'user', 'content': prompt}]);
-
-        // Add response to messages list (role of assistant  and content from backend)
+        setMessages(prev => [...prev, {'role': 'user', 'content': prompt}]);
         setMessages(prev => [...prev, {'role': 'assistant', 'content': data.response}]);
     }
 
-    return { messages, handleUserInput, clearChat };
+    async function updateChatSidebar(user){
+        // Send prompt to backend via HTTP POST
+        const response = await fetch('/api/get-user-chats', {
+        method: 'GET',
+        credentials: 'include'
+        })
+
+        const data = await response.json();
+        if(data != null)
+        {
+            setChats(/* ADD ALL chat_id and chat_title values to the chats state*/);
+        }   
+    }
+
+    return { messages, handleUserInput, clearChat, chats };
 }
