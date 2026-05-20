@@ -46,6 +46,9 @@ class LoginData(BaseModel):
     email: str
     password: str
 
+class LoggedInUserPromptData(BaseModel):
+    prompt: str
+    chatID: int
 
 def get_db():
     db = SessionLocal()
@@ -68,14 +71,57 @@ def get_current_user(request: Request):
 
 
 # HTTP POST endpoint
-@app.post('/api/process-prompt')
-async def captureUserInput(chatMessages: ChatMessages, user = Depends(get_current_user), db: Session = Depends(get_db)):
-    if user:
-        user_id = user['sub']
-    else:
-        user_id = 0 # Handle guest user better
-    print(user_id) # Current user's ID
+@app.post('/api/process-user-prompt')
+async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(get_current_user), db: Session = Depends(get_db)):
 
+    # Verify user token is valid (by comparing with db)
+    if db.query(models.Users).filter(models.Users.id == user['sub']).first():
+
+        if promptData.chatID == 0:
+        #   Add row in chats db, assign chatID, and return chatID
+            new_chat = models.Chats(chat_title=promptData.prompt[0:25], user_id=user['sub'])
+            db.add(new_chat)
+            db.commit()
+            db.refresh(new_chat)
+            promptData.chatID = new_chat.id
+
+        #Add row in messages db to add user's first prompt
+        new_message = models.Messages(role='user', message_text=promptData.prompt, chat_id=promptData.chatID)
+        db.add(new_message)
+        db.commit()
+        db.refresh(new_message)
+
+        #Retrieve roles and chat messages from messages db (via chatID)
+        messages_query = (db.query(models.Messages).filter(models.Messages.chat_id == promptData.chatID).order_by(models.Messages.created_at.asc()).all())
+
+        chat_completion = client.chat.completions.create(
+        messages=
+        [
+            {
+                'role': message.role,
+                'content': message.message_text
+            }
+            for message in messages_query
+        ], 
+        model='llama-3.3-70b-versatile',
+        )
+        
+        chatbot_response = chat_completion.choices[0].message.content
+
+        #Add row of bot response into messages db
+        new_bot_message = models.Messages(role='assistant', message_text=chatbot_response, chat_id=promptData.chatID)
+        db.add(new_bot_message)
+        db.commit()
+        db.refresh(new_bot_message)
+        
+        return {'chatID': promptData.chatID, 'response': chatbot_response}
+    
+    return {'chatID': 0, 'response': 'invalid'}
+
+
+# HTTP POST endpoint
+@app.post('/api/process-guest-prompt')
+async def captureUserInput(chatMessages: ChatMessages):
     chat_completion = client.chat.completions.create(
         messages=
         [
