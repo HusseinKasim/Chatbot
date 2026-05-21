@@ -54,11 +54,11 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
 ## API Endpoints
 
 ### REST API
-  - `POST /api/process-user-prompt` -> sends the logged in user's prompt to the backend and retrieves response
-  - `POST /api/process-guest-prompt` -> sends the guest user's prompt to the backend and retrieves response
+  - `POST /api/process-user-prompt` -> passes the logged in user's prompt to the Groq model and retrieves the generated response
+  - `POST /api/process-guest-prompt` -> passes the guest user's prompt to the Groq model and retrieves the generated response
   - `POST /api/register` -> registers user account
   - `POST /api/login` -> authentificates user
-  - `POST /api/logout` -> log user out of account
+  - `POST /api/logout` -> logs user out of account
   - `GET /api/me` -> retrieves user info
   - `GET /api/get-user-chats` -> retrieves user chats info
 
