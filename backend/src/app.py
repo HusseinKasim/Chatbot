@@ -60,12 +60,14 @@ def get_db():
 
 def get_current_user(request: Request):
     token = request.cookies.get('access_token')
+
     # Guest user
     if not token:
         return None  
      
     try:
         return auth.verify_token(token)
+ 
     except:
         return None
 
@@ -75,11 +77,11 @@ def get_current_user(request: Request):
 async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(get_current_user), db: Session = Depends(get_db)):
 
     # Verify user token is valid (by comparing with db)
-    if db.query(models.Users).filter(models.Users.id == user['sub']).first():
+    if db.query(models.Users).filter(models.Users.id == int(user['sub'])).first():
 
         if promptData.chatID == 0:
         # Add row in chats db, assign chatID, and return chatID
-            new_chat = models.Chats(chat_title=promptData.prompt[0:25], user_id=user['sub'])
+            new_chat = models.Chats(chat_title=promptData.prompt[0:25], user_id=int(user['sub']))
             db.add(new_chat)
             db.commit()
             db.refresh(new_chat)
@@ -91,8 +93,8 @@ async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(ge
         db.commit()
         db.refresh(new_message)
 
-        # Retrieve roles and chat messages from messages db (via chatID)
-        messages_query = (db.query(models.Messages).filter(models.Messages.chat_id == promptData.chatID).order_by(models.Messages.created_at.asc()).all())
+        # Retrieve roles and chat messages from messages db (via chatID) of authorized user
+        messages_query = (db.query(models.Messages).join(models.Chats, models.Messages.chat_id == models.Chats.id).filter(models.Chats.user_id == int(user['sub']), models.Messages.chat_id == promptData.chatID).order_by(models.Messages.created_at.asc()).all())
 
         chat_completion = client.chat.completions.create(
         messages=
@@ -158,7 +160,7 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
     user = db.query(models.Users).filter(models.Users.email == payload.email).first()
     if not user:
         # Handle exception: Email does not exist
-        return {'response', 'invalid'}
+        return {'response': 'invalid'}
     
     password_verification = verify_password(payload.password, user.password)
     if password_verification:
@@ -173,7 +175,7 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
         return {'response': 'authentificated'}
     
     # Handle exception: Password not verified
-    return {'response', 'invalid'}
+    return {'response': 'invalid'}
 
 
 @app.post('/api/logout')
@@ -188,13 +190,15 @@ async def get_user_info(user=Depends(get_current_user), db: Session = Depends(ge
     if not user:
         return {'response': None, 'id': None, 'firstname': None, 'lastname': None }
     
-    current_user = db.query(models.Users).filter(models.Users.id == user['sub']).first()
-    return {'response': 'success', 'id': user['sub'], 'firstname': current_user.first_name, 'lastname': current_user.last_name}
+    current_user = db.query(models.Users).filter(models.Users.id == int(user['sub'])).first()
+    return {'response': 'success', 'id': int(user['sub']), 'firstname': current_user.first_name, 'lastname': current_user.last_name}
 
 
 @app.get('/api/get-user-chats')
 async def get_user_chats(user=Depends(get_current_user), db: Session = Depends(get_db)):
-    if db.query(models.Users).filter(models.Users.id == user['sub']).first():
-        chats = [] # PLACEHOLDER
-        return {chats: chats} # PLACEHOLDER
-    return {chats: None} # PLACEHOLDER
+    if db.query(models.Users).filter(models.Users.id == int(user['sub'])).first():
+        chats = db.query(models.Chats).filter(models.Chats.user_id == int(user['sub'])).all()
+        return {'chats': chats}
+    else:
+        print("error") # Handle user not found
+    return {'chats': None}

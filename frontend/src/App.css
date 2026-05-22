@@ -12,7 +12,7 @@ html, body, #root {
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 5fr;
+  grid-template-columns: 1fr 6fr;
   grid-template-rows: 4fr 1fr;
   height: 100vh;
 }
@@ -220,28 +220,29 @@ html, body, #root {
   overflow: auto;
 }
 
-.sidePanel.open {
-  overflow: auto;
+.sidePanel {
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  width: 100%;
   background-color: #1e1e20;
-  box-shadow: 2px 1px #2e2d2d;
   transition: width 0.2s ease-in;
 }
 
+.sidePanel.open {
+  width: 100%;
+}
+
 .sidePanel.close {
-  overflow: auto;
-  height: 100%;
-  width: 30%;
-  background-color: #1e1e20;
-  transition: width 0.2s ease;
-  box-shadow: 2px 1px #2e2d2d;
+  width: 40%;
+}
+
+.sidePanelHeader {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
 }
 
 .toggleSidePanelButton.open {
-  position: absolute;
-  right: 15px;
-  top: 10px;
   background: none;
   border: none;
   padding: 0;
@@ -249,9 +250,6 @@ html, body, #root {
 }
 
 .toggleSidePanelButton.close {
-  position: absolute;
-  left: 5px;
-  top: 13px;
   background: none;
   border: none;
   padding: 0;
@@ -270,19 +268,34 @@ html, body, #root {
 
 .userIconWrapper{
   display: flex;
-  justify-self: center;
   justify-content: center;
-  transform: translateY(-97vh);
+  margin-top: 5px;
+  margin-bottom: 20px;
 }
 
-.userIconContainer {
+.userIconContainer.open {
   display: grid;
   grid-template-columns: 1fr 3fr;
+}
+
+.userIconContainer.close {
+  display: flex;
 }
 
 .userIconImage {
   display: flex;
   justify-self: center;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 50px;
+  background-color: cadetblue;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+}
+
+.userIconImageCentered {
+  display: flex;
   justify-content: center;
   align-items: center;
   height: 50px;
@@ -307,15 +320,21 @@ html, body, #root {
 }
 
 .userChat {
-  position: absolute;
-  height: 100px;
-  width: 100px;
-  left: 5px;
-  bottom: 300px;
-  padding: 5px;
+  width: 100%;
   background: none;
   border: none;
+  margin-bottom: 5px;
+  text-overflow: ellipsis;
 }
+
+.userChat.close {
+  background: none;
+  border: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 /*
   Chat Area

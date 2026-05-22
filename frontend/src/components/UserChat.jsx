@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import '../App.css'
 
-export default function UserChat({key, title}) {
+export default function UserChat({isOpen, title}) {
   return(
     <>
-    <button className='userChat' key={key}>{title}</button>
+    <button className={`userChat ${isOpen ? 'open' : 'close'}`}>
+      {title}
+    </button>
     </>
   )
 }

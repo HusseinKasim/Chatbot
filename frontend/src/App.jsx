@@ -18,7 +18,7 @@ import UserChat from './components/UserChat.jsx';
 function App() {
   const [ prompt, setPrompt ] = useState('');
   const [ toggleSidePanel, setSidePanel ] = useState(true);
-  const { messages, handleUserInput, clearChat, chats } = useChat();
+  const { messages, handleUserInput, clearChat, chats, updateChatSidebar } = useChat();
   const [ toggleLoginModal, setLoginModal ] = useState(false);
   const [ toggleRegisterModal, setRegisterModal ] = useState(false);
 
@@ -27,6 +27,7 @@ function App() {
   // User login persistence after refresh
   useEffect(() => {
     checkAuth();
+    updateChatSidebar();
   }, []);
 
   function handlePromptChange(e) {
@@ -60,19 +61,20 @@ function App() {
       {/* Sidepanel */}
       <div className='sidePanelContainer'> 
         <div className='sidePanelWrapper'> 
-          <SidePanel isOpen={toggleSidePanel} />
-          <div className='sidePanelHeader'>
-            <ToggleSidePanelButton isOpen={toggleSidePanel} onClick={handleToggleState} />
-          </div>
-          <div className='sidePanelBody'>
-            {user ?  <>
-            <UserIcon firstName={firstName} lastName={lastName} />
-            <LogoutButton onLogout={clearChat}/>
-            {chats.map(chat => (
-              <UserChat key={chat.chatID} title={chat.title} />
-            ))}
-            </> : <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false)}}/> }
-          </div>
+          <SidePanel isOpen={toggleSidePanel}>
+            <div className='sidePanelHeader'>
+              <ToggleSidePanelButton isOpen={toggleSidePanel} onClick={handleToggleState} />
+            </div>
+              {user ?  <>
+              <div className='userIconWrapper'>
+                <UserIcon isOpen={toggleSidePanel} firstName={firstName} lastName={lastName} />
+              </div>
+              <LogoutButton onLogout={clearChat}/>
+              {chats.map(chat => (
+                <UserChat key={chat.chatID} title={chat.title} />
+              ))}
+              </> : <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false)}}/> }
+          </SidePanel>
         </div>
       </div>  
 

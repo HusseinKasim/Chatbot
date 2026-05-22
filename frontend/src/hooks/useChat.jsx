@@ -1,4 +1,4 @@
-import {useState, useContext} from 'react'
+import {useState, useContext, useEffect} from 'react'
 import '../App.css'
 import AuthContext from '../context/AuthContext';
 
@@ -13,6 +13,17 @@ export default function useChat()
     ])
     const { user } = useContext(AuthContext);
 
+    useEffect(() => {
+        if(user){
+            updateChatSidebar();
+        }
+        else{
+            setChats([{'chatID': 0, 'title': 'New Chat'}]);
+            setMessages([{'role': 'assistant', 'content': 'Hello! Please enter a prompt.'}]);
+            setChatID(0);
+        }
+    }, [user]);
+
     async function handleUserInput(prompt){
         if(user == null)
         {
@@ -21,7 +32,6 @@ export default function useChat()
         else
         {
             handleLoggedInUserInput(prompt, chatID);
-            updateChatSidebar(chats);
         }
     }
 
@@ -63,7 +73,6 @@ export default function useChat()
 
         // Return and print data from backend
         const data = await response.json();
-        console.log(data.chatID);
         
         // Update ChatID if it was null
         setChatID(data.chatID);
@@ -72,7 +81,7 @@ export default function useChat()
         setMessages(prev => [...prev, {'role': 'assistant', 'content': data.response}]);
     }
 
-    async function updateChatSidebar(user){
+    async function updateChatSidebar(){
         // Send prompt to backend via HTTP POST
         const response = await fetch('/api/get-user-chats', {
         method: 'GET',
@@ -80,11 +89,16 @@ export default function useChat()
         })
 
         const data = await response.json();
-        if(data != null)
+        if(data.chats != null)
         {
-            setChats(/* ADD ALL chat_id and chat_title values to the chats state*/);
-        }   
+            setChats(
+                data.chats.map(chat => ({
+                    chatID: chat.id,
+                    title: chat.chat_title
+                }))
+            );
+        }
     }
 
-    return { messages, handleUserInput, clearChat, chats };
+    return { messages, handleUserInput, clearChat, chats, updateChatSidebar };
 }
