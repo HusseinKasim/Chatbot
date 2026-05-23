@@ -73,7 +73,7 @@ def get_current_user(request: Request):
 
 
 # HTTP POST endpoint
-@app.post('/api/process-user-prompt')
+@app.post('/api/user-prompt')
 async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(get_current_user), db: Session = Depends(get_db)):
 
     # Verify user token is valid (by comparing with db)
@@ -122,7 +122,7 @@ async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(ge
 
 
 # HTTP POST endpoint
-@app.post('/api/process-guest-prompt')
+@app.post('/api/guest-prompt')
 async def captureUserInput(chatMessages: ChatMessages):
     chat_completion = client.chat.completions.create(
         messages=
@@ -194,7 +194,7 @@ async def get_user_info(user=Depends(get_current_user), db: Session = Depends(ge
     return {'response': 'success', 'id': int(user['sub']), 'firstname': current_user.first_name, 'lastname': current_user.last_name}
 
 
-@app.get('/api/get-user-chats')
+@app.get('/api/user-chats')
 async def get_user_chats(user=Depends(get_current_user), db: Session = Depends(get_db)):
     if db.query(models.Users).filter(models.Users.id == int(user['sub'])).first():
         chats = db.query(models.Chats).filter(models.Chats.user_id == int(user['sub'])).all()

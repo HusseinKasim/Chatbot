@@ -47,7 +47,7 @@ export default function useChat()
         setMessages(updatedMessages);
 
         // Send prompt to backend via HTTP POST
-        const response = await fetch('/api/process-guest-prompt', {
+        const response = await fetch('/api/guest-prompt', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ messages: updatedMessages }),
@@ -64,7 +64,7 @@ export default function useChat()
     async function handleLoggedInUserInput(prompt, chatID)
     {
         // Send prompt to backend via HTTP POST
-        const response = await fetch('/api/process-user-prompt', {
+        const response = await fetch('/api/user-prompt', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ prompt: prompt, chatID: chatID }),
@@ -83,7 +83,7 @@ export default function useChat()
 
     async function updateChatSidebar(){
         // Send prompt to backend via HTTP POST
-        const response = await fetch('/api/get-user-chats', {
+        const response = await fetch('/api/user-chats', {
         method: 'GET',
         credentials: 'include'
         })
