@@ -77,4 +77,6 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
 ## Assets Used
 - [Sidepanel] (https://www.flaticon.com/free-icon/side-menu_5405818?term=side+bar&page=1&position=9&origin=search&related_id=5405818)
 
-- [Send] (https://www.flaticon.com/free-icon/send_876777?term=send&page=1&position=9&origin=search&related_id=876777)
+- [Send Prompt] (https://www.flaticon.com/free-icon/send_876777?term=send&page=1&position=9&origin=search&related_id=876777)
+
+- [New Chat] (https://www.flaticon.com/free-icon/add_3416075?term=add&page=1&position=6&origin=search&related_id=3416075)
