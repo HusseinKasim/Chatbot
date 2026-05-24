@@ -60,7 +60,8 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
   - `POST /api/login` -> authentificates user
   - `POST /api/logout` -> logs user out of account
   - `GET /api/me` -> retrieves user info
-  - `GET /api/user-chats` -> retrieves user chats info
+  - `GET /api/user-chats` -> retrieves user chats
+  - `GET /api/chat-messages` -> retrieves chat messages
 
 -----
 
