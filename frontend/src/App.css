@@ -269,8 +269,8 @@ html, body, #root {
 .userIconWrapper{
   display: flex;
   justify-content: center;
-  margin-top: 5px;
-  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 15px;
 }
 
 .userIconContainer.open {
@@ -333,6 +333,28 @@ html, body, #root {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.newChatButton {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  gap: 8px;
+  margin-top: 10px;
+  margin-right: 100px;
+}
+
+.newChatButton.close {
+  justify-content: left;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.newChatButton img {
+  width: 30px;
 }
 
 

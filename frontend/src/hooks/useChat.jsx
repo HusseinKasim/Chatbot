@@ -39,6 +39,8 @@ export default function useChat()
         setMessages([
             {'role': 'assistant', 'content': 'Hello! Please enter a prompt.'} 
         ]);
+        
+        setChatID(0);
     }
 
     async function handleGuestInput(prompt){

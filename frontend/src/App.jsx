@@ -14,6 +14,7 @@ import LogoutButton from './components/LogoutButton'
 import AuthContext from './context/AuthContext.jsx'
 import UserIcon from './components/UserIcon.jsx'
 import UserChat from './components/UserChat.jsx';
+import NewChatButton from './components/NewChatButton.jsx'
 
 function App() {
   const [ prompt, setPrompt ] = useState('');
@@ -63,6 +64,7 @@ function App() {
         <div className='sidePanelWrapper'> 
           <SidePanel isOpen={toggleSidePanel}>
             <div className='sidePanelHeader'>
+              <NewChatButton isOpen={toggleSidePanel} onClick={clearChat}/>
               <ToggleSidePanelButton isOpen={toggleSidePanel} onClick={handleToggleState} />
             </div>
               {user ?  <>

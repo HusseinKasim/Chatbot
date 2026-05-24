@@ -1,11 +1,19 @@
 import { useState } from 'react'
 import '../App.css'
 
-export default function NewChatButton({onClick}) {
+export default function NewChatButton({isOpen, onClick}) {
   return(
     <>  
-      <button className='newChatButton' onClick={onClick}>
-        New Chat
+      <button className={isOpen ? 'newChatButton open' : 'newChatButton close'} onClick={onClick}>
+        <img src='/assets/add.png'/>
+        {
+          isOpen ? <>
+            New Chat
+          </>
+          :
+          <>
+          </>
+        }
       </button>
     </>
   )
