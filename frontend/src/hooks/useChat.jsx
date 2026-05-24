@@ -31,7 +31,7 @@ export default function useChat()
         }
         else
         {
-            handleLoggedInUserInput(prompt, chatID);
+            handleLoggedInUserInput(prompt);
         }
     }
 
@@ -61,7 +61,7 @@ export default function useChat()
         setMessages(prev => [...prev, {'role': 'assistant', 'content': data.response}])
     }
 
-    async function handleLoggedInUserInput(prompt, chatID)
+    async function handleLoggedInUserInput(prompt)
     {
         // Send prompt to backend via HTTP POST
         const response = await fetch('/api/user-prompt', {
@@ -82,7 +82,7 @@ export default function useChat()
     }
 
     async function updateChatSidebar(){
-        // Send prompt to backend via HTTP POST
+        // Fetch user chats from backend via HTTP GET
         const response = await fetch('/api/user-chats', {
         method: 'GET',
         credentials: 'include'
@@ -100,5 +100,26 @@ export default function useChat()
         }
     }
 
-    return { messages, handleUserInput, clearChat, chats, updateChatSidebar };
+    async function updateUserChat(chatID){
+        setChatID(chatID);
+        
+        // Fetch chat messages from backend via HTTP GET
+        const response = await fetch(`/api/chat-messages?chatID=${chatID}`, {
+        method: 'GET',
+        credentials: 'include'
+        })
+        
+        const data = await response.json();
+        if(data.messages != null)
+        {
+            setMessages(
+                data.messages.map(message => ({
+                    role: message.role,
+                    content: message.message_text
+                }))
+            )
+        }
+    }
+
+    return { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat };
 }

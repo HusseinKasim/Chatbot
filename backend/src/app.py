@@ -50,6 +50,7 @@ class LoggedInUserPromptData(BaseModel):
     prompt: str
     chatID: int
 
+
 def get_db():
     db = SessionLocal()
     try:
@@ -200,5 +201,15 @@ async def get_user_chats(user=Depends(get_current_user), db: Session = Depends(g
         chats = db.query(models.Chats).filter(models.Chats.user_id == int(user['sub'])).all()
         return {'chats': chats}
     else:
-        print("error") # Handle user not found
+        print('error') # Handle user not found
     return {'chats': None}
+
+
+@app.get('/api/chat-messages')
+async def get_chat_messages(chatID: int, user=Depends(get_current_user), db: Session = Depends(get_db)):
+    if db.query(models.Users).filter(models.Users.id == int(user['sub'])).first():
+        messages = db.query(models.Messages).filter(models.Messages.chat_id == chatID).all()
+        return {'messages': messages}
+    else:
+        print('error') # Handle user not found
+    return {'messages': None}

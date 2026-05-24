@@ -18,7 +18,7 @@ import UserChat from './components/UserChat.jsx';
 function App() {
   const [ prompt, setPrompt ] = useState('');
   const [ toggleSidePanel, setSidePanel ] = useState(true);
-  const { messages, handleUserInput, clearChat, chats, updateChatSidebar } = useChat();
+  const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat } = useChat();
   const [ toggleLoginModal, setLoginModal ] = useState(false);
   const [ toggleRegisterModal, setRegisterModal ] = useState(false);
 
@@ -71,7 +71,7 @@ function App() {
               </div>
               <LogoutButton onLogout={clearChat}/>
               {chats.map(chat => (
-                <UserChat key={chat.chatID} title={chat.title} />
+                <UserChat key={chat.chatID} title={chat.title} onClick={() => updateUserChat(chat.chatID)}/>
               ))}
               </> : <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false)}}/> }
           </SidePanel>
@@ -98,24 +98,24 @@ function App() {
         {/* Chat Area */}
       <div className='chatAreaContainer'>
         <div className='bubblesContainer'>
-      {messages.map((message) => {
-        if(message.role === 'user')
-        {
-          return(
-                    <div className='userChatBubbleContainer'>
-                      <UserChatBubble value={message.content} />
-                    </div>
-            );
-        }
-        return(
-                <div className='chatbotChatBubbleContainer'>
-                  <ChatbotChatBubble value={message.content} />
-                </div>
-          );
-        }
-      )}
+          {messages.map((message) => {
+            if(message.role === 'user')
+            {
+            return(
+              <div className='userChatBubbleContainer'>
+                <UserChatBubble value={message.content} />
+              </div>
+              );
+            }
+            return(
+              <div className='chatbotChatBubbleContainer'>
+                <ChatbotChatBubble value={message.content} />
+              </div>
+              );
+            }
+          )}
+        </div>
       </div>
-    </div>
     </div>
     </>
   )
