@@ -53,21 +53,21 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
 
 ## API Endpoints
 
-### REST API
-#### Prompt Processing
-  - `POST /api/user-prompt` -> passes the logged in user's prompt to the Groq model and retrieves the generated response
-  - `POST /api/guest-prompt` -> passes the guest user's prompt to the Groq model and retrieves the generated response
+### REST API 
+#### `prompt` Router
+  - `POST /api/prompt/guest` -> passes the guest user's prompt to the Groq model and retrieves the generated response
+  - `POST /api/prompt/user` -> passes the logged in user's prompt to the Groq model and retrieves the generated response 
 
-#### Auth
-  - `GET /api/me` -> retrieves user info
-  - `POST /api/register` -> registers user account
-  - `POST /api/login` -> authentificates user
-  - `POST /api/logout` -> logs user out of account
+#### `auth` Router
+  - `GET /api/auth/me` -> retrieves user info
+  - `POST /api/auth/register` -> registers user account
+  - `POST /api/auth/login` -> authentificates user
+  - `POST /api/auth/logout` -> logs user out of account
 
-#### Chats
-  - `GET /api/user-chats` -> retrieves user chats
-  - `GET /api/chat-messages` -> retrieves chat messages
-  - `DELETE /api/chat-delete` -> deletes chat messages
+#### `chats` Router
+  - `GET /api/chats/` -> retrieves user chats
+  - `GET /api/chats/{chatID}/messages` -> retrieves chat messages
+  - `DELETE /api/chats/{chatID}` -> deletes chat messages
 
 -----
 
