@@ -1,23 +1,17 @@
-import os
+
 from dotenv import load_dotenv
-from fastapi import FastAPI, Depends, HTTPException, Response, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from groq import Groq
-from typing import List
 import models
 from database import Base, engine, SessionLocal
-from sqlalchemy.orm import Session
-from hash import encrypt_password, verify_password
-import auth
+import pass_auth
+from routers import prompt, auth, chats
 
 app = FastAPI()
- 
+
 load_dotenv()
 
 models.Base.metadata.create_all(bind=engine)
-
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 # CORS
 app.add_middleware(
@@ -28,36 +22,12 @@ app.add_middleware(
     allow_headers = ["*"],
 )
 
-# Pydantic classes
-class Message(BaseModel):
-    role: str
-    content: str
-
-class ChatMessages(BaseModel):
-    messages: List[Message]
-
-class RegisterData(BaseModel):
-    firstName: str
-    lastName: str
-    email: str
-    password: str
-
-class LoginData(BaseModel):
-    email: str
-    password: str
-
-class LoggedInUserPromptData(BaseModel):
-    prompt: str
-    chatID: int
-
-
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
-
 
 def get_current_user(request: Request):
     token = request.cookies.get('access_token')
@@ -67,165 +37,11 @@ def get_current_user(request: Request):
         return None  
      
     try:
-        return auth.verify_token(token)
+        return pass_auth.verify_token(token)
  
     except:
         return None
 
-
-# HTTP POST endpoint
-@app.post('/api/user-prompt')
-async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(get_current_user), db: Session = Depends(get_db)):
-
-    # Verify user token is valid (by comparing with db)
-    if db.query(models.Users).filter(models.Users.id == int(user['sub'])).first():
-
-        if promptData.chatID == 0:
-        # Add row in chats db, assign chatID, and return chatID
-            new_chat = models.Chats(chat_title=promptData.prompt[0:25], user_id=int(user['sub']))
-            db.add(new_chat)
-            db.commit()
-            db.refresh(new_chat)
-            promptData.chatID = new_chat.id
-
-        # Add row in messages db to add user's first prompt
-        new_message = models.Messages(role='user', message_text=promptData.prompt, chat_id=promptData.chatID)
-        db.add(new_message)
-        db.commit()
-        db.refresh(new_message)
-
-        # Retrieve roles and chat messages from messages db (via chatID) of authorized user
-        messages_query = (db.query(models.Messages).join(models.Chats, models.Messages.chat_id == models.Chats.id).filter(models.Chats.user_id == int(user['sub']), models.Messages.chat_id == promptData.chatID).order_by(models.Messages.created_at.asc()).all())
-
-        chat_completion = client.chat.completions.create(
-        messages=
-        [
-            {
-                'role': message.role,
-                'content': message.message_text
-            }
-            for message in messages_query
-        ], 
-        model='llama-3.3-70b-versatile',
-        )
-        
-        chatbot_response = chat_completion.choices[0].message.content
-
-        # Add row of bot response into messages db
-        new_bot_message = models.Messages(role='assistant', message_text=chatbot_response, chat_id=promptData.chatID)
-        db.add(new_bot_message)
-        db.commit()
-        db.refresh(new_bot_message)
-
-        return {'chatID': promptData.chatID, 'response': chatbot_response}
-    
-    return {'chatID': 0, 'response': 'invalid'}
-
-
-# HTTP POST endpoint
-@app.post('/api/guest-prompt')
-async def captureUserInput(chatMessages: ChatMessages):
-    chat_completion = client.chat.completions.create(
-        messages=
-        [
-            {
-                'role': msg.role,  
-                'content': msg.content,
-            }   
-            for msg in chatMessages.messages
-        ], 
-        model='llama-3.3-70b-versatile',
-    )
-    chatbot_response = chat_completion.choices[0].message.content
-    return {'response': chatbot_response}
-
-
-@app.post('/api/register')
-async def register(payload: RegisterData, db: Session = Depends(get_db)):
-    if payload.firstName != '' and payload.lastName != '' and payload.email != '' and payload.password  != '':
-        # Encrypt password
-        encrypted_password = encrypt_password(payload.password)
-
-        # Store data in database
-        db_user = models.Users(first_name=payload.firstName.capitalize(), last_name=payload.lastName.capitalize(), email=payload.email, password=encrypted_password)
-        db.add(db_user)
-        db.commit()
-        db.refresh(db_user) 
-        return {'response': "ok"}
-    # Handle Exception: Empty input field/-s
-
-
-@app.post('/api/login')
-async def login(payload: LoginData, response: Response, db: Session = Depends(get_db)):
-    # Verify password
-    user = db.query(models.Users).filter(models.Users.email == payload.email).first()
-    if not user:
-        # Handle exception: Email does not exist
-        return {'response': 'invalid'}
-    
-    password_verification = verify_password(payload.password, user.password)
-    if password_verification:
-        token = auth.create_token(user.id)
-        response.set_cookie(
-            key='access_token',
-            value=token,
-            httponly=True,
-            secure=False,
-            samesite='lax'
-        )
-        return {'response': 'authentificated'}
-    
-    # Handle exception: Password not verified
-    return {'response': 'invalid'}
-
-
-@app.post('/api/logout')
-async def logout(response: Response):
-    response.delete_cookie('access_token')
-    # Handle Exception: cookie does not exist/already deleted
-    return {'response': 'logged out'}
-
-
-@app.get('/api/me')
-async def get_user_info(user=Depends(get_current_user), db: Session = Depends(get_db)):
-    if not user:
-        return {'response': None, 'id': None, 'firstname': None, 'lastname': None }
-    
-    current_user = db.query(models.Users).filter(models.Users.id == int(user['sub'])).first()
-    return {'response': 'success', 'id': int(user['sub']), 'firstname': current_user.first_name, 'lastname': current_user.last_name}
-
-
-@app.get('/api/user-chats')
-async def get_user_chats(user=Depends(get_current_user), db: Session = Depends(get_db)):
-    if db.query(models.Users).filter(models.Users.id == int(user['sub'])).first():
-        chats = db.query(models.Chats).filter(models.Chats.user_id == int(user['sub'])).order_by(models.Chats.created_at.desc()).all()
-        return {'chats': chats}
-    else:
-        print('error') # Handle user not found
-    return {'chats': None}
-
-
-@app.get('/api/chat-messages')
-async def get_chat_messages(chatID: int, user=Depends(get_current_user), db: Session = Depends(get_db)):
-    if db.query(models.Users).filter(models.Users.id == int(user['sub'])).first():
-        messages = db.query(models.Messages).filter(models.Messages.chat_id == chatID).all()
-        return {'messages': messages}
-    else:
-        print('error') # Handle user not found
-    return {'messages': None}
-
-
-@app.delete('/api/chat-delete')
-async def delete_chat(chatID: int, user=Depends(get_current_user), db: Session = Depends(get_db)):
-    if db.query(models.Users).filter(models.Users.id == int(user['sub'])).first():
-        # Delete chat messages
-        db.query(models.Messages).filter(models.Messages.chat_id == chatID).delete()
-        db.commit()
-
-        # Delete chat
-        chat = db.query(models.Chats).filter(models.Chats.id == chatID).first()
-        db.delete(chat)
-        db.commit()
-        return {'response': 'success'}
-    else:
-        return {'response': 'invalid'}
+app.include_router(prompt.router)
+app.include_router(auth.router)
+app.include_router(chats.router)

@@ -49,7 +49,7 @@ export default function useChat()
         setMessages(updatedMessages);
 
         // Send prompt to backend via HTTP POST
-        const response = await fetch('/api/guest-prompt', {
+        const response = await fetch('/api/prompt/guest', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ messages: updatedMessages }),
@@ -66,7 +66,7 @@ export default function useChat()
     async function handleLoggedInUserInput(prompt)
     {
         // Send prompt to backend via HTTP POST
-        const response = await fetch('/api/user-prompt', {
+        const response = await fetch('/api/prompt/user', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ prompt: prompt, chatID: chatID }),
@@ -85,7 +85,7 @@ export default function useChat()
 
     async function updateChatSidebar(){
         // Fetch user chats from backend via HTTP GET
-        const response = await fetch('/api/user-chats', {
+        const response = await fetch('/api/chats/', {
         method: 'GET',
         credentials: 'include'
         })
@@ -106,7 +106,7 @@ export default function useChat()
         setChatID(chatID);
         
         // Fetch chat messages from backend via HTTP GET
-        const response = await fetch(`/api/chat-messages?chatID=${chatID}`, {
+        const response = await fetch(`/api/chats/${chatID}/messages`, {
         method: 'GET',
         credentials: 'include'
         })
@@ -125,7 +125,7 @@ export default function useChat()
 
     async function deleteUserChat(chatID){
         // Delete user chat from DB via HTTP DELETE
-        const response = await fetch(`/api/chat-delete?chatID=${chatID}`, {
+        const response = await fetch(`/api/chats/${chatID}`, {
         method: 'DELETE',
         credentials: 'include'
         })

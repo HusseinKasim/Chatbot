@@ -35,7 +35,7 @@ export function AuthProvider({children}) {
         };
 
         // Send user data to backend via HTTP POST
-        const response = await fetch('/api/register', {
+        const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(payload),
@@ -51,7 +51,7 @@ export function AuthProvider({children}) {
         };
 
         // Get user data from backend via HTTP POST
-        const response = await fetch('/api/login', {
+        const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(payload),
@@ -70,7 +70,7 @@ export function AuthProvider({children}) {
     }
 
     const logout = async () => {
-        const response = await fetch('/api/logout', {
+        const response = await fetch('/api/auth/logout', {
         method: 'POST',
         credentials: 'include'
         })
@@ -80,7 +80,7 @@ export function AuthProvider({children}) {
     }
 
     const checkAuth = async () => {
-        const response = await fetch('/api/me', {
+        const response = await fetch('/api/auth/me', {
             method: 'GET',
             credentials: 'include'
         });
