@@ -154,12 +154,14 @@ html, body, #root {
 
 .actions .registerButton {
   background: none;
+  border: none;
   color: blue;
   padding: 2px;
 }
 
 .actions .loginNowButton{
   background: none;
+  border: none;
   color: blue;
   padding: 2px;
 }
