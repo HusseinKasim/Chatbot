@@ -73,7 +73,7 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
 
 ## Features
 - Processes user prompts via Groq API
-- REST API for handling prompts and user registration/authentification
+- REST API for handling prompts, user registration/authentification, and chat management
 - PostgreSQL DB for user login data and user chats data
 - JWT Authentification
 - Password hashing
