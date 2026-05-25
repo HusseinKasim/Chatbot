@@ -19,7 +19,7 @@ import NewChatButton from './components/NewChatButton.jsx'
 function App() {
   const [ prompt, setPrompt ] = useState('');
   const [ toggleSidePanel, setSidePanel ] = useState(true);
-  const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat } = useChat();
+  const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat } = useChat();
   const [ toggleLoginModal, setLoginModal ] = useState(false);
   const [ toggleRegisterModal, setRegisterModal ] = useState(false);
 
@@ -73,7 +73,7 @@ function App() {
               </div>
               <LogoutButton onLogout={clearChat}/>
               {chats.map(chat => (
-                <UserChat key={chat.chatID} title={chat.title} onClick={() => updateUserChat(chat.chatID)}/>
+                <UserChat key={chat.chatID} title={chat.title} onClick={() => updateUserChat(chat.chatID)} onDelete={() => deleteUserChat(chat.chatID)}/>
               ))}
               </> : <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false)}}/> }
           </SidePanel>

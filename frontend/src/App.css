@@ -324,6 +324,8 @@ html, body, #root {
   background: none;
   border: none;
   margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 
@@ -333,6 +335,25 @@ html, body, #root {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.userChatWrapper {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  gap: 2px;
+}
+
+.deleteChatButton {
+  background: none;
+  border: none;
+}
+
+.deleteChatButton img {
+  height: 15px;
+  width: 15px;
 }
 
 .newChatButton {

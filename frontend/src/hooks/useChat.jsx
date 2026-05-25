@@ -123,5 +123,16 @@ export default function useChat()
         }
     }
 
-    return { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat };
+    async function deleteUserChat(chatID){
+        // Delete user chat from DB via HTTP DELETE
+        const response = await fetch(`/api/chat-delete?chatID=${chatID}`, {
+        method: 'DELETE',
+        credentials: 'include'
+        })
+
+        // Add error handling for when no response 
+        const data = await response.json();
+    }
+
+    return { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat };
 }
