@@ -66,7 +66,7 @@ export default function useChat()
     async function handleLoggedInUserInput(prompt)
     {
         // Send prompt to backend via HTTP POST
-        const response = await fetch('/api/prompt/user', {
+        let response = await fetchWithAuth('/api/prompt/user', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ prompt: prompt, chatID: chatID }),
@@ -85,7 +85,7 @@ export default function useChat()
 
     async function updateChatSidebar(){
         // Fetch user chats from backend via HTTP GET
-        const response = await fetch('/api/chats/', {
+        let response = await fetchWithAuth('/api/chats/', {
         method: 'GET',
         credentials: 'include'
         })
@@ -106,11 +106,11 @@ export default function useChat()
         setChatID(chatID);
         
         // Fetch chat messages from backend via HTTP GET
-        const response = await fetch(`/api/chats/${chatID}/messages`, {
+        let response = await fetchWithAuth(`/api/chats/${chatID}/messages`, {
         method: 'GET',
         credentials: 'include'
         })
-        
+
         const data = await response.json();
         if(data.messages != null)
         {
@@ -125,13 +125,32 @@ export default function useChat()
 
     async function deleteUserChat(chatID){
         // Delete user chat from DB via HTTP DELETE
-        const response = await fetch(`/api/chats/${chatID}`, {
+        let response = await fetchWithAuth(`/api/chats/${chatID}`, {
         method: 'DELETE',
         credentials: 'include'
         })
 
         // Add error handling for when no response 
         const data = await response.json();
+    }
+
+    async function fetchWithAuth(url, options={}){
+        let response = await fetch(url, options)
+        if(response.status == 401) // Unauthorized (bad access token)
+        {
+            // Use refresh token to create new access token
+            const refreshResponse = await fetch('/api/auth/refresh', {
+            method: 'POST',
+            credentials: 'include'
+            })
+
+            if(refreshResponse.ok)
+            {
+                // Retry
+                response = await fetch(url, options)
+            }
+        }
+        return response;
     }
 
     return { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat };

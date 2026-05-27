@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, Request
-from database import Base, SessionLocal
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from hash import encrypt_password, verify_password
+from dependencies import get_db, get_current_loggedin_user
 import models
 import pass_auth
 
@@ -18,27 +18,8 @@ class LoginData(BaseModel):
     email: str
     password: str
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-def get_current_user(request: Request):
-    token = request.cookies.get('access_token')
-
-    # Guest user
-    if not token:
-        return None  
-     
-    try:
-        return pass_auth.verify_token(token)
-    except:
-        return None
-
 @router.get('/me')
-async def get_user_info(user=Depends(get_current_user), db: Session = Depends(get_db)):
+async def get_user_info(user=Depends(get_current_loggedin_user), db: Session = Depends(get_db)):
     if not user:
         return {'response': None, 'id': None, 'firstname': None, 'lastname': None }
     
@@ -71,10 +52,19 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
     
     password_verification = verify_password(payload.password, user.password)
     if password_verification:
-        token = pass_auth.create_token(user.id)
+        access_token = pass_auth.create_access_token(user.id)
         response.set_cookie(
             key='access_token',
-            value=token,
+            value=access_token,
+            httponly=True,
+            secure=False,
+            samesite='lax'
+        )
+
+        refresh_token = pass_auth.create_refresh_token(user.id)
+        response.set_cookie(
+            key='refresh_token',
+            value=refresh_token,
             httponly=True,
             secure=False,
             samesite='lax'
@@ -88,6 +78,27 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
 @router.post('/logout')
 async def logout(response: Response):
     response.delete_cookie('access_token')
+    response.delete_cookie('refresh_token')
     # Handle Exception: cookie does not exist/already deleted
     return {'response': 'logged out'}
 
+
+@router.post('/refresh')
+async def create_new_access_token(request: Request, response:Response):
+    # Verify refresh token
+    refresh_token = request.cookies.get('refresh_token')
+    if not refresh_token:
+        return {'response': None}
+    
+    payload = pass_auth.verify_refresh_token(refresh_token)
+
+    # Create access token in cookie
+    access_token = pass_auth.create_access_token(payload['sub'])
+    response.set_cookie(
+            key='access_token',
+            value=access_token,
+            httponly=True,
+            secure=False,
+            samesite='lax'
+        )
+    return {'response': 'success'}

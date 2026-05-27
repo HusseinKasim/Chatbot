@@ -10,21 +10,40 @@ security = HTTPBearer(auto_error=False)
 
 # Constants
 load_dotenv()
-SECRET_KEY = os.getenv('JWT_SECRET_KEY')
+ACCESS_TOKEN_SECRET_KEY = os.getenv('JWT_ACCESS_TOKEN_SECRET_KEY')
+REFRESH_TOKEN_SECRET_KEY = os.getenv('JWT_REFRESH_TOKEN_SECRET_KEY')
 ALGORITHM = 'HS256'
-TOKEN_EXPIRATION_TIME_HOURS = 1
+ACCESS_TOKEN_EXPIRATION_TIME_HOURS = 1
+REFRESH_TOKEN_EXPIRATION_TIME_HOURS = 72
 
-# Create JWT Token
-def create_token(user_id: int):
+# Create JWT access token
+def create_access_token(user_id: int):
     payload = {
         'sub': str(user_id),
-        'exp': datetime.now(timezone.utc) + timedelta(hours=TOKEN_EXPIRATION_TIME_HOURS) 
+        'type': 'access',
+        'exp': datetime.now(timezone.utc) + timedelta(hours=ACCESS_TOKEN_EXPIRATION_TIME_HOURS) 
     }
 
-    token = jwt.encode(payload=payload, key=SECRET_KEY, algorithm=ALGORITHM)
+    token = jwt.encode(payload=payload, key=ACCESS_TOKEN_SECRET_KEY, algorithm=ALGORITHM)
     return token
 
-# Verify JWT Token
-def verify_token(token: str):
-    payload = jwt.decode(jwt=token, key=SECRET_KEY, algorithms=[ALGORITHM])
+# Verify JWT access token
+def verify_access_token(token: str):
+    payload = jwt.decode(jwt=token, key=ACCESS_TOKEN_SECRET_KEY, algorithms=[ALGORITHM])
+    return payload
+
+# Create JWT refresh token
+def create_refresh_token(user_id: int):
+    payload = {
+        'sub': str(user_id),
+        'type': 'refresh',
+        'exp': datetime.now(timezone.utc) + timedelta(hours=REFRESH_TOKEN_EXPIRATION_TIME_HOURS) 
+    }
+    
+    token = jwt.encode(payload=payload, key=REFRESH_TOKEN_SECRET_KEY, algorithm=ALGORITHM)
+    return token
+
+# Verify JWT refresh token
+def verify_refresh_token(token: str):
+    payload = jwt.decode(jwt=token, key=REFRESH_TOKEN_SECRET_KEY, algorithms=[ALGORITHM])
     return payload

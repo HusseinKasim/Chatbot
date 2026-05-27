@@ -1,11 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, Request
+from fastapi import APIRouter, Depends, HTTPException
 from groq import Groq
-from database import Base, engine, SessionLocal
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import List
 import models
-import pass_auth
+from dependencies import get_db, get_current_loggedin_user
 import os
 
 router = APIRouter(prefix='/api/prompt')
@@ -23,25 +22,6 @@ class Message(BaseModel):
 
 class ChatMessages(BaseModel):
     messages: List[Message]
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-def get_current_user(request: Request):
-    token = request.cookies.get('access_token')
-
-    # Guest user
-    if not token:
-        return None  
-     
-    try:
-        return pass_auth.verify_token(token)
-    except:
-        return None
 
 # Guest prompt endpoint
 @router.post('/guest')
@@ -63,7 +43,7 @@ async def captureUserInput(chatMessages: ChatMessages):
 
 # User prompt endpoint
 @router.post('/user')
-async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(get_current_user), db: Session = Depends(get_db)):
+async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(get_current_loggedin_user), db: Session = Depends(get_db)):
     # Verify user token is valid (by comparing with db)
     if db.query(models.Users).filter(models.Users.id == int(user['sub'])).first():
 
