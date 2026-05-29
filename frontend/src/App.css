@@ -235,7 +235,7 @@ html, body, #root {
 }
 
 .sidePanel.close {
-  width: 40%;
+ width: 110px;
 }
 
 .sidePanelHeader {
@@ -262,10 +262,13 @@ html, body, #root {
 }
 
 .loginButton {
-  position: absolute;
-  left: 5px;
-  bottom: 13px;
-  padding: 5px;
+  display: flex;
+  justify-content: center;
+  width: calc(100% - 40px);
+  margin: auto 20px 20px 20px;
+  background-color: #508991;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .userIconWrapper{
@@ -315,10 +318,13 @@ html, body, #root {
 }
 
 .logoutButton {
-  position: absolute;
-  left: 5px;
-  bottom: 13px;
-  padding: 5px;
+  display: flex;
+  justify-content: center;
+  width: calc(100% - 40px);
+  margin: auto 20px 20px 20px;
+  background-color: #508991;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .userChat {

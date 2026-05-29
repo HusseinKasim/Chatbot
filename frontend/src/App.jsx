@@ -71,11 +71,11 @@ function App() {
               <div className='userIconWrapper'>
                 <UserIcon isOpen={toggleSidePanel} firstName={firstName} lastName={lastName} />
               </div>
-              <LogoutButton onLogout={clearChat}/>
               {chats.map(chat => (
                 <UserChat key={chat.chatID} title={chat.title} onClick={() => updateUserChat(chat.chatID)} onDelete={() => deleteUserChat(chat.chatID)}/>
               ))}
-              </> : <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false)}}/> }
+              <LogoutButton isOpen={toggleSidePanel} onLogout={clearChat}/>
+              </> : <LoginButton isOpen={toggleSidePanel} onClick={() => {setLoginModal(true); setRegisterModal(false)}}/> }
           </SidePanel>
         </div>
       </div>  
