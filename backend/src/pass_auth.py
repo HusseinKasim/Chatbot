@@ -1,7 +1,6 @@
 import os
 import jwt
 from datetime import datetime, timedelta, timezone
-from fastapi import Depends
 from fastapi.security import HTTPBearer
 from dotenv import load_dotenv
 
