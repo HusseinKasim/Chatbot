@@ -47,32 +47,29 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
     # Verify password
     user = db.query(models.Users).filter(models.Users.email == payload.email).first()
     if not user:
-        # Handle exception: Email does not exist
-        return {'response': 'invalid'}
+        raise HTTPException(status_code=401, detail='Invalid login credentials')
     
-    password_verification = verify_password(payload.password, user.password)
-    if password_verification:
-        access_token = pass_auth.create_access_token(user.id)
-        response.set_cookie(
-            key='access_token',
-            value=access_token,
-            httponly=True,
-            secure=False,
-            samesite='lax'
-        )
+    if not verify_password(payload.password, user.password):
+        raise HTTPException(status_code=401, detail='Invalid login credentials')
+    
+    access_token = pass_auth.create_access_token(user.id)
+    response.set_cookie(
+        key='access_token',
+        value=access_token,
+        httponly=True,
+        secure=False,
+        samesite='lax'
+    )
 
-        refresh_token = pass_auth.create_refresh_token(user.id)
-        response.set_cookie(
-            key='refresh_token',
-            value=refresh_token,
-            httponly=True,
-            secure=False,
-            samesite='lax'
-        )
-        return {'response': 'authentificated'}
-    
-    # Handle exception: Password not verified
-    return {'response': 'invalid'}
+    refresh_token = pass_auth.create_refresh_token(user.id)
+    response.set_cookie(
+        key='refresh_token',
+        value=refresh_token,
+        httponly=True,
+        secure=False,
+        samesite='lax'
+    )
+    return {'response': 'authenticated'}
 
 
 @router.post('/logout')
