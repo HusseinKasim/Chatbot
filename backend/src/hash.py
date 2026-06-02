@@ -2,7 +2,7 @@ from pwdlib import PasswordHash
 
 password_hasher = PasswordHash.recommended()
 
-def encrypt_password(password):
+def hash_password(password):
     hashed_password = password_hasher.hash(password)
     return hashed_password
 

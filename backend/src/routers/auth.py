@@ -1,25 +1,25 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, Request
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
-from hash import encrypt_password, verify_password
-from dependencies import get_db, get_current_loggedin_user
+from pydantic import BaseModel, Field
+from hash import hash_password, verify_password
+from dependencies import get_db, get_current_user, get_current_user_optional
 import models
 import pass_auth
 
 router = APIRouter(prefix='/api/auth')
 
 class RegisterData(BaseModel):
-    firstName: str
-    lastName: str
-    email: str
-    password: str
+    firstName: str = Field(min_length=1)
+    lastName: str = Field(min_length=1)
+    email: str = Field(min_length=1)
+    password: str = Field(min_length=1)
 
 class LoginData(BaseModel):
     email: str
     password: str
 
-@router.get('/me')
-async def get_user_info(user=Depends(get_current_loggedin_user), db: Session = Depends(get_db)):
+@router.get('/me') 
+async def get_user_info(user=Depends(get_current_user_optional), db: Session = Depends(get_db)):
     if not user:
         return {'response': None, 'id': None, 'firstname': None, 'lastname': None }
     
@@ -27,19 +27,23 @@ async def get_user_info(user=Depends(get_current_loggedin_user), db: Session = D
     return {'response': 'success', 'id': int(user['sub']), 'firstname': current_user.first_name, 'lastname': current_user.last_name}
 
 
-@router.post('/register')
+@router.post('/register') # Exception handling done
 async def register(payload: RegisterData, db: Session = Depends(get_db)):
-    if payload.firstName != '' and payload.lastName != '' and payload.email != '' and payload.password  != '':
-        # Encrypt password
-        encrypted_password = encrypt_password(payload.password)
 
-        # Store data in database
-        db_user = models.Users(first_name=payload.firstName.capitalize(), last_name=payload.lastName.capitalize(), email=payload.email, password=encrypted_password)
-        db.add(db_user)
-        db.commit()
-        db.refresh(db_user) 
-        return {'response': "ok"}
-    # Handle Exception: Empty input field/-s
+    existing_user = db.query(models.Users).filter(models.Users.email == payload.email.strip().lower()).first()
+    if existing_user:
+        raise HTTPException(status_code=409, detail='Email already exists!')
+
+    # Encrypt password
+    hashed_password = hash_password(payload.password)
+
+    # Store data in database
+    db_user = models.Users(first_name=payload.firstName.strip().capitalize(), last_name=payload.lastName.strip().capitalize(), email=payload.email, password=hashed_password)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user) 
+
+    return {'response': "ok"}
 
 
 @router.post('/login')
