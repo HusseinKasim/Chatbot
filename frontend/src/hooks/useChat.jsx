@@ -65,6 +65,8 @@ export default function useChat()
 
     async function handleLoggedInUserInput(prompt)
     {
+        setMessages(prev => [...prev, {'role': 'user', 'content': prompt}]);
+        
         // Send prompt to backend via HTTP POST
         let response = await fetchWithAuth('/api/prompt/user', {
         method: 'POST',
@@ -79,7 +81,6 @@ export default function useChat()
         // Update ChatID if it was null
         setChatID(data.chatID);
         
-        setMessages(prev => [...prev, {'role': 'user', 'content': prompt}]);
         setMessages(prev => [...prev, {'role': 'assistant', 'content': data.response}]);
     }
 
