@@ -112,6 +112,7 @@ export default function useChat()
         })
 
         const data = await response.json();
+        console.log(data.messages);
         if(data.messages != null)
         {
             setMessages(

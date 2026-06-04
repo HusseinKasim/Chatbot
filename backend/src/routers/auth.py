@@ -27,7 +27,7 @@ async def get_user_info(user=Depends(get_current_user_optional), db: Session = D
     return {'response': 'success', 'id': int(user['sub']), 'firstname': current_user.first_name, 'lastname': current_user.last_name}
 
 
-@router.post('/register') # Exception handling done
+@router.post('/register')
 async def register(payload: RegisterData, db: Session = Depends(get_db)):
 
     existing_user = db.query(models.Users).filter(models.Users.email == payload.email.strip().lower()).first()
@@ -77,10 +77,10 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
 
 
 @router.post('/logout')
-async def logout(response: Response):
+async def logout(response: Response, request: Request):
     response.delete_cookie('access_token')
     response.delete_cookie('refresh_token')
-    # Handle Exception: cookie does not exist/already deleted
+
     return {'response': 'logged out'}
 
 
@@ -89,7 +89,7 @@ async def create_new_access_token(request: Request, response:Response):
     # Verify refresh token
     refresh_token = request.cookies.get('refresh_token')
     if not refresh_token:
-        return {'response': None}
+        raise HTTPException(status_code=401, detail='Refresh token does not exist')
     
     payload = pass_auth.verify_refresh_token(refresh_token)
 
