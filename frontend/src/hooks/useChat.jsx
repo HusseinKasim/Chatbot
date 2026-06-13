@@ -49,18 +49,23 @@ export default function useChat()
         setMessages(updatedMessages);
 
         // Send prompt to backend via HTTP POST
-        const response = await fetch('/api/prompt/guest', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ messages: updatedMessages }),
-        credentials: 'include'
-        })
+        try{
+            const response = await fetch('/api/prompt/guest', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ messages: updatedMessages }),
+            credentials: 'include'
+            })
 
         // Return and print data from backend
         const data = await response.json();
 
         // Add response to messages list 
         setMessages(prev => [...prev, {'role': 'assistant', 'content': data.response}])
+        }
+        catch(err){
+            console.log('Prompt error: ' + err);
+        }
     }
 
     async function handleLoggedInUserInput(prompt)
@@ -68,12 +73,13 @@ export default function useChat()
         setMessages(prev => [...prev, {'role': 'user', 'content': prompt}]);
         
         // Send prompt to backend via HTTP POST
-        let response = await fetchWithAuth('/api/prompt/user', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ prompt: prompt, chatID: chatID }),
-        credentials: 'include'
-        })
+        try{
+            let response = await fetchWithAuth('/api/prompt/user', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ prompt: prompt, chatID: chatID }),
+            credentials: 'include'
+            })
 
         // Return and print data from backend
         const data = await response.json();
@@ -82,24 +88,33 @@ export default function useChat()
         setChatID(data.chatID);
         
         setMessages(prev => [...prev, {'role': 'assistant', 'content': data.response}]);
+        }
+        catch(err){
+            console.log('Prompt error: ' + err);
+        }
     }
 
     async function updateChatSidebar(){
         // Fetch user chats from backend via HTTP GET
-        let response = await fetchWithAuth('/api/chats/', {
-        method: 'GET',
-        credentials: 'include'
-        })
+        try{
+            let response = await fetchWithAuth('/api/chats/', {
+            method: 'GET',
+            credentials: 'include'
+            })
 
-        const data = await response.json();
-        if(data.chats != null)
-        {
-            setChats(
-                data.chats.map(chat => ({
-                    chatID: chat.id,
-                    title: chat.chat_title
-                }))
-            );
+            const data = await response.json();
+            if(data.chats != null)
+            {
+                setChats(
+                    data.chats.map(chat => ({
+                        chatID: chat.id,
+                        title: chat.chat_title
+                    }))
+                );
+            }
+        }
+        catch(err){
+            console.log('Error when updating chat sidebar: ' + err);
         }
     }
 
@@ -107,33 +122,42 @@ export default function useChat()
         setChatID(chatID);
         
         // Fetch chat messages from backend via HTTP GET
-        let response = await fetchWithAuth(`/api/chats/${chatID}/messages`, {
-        method: 'GET',
-        credentials: 'include'
-        })
+        try{
+            let response = await fetchWithAuth(`/api/chats/${chatID}/messages`, {
+            method: 'GET',
+            credentials: 'include'
+            })
 
-        const data = await response.json();
-        console.log(data.messages);
-        if(data.messages != null)
-        {
-            setMessages(
-                data.messages.map(message => ({
-                    role: message.role,
-                    content: message.message_text
-                }))
-            )
+            const data = await response.json();
+            if(data.messages != null)
+            {
+                setMessages(
+                    data.messages.map(message => ({
+                        role: message.role,
+                        content: message.message_text
+                    }))
+                )
+            }
+        }
+        catch(err){
+            console.log('Error when retreiving chat messages: ' + err);
         }
     }
 
     async function deleteUserChat(chatID){
         // Delete user chat from DB via HTTP DELETE
-        let response = await fetchWithAuth(`/api/chats/${chatID}`, {
-        method: 'DELETE',
-        credentials: 'include'
-        })
+        try{
+            let response = await fetchWithAuth(`/api/chats/${chatID}`, {
+            method: 'DELETE',
+            credentials: 'include'
+            })
 
-        // Add error handling for when no response 
-        const data = await response.json();
+            // Add error handling for when no response 
+            const data = await response.json();
+        }
+        catch(err){
+            console.log('Error when deleting user chat: ' + err);
+        }
     }
 
     async function fetchWithAuth(url, options={}){

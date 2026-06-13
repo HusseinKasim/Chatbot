@@ -73,7 +73,7 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
         secure=False,
         samesite='lax'
     )
-    return {'response': 'authenticated'}
+    return {'response': 'authentificated'}
 
 
 @router.post('/logout')

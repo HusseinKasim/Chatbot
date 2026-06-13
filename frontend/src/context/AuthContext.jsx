@@ -35,12 +35,19 @@ export function AuthProvider({children}) {
         };
 
         // Send user data to backend via HTTP POST
-        const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload),
-        credentials: 'include'
-        })
+        try{
+            const response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload),
+            credentials: 'include'
+            })
+        }
+        catch(err)
+        {
+            console.log('Registration error: ' + err);
+        }
+        
     }
 
     const login = async () => {
@@ -51,47 +58,63 @@ export function AuthProvider({children}) {
         };
 
         // Get user data from backend via HTTP POST
-        const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload),
-        credentials: 'include'
-        })
+        try{
+            const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload),
+            credentials: 'include'
+            })
 
-        const data = await response.json();
-        if(data.response == 'authentificated')
-        {
-            checkAuth(); // Set user
+            const data = await response.json();
+            if(data.response == 'authentificated')
+            {
+                checkAuth(); // Set user
+            }
+            else
+            {
+                console.log('Wrong login info'); // MUST DISPLAY ON UI
+            }
         }
-        else
+        catch(err)
         {
-            console.log('Wrong login info'); // MUST DISPLAY ON UI
+            console.log('Login Error: ' + err);
         }
     }
 
     const logout = async () => {
-        const response = await fetch('/api/auth/logout', {
-        method: 'POST',
-        credentials: 'include'
-        })
+        try{
+            const response = await fetch('/api/auth/logout', {
+            method: 'POST',
+            credentials: 'include'
+            })
+        }
+        catch(err){
+            console.log('Logout error:' + err);
+        }
 
         console.log("Logged out");
         setUser(null);
     }
 
     const checkAuth = async () => {
-        const response = await fetch('/api/auth/me', {
-            method: 'GET',
-            credentials: 'include'
-        });
+        try{
+            const response = await fetch('/api/auth/me', {
+                method: 'GET',
+                credentials: 'include'
+            });
 
-        const data = await response.json();
-        if(data.response != null)
-        {
-            setUser(data.id);
-            setFirstName(data.firstname);
-            setLastName(data.lastname);
-            console.log('Logged in');
+            const data = await response.json();
+            if(data.response != null)
+            {
+                setUser(data.id);
+                setFirstName(data.firstname);
+                setLastName(data.lastname);
+                console.log('Logged in');
+            }
+        }
+        catch(err){
+            console.log('Authentication error:' + err);
         }
     }
     
