@@ -69,16 +69,19 @@ export function AuthProvider({children}) {
             const data = await response.json();
             if(data.response == 'authentificated')
             {
-                checkAuth(); // Set user
+                await checkAuth(); // Set user
+                return true;
             }
             else
             {
                 console.log('Wrong login info'); // MUST DISPLAY ON UI
+                return false;
             }
         }
         catch(err)
         {
             console.log('Login Error: ' + err);
+            return false;
         }
     }
 

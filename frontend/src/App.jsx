@@ -54,7 +54,7 @@ function App() {
     <>
     <div className="container">
       {/* Login Modal */}
-      {toggleLoginModal && <LoginModal onRegister={() => {setRegisterModal(true); setLoginModal(false);}} onClose={() => setLoginModal(false)} onLogin={clearChat}/>}
+      {toggleLoginModal && <LoginModal onRegister={() => {setRegisterModal(true); setLoginModal(false);}} onClose={() => setLoginModal(false)} onLogin={clearChat} onLoginClose={() => setLoginModal(false)}/>}
 
       {/* Register Modal */}
       {toggleRegisterModal && <RegisterModal onLogin={() => {setLoginModal(true); setRegisterModal(false)}} onClose={() => setRegisterModal(false)}/>}
