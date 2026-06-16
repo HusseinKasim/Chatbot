@@ -42,10 +42,12 @@ export function AuthProvider({children}) {
             body: JSON.stringify(payload),
             credentials: 'include'
             })
+            return true;
         }
         catch(err)
         {
             console.log('Registration error: ' + err);
+            return false;
         }
         
     }

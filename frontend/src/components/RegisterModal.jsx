@@ -4,6 +4,7 @@ import AuthContext from '../context/AuthContext.jsx'
 
 export default function RegisterModal({onLogin, onClose}) {
   const { firstName, lastName, email, password, handleFirstNameChange, handleLastNameChange, handleEmailChange, handlePasswordChange, register } = useContext(AuthContext);
+  const [ registerLoading, setRegisterLoading ] = useState(false);
 
   return(
     <> 
@@ -24,7 +25,20 @@ export default function RegisterModal({onLogin, onClose}) {
             <input type='password' className='passwordTextArea' placeholder='Password' value={password} onChange={(e) => handlePasswordChange(e)}></input>
             
             <div className='loginButtonDiv'>
-              <button className='modalLoginButton' onClick={register}> Register </button>
+              { registerLoading ? 
+                <>
+                <div className = 'loginLoadingDiv'></div>
+                </> : <>
+                <button className='modalLoginButton' onClick={async () => {
+                  setRegisterLoading(true);
+                  const success = await register();
+                  if(success){
+                    console.log('Registration successful!');
+                  }
+                  setRegisterLoading(false);
+                }}> Register </button>
+                </>
+              }
             </div>
         </div>
 
