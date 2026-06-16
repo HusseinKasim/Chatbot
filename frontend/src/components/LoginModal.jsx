@@ -4,6 +4,7 @@ import AuthContext from '../context/AuthContext.jsx';
 
 export default function LoginModal({onRegister, onClose, onLogin, onLoginClose}) {
   const { login, email, password, handleEmailChange, handlePasswordChange } = useContext(AuthContext);
+  const [ loginLoading, setLoginLoading ] = useState(false);
 
   return(
     <> 
@@ -20,13 +21,21 @@ export default function LoginModal({onRegister, onClose, onLogin, onLoginClose})
             <input type='password' className='passwordTextArea' placeholder='Password' value={password} onChange={(e) => handlePasswordChange(e)}></input>
             
             <div className='loginButtonDiv'>
-              <button className='modalLoginButton' onClick={async () => {
-                const success = await login();
-                if(success){
-                  onLogin();
-                  onLoginClose(); 
-                }
+              { loginLoading ? 
+                <>
+                <div className = 'loginLoadingDiv'></div>
+                </> : <>
+                <button className='modalLoginButton' onClick={async () => {
+                  setLoginLoading(true);
+                  const success = await login();
+                  if(success){
+                    onLogin();
+                    onLoginClose(); 
+                  }
+                  setLoginLoading(false);
                 }}> Login </button>
+                </>
+              }
             </div>
         </div>
 
