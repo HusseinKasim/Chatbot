@@ -9,7 +9,7 @@ Basic LLM Chatbot made with React and Groq.
   - Backend: FastAPI
   - LLM: Groq API
   - DB: PostgreSQL
-  - Authentification: JWT (via PyJWT)
+  - Authentication: JWT (via PyJWT)
   - Containerization: Docker (+ Docker Compose)
   - Password Hashing: pwdlib
 
@@ -61,7 +61,7 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
 #### `auth` Router
   - `GET /api/auth/me` -> retrieves user info
   - `POST /api/auth/register` -> registers user account
-  - `POST /api/auth/login` -> authentificates user
+  - `POST /api/auth/login` -> authenticates user
   - `POST /api/auth/logout` -> logs user out of account
 
 #### `chats` Router
@@ -73,9 +73,9 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
 
 ## Features
 - Processes user prompts via Groq API
-- REST API for handling prompts, user registration/authentification, and chat management
+- REST API for handling prompts, user registration/authentication, and chat management
 - PostgreSQL DB for user login data and user chats data
-- JWT Authentification
+- JWT Authentication
 - Password hashing
 - Docker containerization support
 -----
