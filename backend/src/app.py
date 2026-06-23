@@ -2,9 +2,9 @@
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import models
-from database import Base, engine, SessionLocal
-from routers import prompt, auth, chats
+from src import models
+from src.database import Base, engine, SessionLocal
+from src.routers import prompt, auth, chats
 
 app = FastAPI()
 
