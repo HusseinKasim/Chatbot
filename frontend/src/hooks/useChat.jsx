@@ -51,7 +51,7 @@ export default function useChat()
 
         // Send prompt to backend via HTTP POST
         try{
-            const response = await fetch(`${RENDER_BACKEND}/api/prompt/guest`, {
+            const response = await fetch(`https://chatbot-backend-km58.onrender.com/api/prompt/guest`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ messages: updatedMessages }),
