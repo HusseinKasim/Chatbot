@@ -1,7 +1,6 @@
 import {useState, useContext, useEffect} from 'react'
 import '../App.css'
 import AuthContext from '../context/AuthContext';
-const RENDER_BACKEND = import.meta.env.VITE_RENDER_BACKEND;
 
 export default function useChat()
 {

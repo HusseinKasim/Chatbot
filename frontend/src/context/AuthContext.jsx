@@ -1,7 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
-const RENDER_BACKEND = import.meta.env.VITE_RENDER_BACKEND;
 
 export function AuthProvider({children}) {
     const [ firstName, setFirstName ] = useState('');
