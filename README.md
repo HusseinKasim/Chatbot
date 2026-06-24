@@ -1,6 +1,8 @@
 
 # Chatbot
-Basic LLM Chatbot made with React, FastAPI, PostgreSQL and Groq. The website can be accessed here:
+Basic LLM Chatbot made with React, FastAPI, PostgreSQL and Groq. 
+
+The website can be accessed here:
 https://chatbot-r1ui.onrender.com
 
 -----
@@ -13,6 +15,7 @@ https://chatbot-r1ui.onrender.com
   - Authentication: JWT (via PyJWT)
   - Containerization: Docker (+ Docker Compose)
   - Password Hashing: pwdlib
+  - Deployment: Render (Frontend + Backend), Supabase (DB)
 
 -----
 
