@@ -37,7 +37,7 @@ export function AuthProvider({children}) {
 
         // Send user data to backend via HTTP POST
         try{
-            const response = await fetch(`${RENDER_BACKEND}/api/auth/register`, {
+            const response = await fetch(`https://chatbot-backend-km58.onrender.com/api/auth/register`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload),
@@ -62,7 +62,7 @@ export function AuthProvider({children}) {
 
         // Get user data from backend via HTTP POST
         try{
-            const response = await fetch(`${RENDER_BACKEND}/api/auth/login`, {
+            const response = await fetch(`https://chatbot-backend-km58.onrender.com/api/auth/login`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload),
@@ -90,7 +90,7 @@ export function AuthProvider({children}) {
 
     const logout = async () => {
         try{
-            const response = await fetch(`${RENDER_BACKEND}/api/auth/logout`, {
+            const response = await fetch(`https://chatbot-backend-km58.onrender.com/api/auth/logout`, {
             method: 'POST',
             credentials: 'include'
             })
@@ -105,7 +105,7 @@ export function AuthProvider({children}) {
 
     const checkAuth = async () => {
         try{
-            const response = await fetch(`${RENDER_BACKEND}/api/auth/me`, {
+            const response = await fetch(`https://chatbot-backend-km58.onrender.com/api/auth/me`, {
                 method: 'GET',
                 credentials: 'include'
             });

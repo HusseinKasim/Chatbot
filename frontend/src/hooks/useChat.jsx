@@ -75,7 +75,7 @@ export default function useChat()
         
         // Send prompt to backend via HTTP POST
         try{
-            let response = await fetchWithAuth(`${RENDER_BACKEND}/api/prompt/user`, {
+            let response = await fetchWithAuth(`https://chatbot-backend-km58.onrender.com/api/prompt/user`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ prompt: prompt, chatID: chatID }),
@@ -98,7 +98,7 @@ export default function useChat()
     async function updateChatSidebar(){
         // Fetch user chats from backend via HTTP GET
         try{
-            let response = await fetchWithAuth(`${RENDER_BACKEND}/api/chats/`, {
+            let response = await fetchWithAuth(`https://chatbot-backend-km58.onrender.com/api/chats/`, {
             method: 'GET',
             credentials: 'include'
             })
@@ -124,7 +124,7 @@ export default function useChat()
         
         // Fetch chat messages from backend via HTTP GET
         try{
-            let response = await fetchWithAuth(`${RENDER_BACKEND}/api/chats/${chatID}/messages`, {
+            let response = await fetchWithAuth(`https://chatbot-backend-km58.onrender.com/api/chats/${chatID}/messages`, {
             method: 'GET',
             credentials: 'include'
             })
@@ -148,7 +148,7 @@ export default function useChat()
     async function deleteUserChat(chatID){
         // Delete user chat from DB via HTTP DELETE
         try{
-            let response = await fetchWithAuth(`${RENDER_BACKEND}/api/chats/${chatID}`, {
+            let response = await fetchWithAuth(`https://chatbot-backend-km58.onrender.com/api/chats/${chatID}`, {
             method: 'DELETE',
             credentials: 'include'
             })
@@ -166,7 +166,7 @@ export default function useChat()
         if(response.status == 401) // Unauthorized (bad access token)
         {
             // Use refresh token to create new access token
-            const refreshResponse = await fetch(`${RENDER_BACKEND}/api/auth/refresh`, {
+            const refreshResponse = await fetch(`https://chatbot-backend-km58.onrender.com/api/auth/refresh`, {
             method: 'POST',
             credentials: 'include'
             })
