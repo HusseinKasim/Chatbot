@@ -67,6 +67,7 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
   - `POST /api/auth/register` -> registers user account
   - `POST /api/auth/login` -> authenticates user
   - `POST /api/auth/logout` -> logs user out of account
+  - `POST /api/auth/refresh` -> creates a new access token via refresh token
 
 #### `chats` Router
   - `GET /api/chats/` -> retrieves user chats
