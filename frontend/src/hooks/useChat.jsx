@@ -47,8 +47,6 @@ export default function useChat()
         // Add prompt to messages list
         const updatedMessages = [...messages, {'role': 'user', 'content': prompt}]
         setMessages(updatedMessages);
-
-        console.log('API URL: ', import.meta.env.VITE_API_URL);
         
         // Send prompt to backend via HTTP POST
         try{
