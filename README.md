@@ -19,7 +19,39 @@ https://chatbot-r1ui.onrender.com
 
 -----
 
-## How to Run
+## Features
+- Processes user prompts via Groq API
+- REST API for handling prompts, user registration/authentication, and chat management
+- PostgreSQL DB for user login data and user chats data
+- JWT Authentication
+- Password hashing
+- Docker containerization support
+- Deployed on Render + Supabase
+
+-----
+
+## API Endpoints
+
+### REST API 
+#### `prompt` Router
+  - `POST /api/prompt/guest` -> passes the guest user's prompt to the Groq model and retrieves the generated response
+  - `POST /api/prompt/user` -> passes the logged in user's prompt to the Groq model and retrieves the generated response 
+
+#### `auth` Router
+  - `GET /api/auth/me` -> retrieves user info
+  - `POST /api/auth/register` -> registers user account
+  - `POST /api/auth/login` -> authenticates user
+  - `POST /api/auth/logout` -> logs user out of account
+  - `POST /api/auth/refresh` -> creates a new access token via refresh token
+
+#### `chats` Router
+  - `GET /api/chats/` -> retrieves user chats
+  - `GET /api/chats/{chatID}/messages` -> retrieves chat messages
+  - `DELETE /api/chats/{chatID}` -> deletes chat messages
+
+-----
+
+## How to Run Locally
 
 ### Option 1: Run the entire project using Docker Compose (Recommended)
 
@@ -52,38 +84,6 @@ npm run dev
 cd backend/src
 python -m uvicorn app:app --host 0.0.0.0 --port 8003
 ```
-
------
-
-## API Endpoints
-
-### REST API 
-#### `prompt` Router
-  - `POST /api/prompt/guest` -> passes the guest user's prompt to the Groq model and retrieves the generated response
-  - `POST /api/prompt/user` -> passes the logged in user's prompt to the Groq model and retrieves the generated response 
-
-#### `auth` Router
-  - `GET /api/auth/me` -> retrieves user info
-  - `POST /api/auth/register` -> registers user account
-  - `POST /api/auth/login` -> authenticates user
-  - `POST /api/auth/logout` -> logs user out of account
-  - `POST /api/auth/refresh` -> creates a new access token via refresh token
-
-#### `chats` Router
-  - `GET /api/chats/` -> retrieves user chats
-  - `GET /api/chats/{chatID}/messages` -> retrieves chat messages
-  - `DELETE /api/chats/{chatID}` -> deletes chat messages
-
------
-
-## Features
-- Processes user prompts via Groq API
-- REST API for handling prompts, user registration/authentication, and chat management
-- PostgreSQL DB for user login data and user chats data
-- JWT Authentication
-- Password hashing
-- Docker containerization support
-- Deployed on Render + Supabase
 -----
 
 ## Assets Used
