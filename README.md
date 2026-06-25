@@ -82,6 +82,7 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
 - JWT Authentication
 - Password hashing
 - Docker containerization support
+- Deployed on Render + Supabase
 -----
 
 ## Assets Used
