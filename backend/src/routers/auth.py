@@ -78,8 +78,18 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
 
 @router.post('/logout')
 async def logout(response: Response, request: Request):
-    response.delete_cookie('access_token')
-    response.delete_cookie('refresh_token')
+    response.delete_cookie(
+        key='access_token',
+        httponly=True,
+        secure=True,
+        samesite='none'
+        )
+    response.delete_cookie(
+        key='refresh_token',
+        httponly=True,
+        secure=True,
+        samesite='none'
+    )
 
     return {'response': 'logged out'}
 
