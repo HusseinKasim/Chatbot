@@ -61,8 +61,8 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
         key='access_token',
         value=access_token,
         httponly=True,
-        secure=False,
-        samesite='lax'
+        secure=True,
+        samesite='none'
     )
 
     refresh_token = pass_auth.create_refresh_token(user.id)
@@ -70,8 +70,8 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
         key='refresh_token',
         value=refresh_token,
         httponly=True,
-        secure=False,
-        samesite='lax'
+        secure=True,
+        samesite='none'
     )
     return {'response': 'authentificated'}
 
@@ -99,7 +99,7 @@ async def create_new_access_token(request: Request, response:Response):
             key='access_token',
             value=access_token,
             httponly=True,
-            secure=False,
-            samesite='lax'
+            secure=True,
+            samesite='none'
         )
     return {'response': 'success'}
