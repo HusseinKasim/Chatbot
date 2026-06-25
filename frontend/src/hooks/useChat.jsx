@@ -48,6 +48,8 @@ export default function useChat()
         const updatedMessages = [...messages, {'role': 'user', 'content': prompt}]
         setMessages(updatedMessages);
 
+        console.log('API URL: ', import.meta.env.VITE_API_URL);
+        
         // Send prompt to backend via HTTP POST
         try{
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/prompt/guest`, {
