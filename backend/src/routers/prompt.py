@@ -46,7 +46,7 @@ async def captureUserInput(chatMessages: ChatMessages):
 
 
 # User prompt endpoint
-@router.post('/user')
+@router.post('/user')   
 async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(get_current_user), db: Session = Depends(get_db)):
     if not user:
         return {'chatID': 0, 'response': 'invalid'}
