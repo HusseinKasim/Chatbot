@@ -16,6 +16,7 @@ https://chatbot-r1ui.onrender.com
   - Containerization: Docker (+ Docker Compose)
   - Password Hashing: pwdlib
   - Deployment: Render (Frontend + Backend), Supabase (DB)
+  - Testing: pytest (In progress)
 
 -----
 
@@ -27,6 +28,7 @@ https://chatbot-r1ui.onrender.com
 - Password hashing
 - Docker containerization support
 - Deployed on Render + Supabase
+- Testing using pytest
 
 -----
 
