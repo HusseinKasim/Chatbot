@@ -39,7 +39,9 @@ jobs:
         
       - name: Run pytest
         working-directory: backend
-        run: pytest
+        run: |
+          export PYTHONPATH='.'
+          pytest
 
   deploy:
       needs: test
