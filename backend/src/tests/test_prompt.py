@@ -18,6 +18,6 @@ def test_guest():
         'content': 'I am fine. What is the definition of the world test?'
     }]
 
-    response = client.post('/api/prompt/guest', json={test_messages}) # Must not use the real Groq API
+    response = client.post('/api/prompt/guest', data={test_messages}) # Must not use the real Groq API
     assert response.status_code == 200
 
