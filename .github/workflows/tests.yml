@@ -20,7 +20,7 @@ jobs:
           - 5432:5432
 
     env:
-      DATABASE_URL: ${{ secrets.TEST_DB_URL }}
+      DB_URL: ${{ secrets.TEST_DB_URL }}
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
 
     steps:
