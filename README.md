@@ -15,8 +15,9 @@ https://chatbot-r1ui.onrender.com
   - Authentication: JWT (via PyJWT)
   - Containerization: Docker (+ Docker Compose)
   - Password Hashing: pwdlib
-  - Deployment: Render (Frontend + Backend), Supabase (DB)
   - Testing: pytest (In progress)
+  - CI/CD: GitHub Actions (automated testing and Render deployment)
+  - Deployment: Render (Frontend + Backend), Supabase (DB)
 
 -----
 
@@ -27,8 +28,9 @@ https://chatbot-r1ui.onrender.com
 - JWT Authentication
 - Password hashing
 - Docker containerization support
-- Deployed on Render + Supabase
 - Testing using pytest
+- CI/CD Pipeline using GitHub Actions for automated testing and Render deployment
+- Deployed on Render + Supabase
 
 -----
 
