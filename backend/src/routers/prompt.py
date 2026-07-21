@@ -3,8 +3,8 @@ from groq import Groq
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import List
-from src import models
-from src.dependencies import get_db, get_current_user
+import models
+from dependencies import get_db, get_current_user
 import os
 
 router = APIRouter(prefix='/api/prompt')
