@@ -1,6 +1,6 @@
 from fastapi import Request, HTTPException
-from database import Base, SessionLocal
-import pass_auth
+from src.database import Base, SessionLocal
+from src import pass_auth
 
 def get_db():
     db = SessionLocal()

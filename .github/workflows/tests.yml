@@ -39,9 +39,7 @@ jobs:
         
       - name: Run pytest
         working-directory: backend
-        run: |
-          export PYTHONPATH='src'
-          pytest
+        run: pytest
 
   deploy:
       needs: test
