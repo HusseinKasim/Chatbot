@@ -9,6 +9,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        ports:
+          - 5432:5432
+
+    env:
+      DATABASE_URL: ${{ secrets.TEST_DB_URL }}
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
