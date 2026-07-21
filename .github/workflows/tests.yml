@@ -42,3 +42,11 @@ jobs:
         run: |
           export PYTHONPATH='src'
           pytest
+
+  deploy:
+      needs: test
+      runs-on: ubuntu-latest
+      steps:
+          - name: Trigger Render
+            run: curl '${{ secrets.RENDER_DEPLOY_HOOK }}'
+
