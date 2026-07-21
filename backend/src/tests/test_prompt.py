@@ -5,6 +5,7 @@ from app import app
 client = TestClient(app)
 
 def test_guest():
+    
     test_messages = [{
         'role': 'user',
         'content': 'Hi! How are you?'
