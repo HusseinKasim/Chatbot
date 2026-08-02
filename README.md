@@ -29,7 +29,7 @@ https://chatbot-r1ui.onrender.com
 - JWT Authentication
 - Password hashing
 - Docker containerization support
-- Testing using pytest
+- Testing using pytest (IN PROGRESS)
 - CI/CD Pipeline using GitHub Actions for automated testing and Render deployment
 - Deployed on Render + Supabase
 
