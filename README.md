@@ -23,6 +23,7 @@ https://chatbot-r1ui.onrender.com
 
 ## Features
 - Processes user prompts via Groq API
+- RAG System for document-based knowledge retrieval and context-aware chatbot responses (IN PROGRESS)
 - REST API for handling prompts, user registration/authentication, and chat management
 - PostgreSQL DB for user login data and user chats data
 - JWT Authentication
