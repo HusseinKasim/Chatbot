@@ -4,7 +4,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from . import models
 from .database import Base, engine, SessionLocal
-from .routers import prompt, auth, chats
+from .routers import prompt, auth, chats, upload
 
 app = FastAPI()
 
@@ -26,3 +26,4 @@ app.add_middleware(
 app.include_router(prompt.router)
 app.include_router(auth.router)
 app.include_router(chats.router)
+app.include_router(upload.router)
