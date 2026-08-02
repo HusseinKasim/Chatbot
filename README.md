@@ -15,7 +15,7 @@ https://chatbot-r1ui.onrender.com
   - Authentication: JWT (via PyJWT)
   - Containerization: Docker (+ Docker Compose)
   - Password Hashing: pwdlib
-  - Testing: pytest (In progress)
+  - Testing: pytest (IN PROGRESS)
   - CI/CD: GitHub Actions (automated testing and Render deployment)
   - Deployment: Render (Frontend + Backend), Supabase (DB)
 
@@ -52,6 +52,9 @@ https://chatbot-r1ui.onrender.com
   - `GET /api/chats/` -> retrieves user chats
   - `GET /api/chats/{chatID}/messages` -> retrieves chat messages
   - `DELETE /api/chats/{chatID}` -> deletes chat messages
+
+#### `upload` Router
+  - `POST /api/upload/` -> uploads a PDF file (IN PROGRESS)
 
 -----
 
@@ -96,3 +99,7 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8003
 - [Send Prompt] (https://www.flaticon.com/free-icon/send_876777?term=send&page=1&position=9&origin=search&related_id=876777)
 
 - [New Chat] (https://www.flaticon.com/free-icon/add_3416075?term=add&page=1&position=6&origin=search&related_id=3416075)
+
+- [Add] (https://www.flaticon.com/free-icon/add_3416075?term=add&page=1&position=5&origin=search&related_id=3416075)
+
+- [Upload] (https://www.flaticon.com/free-icon/up-loading_10009684?term=upload&page=1&position=7&origin=search&related_id=10009684)
