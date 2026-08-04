@@ -41,6 +41,7 @@ jobs:
         run: |
           psql \
           -h localhost \
+          -p 5432 \
           -U ${{ secrets.POSTGRES_USER }} \
           -d ${{ secrets.POSTGRES_DB }} \
           -c 'CREATE EXTENSION IF NOT EXISTS vector;'
