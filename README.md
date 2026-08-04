@@ -1,6 +1,6 @@
 
 # Chatbot
-An LLM Chatbot made with React, FastAPI, PostgreSQL, LangChain and Groq API.
+An LLM Chatbot made with React, FastAPI, PostgreSQL, LangChain, and Groq API.
 
 The website can be accessed here:
 https://chatbot-r1ui.onrender.com
