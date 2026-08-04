@@ -38,8 +38,10 @@ jobs:
           pip install -r requirements.txt
         
       - name: Enable pgvector
+        env:
+          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
-          PGPASSWORD=${{ secrets.POSTGRES_PASSWORD }} psql -h localhost -p 5432 -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c 'CREATE EXTENSION IF NOT EXISTS vector;'
+          psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c 'CREATE EXTENSION IF NOT EXISTS vector;'
 
       - name: Run pytest
         working-directory: backend
