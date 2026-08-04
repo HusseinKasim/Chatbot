@@ -13,3 +13,4 @@ python-multipart
 langchain-community
 langchain_text_splitters
 langchain_openai
+pgvector

@@ -1,5 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Text, DateTime
 from sqlalchemy.sql import func
+from pgvector.sqlalchemy import Vector
 from .database import Base
 
 class Users(Base):
@@ -29,4 +30,24 @@ class Messages(Base):
     role = Column(String)
     message_text = Column(Text)
     chat_id = Column(Integer, ForeignKey('chats.id'), index=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class Documents(Base):
+    __tablename__ = 'documents'
+
+    id = Column(Integer, primary_key=True)
+    document_name = Column(Text)
+    user_id = Column(Integer, ForeignKey('users.id'), index=True)
+    uploaded_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class Chunks(Base):
+    __tablename__ = 'chunks'
+
+    id = Column(Integer, primary_key=True)
+    document_id = Column(Integer, ForeignKey('documents.id'), index=True)
+    chunk_id = Column(Integer)
+    chunk_text = Column(Text)
+    embedding = Column(Vector(1536))
     created_at = Column(DateTime(timezone=True), server_default=func.now())

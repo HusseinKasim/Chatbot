@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres
+    image: pgvector/pgvector:latest
     container_name: postgres-db
     restart: always
     environment:
