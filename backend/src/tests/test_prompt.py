@@ -15,7 +15,7 @@ def test_guest():
     },
     {
         'role': 'user',
-        'content': 'I am fine. What is the definition of the world test?'
+        'content': 'I am fine. What is the definition of the word test?'
     }]
 
     response = client.post('/api/prompt/guest', json={'messages': test_messages}) # Must not use the real Groq API
