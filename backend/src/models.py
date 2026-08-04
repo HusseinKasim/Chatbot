@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Text, DateTime
 from sqlalchemy.sql import func
-from pgvector.sqlalchemy import Vector
+from pgvector.sqlalchemy import VECTOR
 from .database import Base
 
 class Users(Base):
@@ -49,5 +49,5 @@ class Chunks(Base):
     document_id = Column(Integer, ForeignKey('documents.id'), index=True)
     chunk_id = Column(Integer)
     chunk_text = Column(Text)
-    embedding = Column(Vector(1536))
+    embedding = Column(VECTOR(1536))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
