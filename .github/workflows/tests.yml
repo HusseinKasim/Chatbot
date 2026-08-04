@@ -39,7 +39,7 @@ jobs:
         
       - name: Enable pgvector
         run: |
-          psql \
+          PGPassword=${{ secrets.POSTGRES_PASSWORD }} psql \
           -h localhost \
           -p 5432 \
           -U ${{ secrets.POSTGRES_USER }} \
