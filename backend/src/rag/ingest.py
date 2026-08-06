@@ -16,6 +16,8 @@ def ingest_doc(uploadedFilePath: Path, db, user):
     loader = PyPDFLoader(str(uploadedFilePath))
     documents = loader.load()
 
+    print(documents[0].metadata)
+
     # Store documents to db
     new_doc = models.Documents(document_name=documents[0].metadata['title'], user_id=int(user['sub']))
     db.add(new_doc)
