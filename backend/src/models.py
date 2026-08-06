@@ -39,6 +39,7 @@ class Documents(Base):
     id = Column(Integer, primary_key=True)
     document_name = Column(Text)
     user_id = Column(Integer, ForeignKey('users.id'), index=True)
+    # ADD A FILE TYPE COLUMN FOR WHEN MORE FILE TYPES ARE IMPLEMENTED
     uploaded_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
@@ -47,7 +48,7 @@ class Chunks(Base):
 
     id = Column(Integer, primary_key=True)
     document_id = Column(Integer, ForeignKey('documents.id'), index=True)
-    chunk_id = Column(Integer)
+    chunk_id = Column(String, unique=True)
     chunk_text = Column(Text)
     embedding = Column(VECTOR(1536))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
