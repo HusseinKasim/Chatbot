@@ -53,7 +53,7 @@ async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(ge
         
     if promptData.chatID == 0:
     # Add row in chats db, assign chatID, and return chatID
-        new_chat = models.Chats(chat_title=promptData.prompt[0:25], user_id=int(user['sub']))
+        new_chat = models.Chats(chat_title=promptData.prompt, user_id=int(user['sub']))
         db.add(new_chat)
         db.commit()
         db.refresh(new_chat)
