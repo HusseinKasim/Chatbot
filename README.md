@@ -1,6 +1,6 @@
 
 # Chatbot
-An LLM Chatbot made with React, FastAPI, PostgreSQL and Groq API.
+An LLM Chatbot made with React, FastAPI, PostgreSQL, LangChain, and Groq API.
 
 The website can be accessed here:
 https://chatbot-r1ui.onrender.com
@@ -11,7 +11,8 @@ https://chatbot-r1ui.onrender.com
   - Frontend: HTML, CSS, JavaScript, React
   - Backend: FastAPI
   - LLM: Groq API
-  - DB: PostgreSQL
+  - RAG: LangChain
+  - DB: PostgreSQL + pgvector
   - Authentication: JWT (via PyJWT)
   - Containerization: Docker (+ Docker Compose)
   - Password Hashing: pwdlib
@@ -23,9 +24,9 @@ https://chatbot-r1ui.onrender.com
 
 ## Features
 - Processes user prompts via Groq API
-- RAG System for document-based knowledge retrieval and context-aware chatbot responses (IN PROGRESS)
+- RAG System for document-based knowledge retrieval and context-aware chatbot responses via LangChain (IN PROGRESS)
 - REST API for handling prompts, user registration/authentication, and chat management
-- PostgreSQL DB for user login data and user chats data
+- PostgreSQL DB for user login data, user chats data, and vector storage using pgvector for RAG retrieval (IN PROGRESS)
 - JWT Authentication
 - Password hashing
 - Docker containerization support
