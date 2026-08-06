@@ -356,26 +356,23 @@ html, body, #root {
 }
 
 .userChat {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   background: none;
   border: none;
   margin-bottom: 5px;
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .userChat.close {
-  background: none;
-  border: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
 }
 
 .userChatWrapper {
   display: flex;
   align-items: center;
+  width: 100%;
   background: none;
   border: none;
   padding: 0;
@@ -412,6 +409,14 @@ html, body, #root {
 
 .newChatButton img {
   width: 30px;
+}
+
+.chat-title {
+  width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 

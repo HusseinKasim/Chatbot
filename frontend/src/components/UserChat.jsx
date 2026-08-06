@@ -7,7 +7,9 @@ export default function UserChat({isOpen, title, onClick, onDelete}) {
     <>
     <div className='userChatWrapper'>
       <button className={`userChat ${isOpen ? 'open' : 'close'}`} onClick={onClick}>
-        {title}
+        <div className='chat-title' title={title}>
+          {title}
+        </div>
       </button>
       
       <button className='deleteChatButton' onClick={onDelete}>
