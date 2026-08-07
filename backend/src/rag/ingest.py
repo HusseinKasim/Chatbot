@@ -17,9 +17,9 @@ def ingest_doc(uploadedFilePath: Path, db, user):
     documents = loader.load()
 
     # Extract document title and file type from source
-    doc_source_split = str(documents[0].metadata['source']).rsplit('\\', 1)[1]
-    doc_title = doc_source_split.split('.', 1)[0]
-    doc_file_type = doc_source_split.split('.', 1)[1]
+    doc_source_split = Path(documents[0].metadata['source']).name
+    doc_title = Path(doc_source_split).stem
+    doc_file_type = Path(doc_source_split).suffix.replace('.','')
 
     # Store documents to db
     new_doc = models.Documents(document_name=doc_title, user_id=int(user['sub']), file_type=doc_file_type)
