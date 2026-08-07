@@ -16,10 +16,12 @@ def ingest_doc(uploadedFilePath: Path, db, user):
     loader = PyPDFLoader(str(uploadedFilePath))
     documents = loader.load()
 
-    print(documents[0].metadata)
+    # Extract document title and file type from source
+    doc_source_split = str(documents[0].metadata['source']).rsplit('\\', 1)[1]
+    doc_title = doc_source_split.split('.', 1)[0]
 
     # Store documents to db
-    new_doc = models.Documents(document_name=documents[0].metadata['title'], user_id=int(user['sub']))
+    new_doc = models.Documents(document_name=doc_title, user_id=int(user['sub']))
     db.add(new_doc)
     db.commit()
     db.refresh(new_doc)
