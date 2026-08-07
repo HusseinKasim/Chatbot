@@ -39,7 +39,7 @@ class Documents(Base):
     id = Column(Integer, primary_key=True)
     document_name = Column(Text)
     user_id = Column(Integer, ForeignKey('users.id'), index=True)
-    # ADD A FILE TYPE COLUMN FOR WHEN MORE FILE TYPES ARE IMPLEMENTED
+    file_type = Column(String)
     uploaded_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
