@@ -56,7 +56,7 @@ https://chatbot-r1ui.onrender.com
   - `DELETE /api/chats/{chatID}` -> deletes chat messages
 
 #### `upload` Router
-  - `POST /api/upload/` -> uploads a PDF file (IN PROGRESS)
+  - `POST /api/upload/` -> uploads a PDF file
 
 -----
 
