@@ -1,14 +1,9 @@
 from pathlib import Path
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_openai import OpenAIEmbeddings
-from dotenv import load_dotenv
-import os
+from src import dependencies
 from src import models
 import uuid
-
-load_dotenv()
-OPENAI_API_KEY=os.getenv('OPENAI_API_KEY')
 
 # Document (PDF) Ingestion
 def ingest_doc(uploadedFilePath: Path, db, user):
@@ -31,11 +26,8 @@ def ingest_doc(uploadedFilePath: Path, db, user):
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
     document_chunks = splitter.split_documents(documents)
 
-    # Create embedding model
-    embeddings = OpenAIEmbeddings(
-        model='text-embedding-3-small',
-        api_key=OPENAI_API_KEY
-    )
+    # Get embeddings model
+    embeddings = dependencies.get_embeddings_model()
 
     # Create vectors from embedding model
     vectors = embeddings.embed_documents([chunk.page_content for chunk in document_chunks])

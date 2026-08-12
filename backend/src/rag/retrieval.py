@@ -1,19 +1,11 @@
-from langchain_openai import OpenAIEmbeddings
-import os
-from dotenv import load_dotenv
 from src import models
 from langchain_core import documents
-
-load_dotenv()
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+from src import dependencies
 
 # Retrieval
 async def context_retrieval(prompt, db, user):
-    # Create embedding model
-    embeddings = OpenAIEmbeddings(
-        model='text-embedding-3-small',
-        api_key=OPENAI_API_KEY
-    )
+    # Get embeddings model
+    embeddings = dependencies.get_embeddings_model()
     
     # Search pgvector for similar vectors
     search_result = await similarity_search(query=prompt, k=3, embeddings=embeddings, db=db, user=user)
