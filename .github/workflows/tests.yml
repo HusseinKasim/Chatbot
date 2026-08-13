@@ -47,7 +47,7 @@ jobs:
         working-directory: backend
         run: |
           export PYTHONPATH='.'
-          pytest --no-header -v
+          pytest --no-header -v --color=yes
 
   deploy:
       needs: test
