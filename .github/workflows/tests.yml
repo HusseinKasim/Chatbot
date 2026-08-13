@@ -39,9 +39,9 @@ jobs:
         
       - name: Enable pgvector
         env:
-          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          PGPASSWORD: ${{ secrets.POSTGRES_TEST_PASSWORD }}
         run: |
-          psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c 'CREATE EXTENSION IF NOT EXISTS vector;'
+          psql -h localhost -U ${{ secrets.POSTGRES_TEST_USER }} -d ${{ secrets.POSTGRES_TEST_DB }} -c 'CREATE EXTENSION IF NOT EXISTS vector;'
 
       - name: Run pytest
         working-directory: backend
