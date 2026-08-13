@@ -13,9 +13,9 @@ jobs:
       postgres:
         image: pgvector/pgvector:pg17
         env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_TEST_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_TEST_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_TEST_DB }}
         ports:
           - 5432:5432
 
