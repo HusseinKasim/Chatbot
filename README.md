@@ -41,7 +41,7 @@ https://chatbot-r1ui.onrender.com
 ### REST API 
 #### `prompt` Router
   - `POST /api/prompt/guest` -> passes the guest user's prompt to the Groq model and retrieves the generated response
-  - `POST /api/prompt/user` -> passes the logged in user's prompt to the Groq model and retrieves the generated response 
+  - `POST /api/prompt/user` -> passes the logged in user's prompt to the Groq model and retrieves the generated response, with optional RAG-based context retrieval
 
 #### `auth` Router
   - `GET /api/auth/me` -> retrieves user info
