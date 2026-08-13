@@ -24,9 +24,9 @@ https://chatbot-r1ui.onrender.com
 
 ## Features
 - Processes user prompts via Groq API
-- RAG System for document-based knowledge retrieval and context-aware chatbot responses via LangChain (IN PROGRESS)
+- RAG System for document-based knowledge retrieval and context-aware chatbot responses via LangChain
 - REST API for handling prompts, user registration/authentication, and chat management
-- PostgreSQL DB for user login data, user chats data, and vector storage using pgvector for RAG retrieval (IN PROGRESS)
+- PostgreSQL DB for user login data, user chats data, and vector storage using pgvector for RAG retrieval
 - JWT Authentication
 - Password hashing
 - Docker containerization support
@@ -41,7 +41,7 @@ https://chatbot-r1ui.onrender.com
 ### REST API 
 #### `prompt` Router
   - `POST /api/prompt/guest` -> passes the guest user's prompt to the Groq model and retrieves the generated response
-  - `POST /api/prompt/user` -> passes the logged in user's prompt to the Groq model and retrieves the generated response 
+  - `POST /api/prompt/user` -> passes the logged in user's prompt to the Groq model and retrieves the generated response, with optional RAG-based context retrieval
 
 #### `auth` Router
   - `GET /api/auth/me` -> retrieves user info
