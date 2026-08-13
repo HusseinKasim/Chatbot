@@ -4,7 +4,8 @@ from src.app import app
 
 client = TestClient(app)
 
-def test_guest():
+# Test case: Guest_User_Prompt_Response
+def test_guest_user_prompt_response():
     test_messages = [{
         'role': 'user',
         'content': 'Hi! How are you?'
