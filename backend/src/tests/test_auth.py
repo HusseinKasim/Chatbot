@@ -9,7 +9,7 @@ client = TestClient(app)
 
 # Test case: Test_User_Registration
 def test_user_registration(sample_user):
-    request = client.post('/api/auth/register', json={'firstName': sample_user['first_name'], 'lastName': sample_user['last_name'], 'email': sample_user['email'], 'password': sample_user['password'], 'db': db})
+    request = client.post('/api/auth/register', json={'firstName': sample_user['first_name'], 'lastName': sample_user['last_name'], 'email': sample_user['email'], 'password': sample_user['password']})
     assert request.status_code == 200
 
     data = request.json()
