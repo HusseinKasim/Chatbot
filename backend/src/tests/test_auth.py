@@ -38,7 +38,7 @@ def test_password_verification(sample_user):
 
 # Test case: Test_Get_User_Info
 def test_get_user_info(sample_user):
-    request = client.get('/api/auth/me', json={'firstName': sample_user['first_name'], 'lastName': sample_user['last_name'], 'email': sample_user['email'], 'password': sample_user['password']})
+    request = client.get('/api/auth/me')
     assert request.status_code == 200
 
     data = request.json()
