@@ -2,7 +2,6 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import Mock, patch
 from src.app import app
-from conftest import test_user
 
 client = TestClient(app)
 
