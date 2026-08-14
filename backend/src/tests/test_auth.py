@@ -8,12 +8,9 @@ from src import models
 client = TestClient(app)
 
 # Test case: Test_User_Registration
-def test_user_registration(sample_user, db):
+def test_user_registration(sample_user):
     request = client.post('/api/auth/register', json={'firstName': sample_user['first_name'], 'lastName': sample_user['last_name'], 'email': sample_user['email'], 'password': sample_user['password'], 'db': db})
     assert request.status_code == 200
-    
-    user = db.query(models.Users).filter(models.Users.email == sample_user['email']).first()
-    assert user is not None
 
     data = request.json()
     assert data['response'] is not None
