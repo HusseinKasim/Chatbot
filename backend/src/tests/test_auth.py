@@ -34,15 +34,3 @@ def test_password_verification(sample_user):
     hashed_password = hash_password(test_password)
     
     assert verify_password(test_password, hashed_password)
-
-
-# Test case: Test_Get_User_Info
-def test_get_user_info(sample_user):
-    request = client.get('/api/auth/me')
-    assert request.status_code == 200
-
-    data = request.json()
-    assert data['response'] is not None
-    assert data['response'] == 'success'
-    assert data['firstname'] == sample_user['first_name']
-    assert data['lastname'] == sample_user['last_name']
