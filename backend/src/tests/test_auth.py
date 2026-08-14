@@ -3,14 +3,18 @@ from fastapi.testclient import TestClient
 from unittest.mock import Mock, patch
 from src.app import app
 from src.hash import hash_password, verify_password
+from src import models
 
 client = TestClient(app)
 
 # Test case: Test_User_Registration
 def test_user_registration(sample_user, db):
-    request = client.post('/api/auth/register', json={'payload': sample_user, 'db': db})
+    request = client.post('/api/auth/register', json={'firstName': sample_user['first_name'], 'lastName': sample_user['last_name'], 'email': sample_user['email'], 'password': sample_user['password'], 'db': db})
     assert request.status_code == 200
     
+    user = db.query(models.Users).filter(models.Users.email == sample_user['email']).first()
+    assert user is not None
+
     data = request.json()
     assert data['response'] is not None
     assert data['response'] == 'ok'
