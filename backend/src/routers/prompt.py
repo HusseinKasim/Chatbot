@@ -10,7 +10,7 @@ from src.rag import retrieval
 
 router = APIRouter(prefix='/api/prompt')
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-GROQ_MODEL = 'openai/gpt-oss-20b'
+GROQ_MODEL = 'openai/gpt-oss-120b'
 
 # Pydantic classes
 class LoggedInUserPromptData(BaseModel):
@@ -76,9 +76,17 @@ async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(ge
                 }   
                 for msg in messages_query
             ]
-    
-    # Add RAG context to prompt and llm_messages
-    updated_prompt = await retrieval.context_retrieval(prompt=promptData.prompt, db=db, user=int(user['sub']))
+
+    try:
+        # Add RAG context to prompt and llm_messages
+        updated_prompt = await retrieval.context_retrieval(prompt=promptData.prompt, db=db, user=int(user['sub']))
+    except Exception as e:
+        print(f"RAG failed: {e}")
+        updated_prompt = None
+
+    if not updated_prompt:
+        updated_prompt = promptData.prompt
+
     llm_messages.append({'role': 'user', 'content': updated_prompt})
 
     try:
