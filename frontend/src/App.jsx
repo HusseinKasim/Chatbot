@@ -15,6 +15,7 @@ import AuthContext from './context/AuthContext.jsx'
 import UserIcon from './components/UserIcon.jsx'
 import UserChat from './components/UserChat.jsx';
 import NewChatButton from './components/NewChatButton.jsx'
+import UploadButton from './components/UploadButton.jsx'
 
 function App() {
   const [ prompt, setPrompt ] = useState('');
@@ -83,17 +84,18 @@ function App() {
       {/* Input Area */}
       <div className='inputAreaContainer'>
         <div className='inputAreaWrapper'>
-        <UserTextArea value={prompt} onChange={handlePromptChange} 
-        onKeyDown={(e) => {
-          if(e.key === 'Enter')
-          {
-            e.preventDefault();
+          <UploadButton onFileSelect={(file) => {console.log(file); }} />
+          <UserTextArea value={prompt} onChange={handlePromptChange} 
+          onKeyDown={(e) => {
+            if(e.key === 'Enter')
+            {
+              e.preventDefault();
+              handleSend(prompt);
+            }
+          }}/>
+          <SendButton onClick={(e) => {
             handleSend(prompt);
-          }
-        }}/>
-        <SendButton onClick={(e) => {
-          handleSend(prompt);
-        }}/>
+          }}/>
         </div>
       </div>
 
