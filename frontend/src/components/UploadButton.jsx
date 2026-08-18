@@ -24,7 +24,7 @@ export default function UploadButton({onFileSelect}) {
     return(
     <>  
       <button className='uploadButton' onClick={handleButtonClick}>
-        <img src='/assets/upload.png' alt='Upload'/>
+        <img src='../assets/upload.png' alt='Upload'/>
       </button>
 
       <input ref={fileInputRef} type='file' style={{display: 'none'}} onChange={handleFileChange}/>

@@ -16,14 +16,18 @@ import UserIcon from './components/UserIcon.jsx'
 import UserChat from './components/UserChat.jsx';
 import NewChatButton from './components/NewChatButton.jsx'
 import UploadButton from './components/UploadButton.jsx'
+import useUpload from './hooks/useUpload.jsx'
 
 function App() {
   const [ prompt, setPrompt ] = useState('');
   const [ toggleSidePanel, setSidePanel ] = useState(true);
-  const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat } = useChat();
   const [ toggleLoginModal, setLoginModal ] = useState(false);
   const [ toggleRegisterModal, setRegisterModal ] = useState(false);
   const [ toggleUploadButton, setUploadButton ] = useState(false);
+
+  const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat } = useChat();
+  
+  const { uploadDocument } = useUpload();
 
   const { user, firstName, lastName, checkAuth } = useContext(AuthContext);
 
@@ -85,7 +89,7 @@ function App() {
       {/* Input Area */}
       <div className='inputAreaContainer'>
         <div className={`inputAreaWrapper ${user ? 'loggedIn' : ''}`}>
-          <UploadButton onFileSelect={(file) => {console.log(file);}} />
+          <UploadButton onFileSelect={uploadDocument} />
           <UserTextArea value={prompt} onChange={handlePromptChange} 
           onKeyDown={(e) => {
             if(e.key === 'Enter')

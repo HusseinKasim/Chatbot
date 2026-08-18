@@ -179,5 +179,5 @@ export default function useChat()
         return response;
     }
 
-    return { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat };
+    return { messages, handleUserInput, clearChat, fetchWithAuth, chats, updateChatSidebar, updateUserChat, deleteUserChat };
 }
