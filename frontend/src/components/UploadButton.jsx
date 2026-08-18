@@ -1,7 +1,9 @@
-import { useRef, useState } from 'react'
-import '../App.css'
+import { useRef, useContext } from 'react';
+import AuthContext from '../context/AuthContext.jsx';
+import '../App.css';
 
 export default function UploadButton({onFileSelect}) {
+  const { user } = useContext(AuthContext);
   const fileInputRef = useRef(null);
 
   function handleButtonClick(){
@@ -12,10 +14,13 @@ export default function UploadButton({onFileSelect}) {
     const file = e.target.files[0];
 
     if(file){
-        onFileSelect(file);
+      onFileSelect(file);
     }
   }
   
+  if(!user) {
+    return null;
+  }
     return(
     <>  
       <button className='uploadButton' onClick={handleButtonClick}>

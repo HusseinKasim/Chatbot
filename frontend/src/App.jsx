@@ -23,6 +23,7 @@ function App() {
   const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat } = useChat();
   const [ toggleLoginModal, setLoginModal ] = useState(false);
   const [ toggleRegisterModal, setRegisterModal ] = useState(false);
+  const [ toggleUploadButton, setUploadButton ] = useState(false);
 
   const { user, firstName, lastName, checkAuth } = useContext(AuthContext);
 
@@ -83,8 +84,8 @@ function App() {
 
       {/* Input Area */}
       <div className='inputAreaContainer'>
-        <div className='inputAreaWrapper'>
-          <UploadButton onFileSelect={(file) => {console.log(file); }} />
+        <div className={`inputAreaWrapper ${user ? 'loggedIn' : ''}`}>
+          <UploadButton onFileSelect={(file) => {console.log(file);}} />
           <UserTextArea value={prompt} onChange={handlePromptChange} 
           onKeyDown={(e) => {
             if(e.key === 'Enter')
