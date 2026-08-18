@@ -37,7 +37,7 @@ async def upload(pdfFile: UploadFile = File(...), db: Session = Depends(get_db),
         try: 
             pdfFile.file.seek(0)
 
-            s3_client = boto3.client('s3', aws_access_key=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_ACCESS_KEY, region_name=AWS_REGION)
+            s3_client = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_ACCESS_KEY, region_name=AWS_REGION)
             s3_key = f"users/{user['sub']}/documents/{pdfFile.filename}--{uuid.uuid4()}"
 
             s3_client.upload_fileobj(pdfFile.file, AWS_BUCKET, s3_key)
