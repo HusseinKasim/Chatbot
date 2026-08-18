@@ -19,6 +19,7 @@ https://chatbot-r1ui.onrender.com
   - Testing: pytest (IN PROGRESS)
   - CI/CD: GitHub Actions (automated testing and Render deployment)
   - Deployment: Render (Frontend + Backend), Supabase (DB)
+  - Object Storage: AWS S3
 
 -----
 
@@ -33,6 +34,7 @@ https://chatbot-r1ui.onrender.com
 - Testing using pytest (IN PROGRESS)
 - CI/CD Pipeline using GitHub Actions for automated testing and Render deployment
 - Deployed on Render + Supabase
+- AWS S3 used for user document storage
 
 -----
 
