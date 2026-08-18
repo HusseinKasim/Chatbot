@@ -22,6 +22,8 @@ jobs:
     env:
       DB_URL: ${{ secrets.TEST_DB_URL }}
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      ACCESS_TOKEN_SECRET_KEY: ${{ secrets.JWT_ACCESS_TOKEN_SECRET_KEY }}
+      REFRESH_TOKEN_SECRET_KEY: ${{ secrets.JWT_REFRESH_TOKEN_SECRET_KEY }}
 
     steps:
       - name: Checkout repository
