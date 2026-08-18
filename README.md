@@ -86,14 +86,14 @@ This option will run the database at:
 #### Frontend
 
 ```bash
-cd frontend/src
+cd frontend
 npm run dev
 ```
 
 #### Backend
 ```bash
-cd backend/src
-python -m uvicorn app:app --host 0.0.0.0 --port 8003
+cd backend
+python -m uvicorn src.app:app --host 0.0.0.0 --port 8003
 ```
 -----
 
