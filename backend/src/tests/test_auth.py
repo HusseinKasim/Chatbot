@@ -3,6 +3,7 @@ from fastapi.testclient import TestClient
 from unittest.mock import Mock, patch
 from src.app import app
 from src.hash import hash_password, verify_password
+from src.pass_auth import create_access_token, verify_access_token, create_refresh_token, verify_refresh_token
 from src import models
 
 client = TestClient(app)
@@ -15,6 +16,56 @@ def test_user_registration(sample_user):
     data = request.json()
     assert data['response'] is not None
     assert data['response'] == 'ok'
+
+
+# Test case: Test_User_Login
+def test_user_login(sample_user):
+    request = client.post('/api/auth/login', json={'email': sample_user['email'], 'password': sample_user['password']})
+    assert request.status_code == 200
+
+    data = request.json()
+    assert data['response'] is not None
+    assert data['response'] == 'authenticated'
+
+
+# Test case: Test_Access_Token_Creation
+def test_access_token_creation():
+    USER_ID = 616 
+
+    access_token = create_access_token(USER_ID)
+
+    assert access_token is not None
+
+
+# Test case: Test_Access_Token_Verification
+def test_access_token_verification():
+    USER_ID = 616 
+    
+    access_token = create_access_token(USER_ID)
+    payload = verify_access_token(access_token)
+    
+    assert payload is not None
+    assert payload['sub'] == str(USER_ID)
+
+
+# Test case: Test_Refresh_Token_Creation
+def test_refresh_token_creation():
+    USER_ID = 616 
+
+    refresh_token = create_refresh_token(USER_ID)
+
+    assert refresh_token is not None
+
+
+# Test case: Test_Refresh_Token_Verification
+def test_refresh_token_verification():
+    USER_ID = 616 
+    
+    refresh_token = create_refresh_token(USER_ID)
+    payload = verify_refresh_token(refresh_token)
+    
+    assert payload is not None
+    assert payload['sub'] == str(USER_ID)
 
 
 # Test case: Test_Password_Hashing
