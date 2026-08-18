@@ -6,7 +6,7 @@ from src import models
 import uuid
 
 # Document (PDF) Ingestion
-def ingest_doc(uploadedFilePath: Path, db, user):
+def ingest_doc(uploadedFilePath: Path, db, user, s3_key):
     # Load PDFs
     loader = PyPDFLoader(str(uploadedFilePath))
     documents = loader.load()
@@ -17,7 +17,7 @@ def ingest_doc(uploadedFilePath: Path, db, user):
     doc_file_type = Path(doc_source_split).suffix.replace('.','')
 
     # Store documents to db
-    new_doc = models.Documents(document_name=doc_title, user_id=int(user['sub']), file_type=doc_file_type)
+    new_doc = models.Documents(document_name=doc_title, user_id=int(user['sub']), s3_key=str(s3_key), file_type=doc_file_type)
     db.add(new_doc)
     db.commit()
     db.refresh(new_doc)
