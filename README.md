@@ -19,6 +19,7 @@ https://chatbot-r1ui.onrender.com
   - Testing: pytest (IN PROGRESS)
   - CI/CD: GitHub Actions (automated testing and Render deployment)
   - Deployment: Render (Frontend + Backend), Supabase (DB)
+  - Object Storage: AWS S3
 
 -----
 
@@ -33,6 +34,7 @@ https://chatbot-r1ui.onrender.com
 - Testing using pytest (IN PROGRESS)
 - CI/CD Pipeline using GitHub Actions for automated testing and Render deployment
 - Deployed on Render + Supabase
+- AWS S3 for user document storage
 
 -----
 
@@ -84,14 +86,14 @@ This option will run the database at:
 #### Frontend
 
 ```bash
-cd frontend/src
+cd frontend
 npm run dev
 ```
 
 #### Backend
 ```bash
-cd backend/src
-python -m uvicorn app:app --host 0.0.0.0 --port 8003
+cd backend
+python -m uvicorn src.app:app --host 0.0.0.0 --port 8003
 ```
 -----
 
