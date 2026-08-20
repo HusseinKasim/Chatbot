@@ -1,12 +1,11 @@
-import { useState } from 'react'
-import '../App.css'
+import { Button } from '@/components/ui/button';
 
 export default function ToggleSidePanelButton({isOpen, onClick}) {
   return(
     <>
-    <button className={isOpen ? 'toggleSidePanelButton open' : 'toggleSidePanelButton close'} onClick={onClick}>
-      <img src='/assets/sidepanel.png'/>
-    </button>
+    <Button className={`bg-none border-none p-0 ${isOpen ? 'rotate-180' : ''}`} onClick={onClick}>
+      <img className='w-[30px]' src='/assets/sidepanel.png'/>
+    </Button>
     </>
   )
 }

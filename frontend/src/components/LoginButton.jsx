@@ -1,12 +1,11 @@
-import { useState } from 'react'
-import '../App.css'
+import { Button } from '@/components/ui/button';
 
 export default function LoginButton({isOpen, onClick}) {
   return(
     <>  
-      <button className='loginButton' onClick={onClick}>
+      <Button className='flex justify-center w-[calc(100%-40px)] mx-5 mb-5 mt-auto box-border overflow-hidden bg-[#508991]' onClick={onClick}>
         Login
-      </button>
+      </Button>
     </>
   )
 }

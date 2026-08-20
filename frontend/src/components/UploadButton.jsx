@@ -1,6 +1,7 @@
 import { useRef, useContext } from 'react';
 import AuthContext from '../context/AuthContext.jsx';
-import '../App.css';
+import { Button } from '@/components/ui/button.jsx';
+import { Input } from '@/components/ui/input';
 
 export default function UploadButton({onFileSelect}) {
   const { user } = useContext(AuthContext);
@@ -23,11 +24,11 @@ export default function UploadButton({onFileSelect}) {
   }
     return(
     <>  
-      <button className='uploadButton' onClick={handleButtonClick}>
-        <img src='../assets/upload.png' alt='Upload'/>
-      </button>
+      <Button className='absolute left-[15px] top-1/2 -translate-y-1/2 border-none p-0 bg-none' onClick={handleButtonClick}>
+        <img className='w-[25px]' src='../assets/upload.png' alt='Upload'/>
+      </Button>
 
-      <input ref={fileInputRef} type='file' style={{display: 'none'}} onChange={handleFileChange}/>
+      <Input className='hidden' ref={fileInputRef} type='file' onChange={handleFileChange} />
     </>
   )
 }

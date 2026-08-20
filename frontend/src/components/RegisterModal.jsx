@@ -1,6 +1,8 @@
-import { useState, useContext } from 'react'
-import '../App.css'
-import AuthContext from '../context/AuthContext.jsx'
+import { useState, useContext } from 'react';
+import '../App.css';
+import AuthContext from '../context/AuthContext.jsx';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 export default function RegisterModal({onLogin, onClose}) {
   const { firstName, lastName, email, password, handleFirstNameChange, handleLastNameChange, handleEmailChange, handlePasswordChange, register } = useContext(AuthContext);
@@ -10,41 +12,41 @@ export default function RegisterModal({onLogin, onClose}) {
     <> 
     <div className='modalBackdrop'>
       <div className='registerModalContainer'>
-        <div className='modalHeader'>
-          <label className='loginTitle'> Register </label>
-          <button className='closeButton' onClick={onClose}> X </button> 
+        <div className='relative flex justify-center items-center'>
+          <label className='text-black text-lg text-bold mt-[20px]'> Register </label>
+          <Button className='absolute top-[5px] right-[5px] text-black text-lg font-semibold border-none bg-none rounded-[10px]' onClick={onClose}> X </Button> 
         </div>
 
         <div className='modalBody'>
           <div className='loginComponents'>
-            <div className='names'>
-                <input type='email' className='firstName' placeholder='First Name' value={firstName} onChange={(e) => handleFirstNameChange(e)}></input>
-                <input type='email' className='lastName' placeholder='Last Name' value={lastName} onChange={(e) => handleLastNameChange(e)}></input>
+            <div className='flex flex-row gap-[22px]'>
+                <Input type='text' className='bg-[#d3d3d3] text-black h-[35px] border-none pl-[10px]' placeholder='First Name' value={firstName} onChange={(e) => handleFirstNameChange(e)} />
+                <Input type='text' className='bg-[#d3d3d3] text-black h-[35px] border-none pl-[10px]' placeholder='Last Name' value={lastName} onChange={(e) => handleLastNameChange(e)} />
             </div>
-            <input type='email' className='emailTextArea' placeholder='Email' value={email} onChange={(e) => handleEmailChange(e)}></input>
-            <input type='password' className='passwordTextArea' placeholder='Password' value={password} onChange={(e) => handlePasswordChange(e)}></input>
+            <Input type='email' className='bg-[#d3d3d3] text-black h-[35px] border-none pl-[10px]' placeholder='Email' value={email} onChange={(e) => handleEmailChange(e)} />
+            <Input type='password' className='bg-[#d3d3d3] text-black h-[35px] border-none pl-[10px]' placeholder='Password' value={password} onChange={(e) => handlePasswordChange(e)} />
             
-            <div className='loginButtonDiv'>
+            <div className='self-center pt-[10px]'>
               { registerLoading ? 
                 <>
                 <div className = 'loginLoadingDiv'></div>
                 </> : <>
-                <button className='modalLoginButton' onClick={async () => {
+                <Button className='mt-[5px] pl-[20px] pr-[20px] text-black border-black rounded-[5px] bg-[#508991]' onClick={async () => {
                   setRegisterLoading(true);
                   const success = await register();
                   if(success){
                     console.log('Registration successful!');
                   }
                   setRegisterLoading(false);
-                }}> Register </button>
+                }}> Register </Button>
                 </>
               }
             </div>
         </div>
 
-         <div className='actions'>
-          <p className='registerText'> Already have an account? </p>
-          <button className='registerButton' onClick={onLogin}> Login now!</button>
+         <div className='flex justify-center items-center mt-[10px]'>
+          <p className='text-black'> Already have an account? </p>
+          <Button className='bg-none border-none text-blue-500 pl-[5px] text-md' onClick={onLogin}> Login now!</Button>
          </div>
         </div>
       </div>

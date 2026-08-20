@@ -97,7 +97,8 @@ function App() {
               e.preventDefault();
               handleSend(prompt);
             }
-          }}/>
+          }} isLoggedIn={user} 
+          />
           <SendButton onClick={(e) => {
             handleSend(prompt);
           }}/>
