@@ -6,24 +6,18 @@ import UserChatBubble from './components/UserChatBubble'
 import ChatbotChatBubble from './components/ChatbotChatBubble'
 import SendButton from './components/SendButton'
 import SidePanel from './components/SidePanel'
-import ToggleSidePanelButton from './components/ToggleSidePanelButton'
 import LoginModal from './components/LoginModal'
-import LoginButton from './components/LoginButton'
 import RegisterModal from './components/RegisterModal'
-import LogoutButton from './components/LogoutButton'
 import AuthContext from './context/AuthContext.jsx'
-import UserIcon from './components/UserIcon.jsx'
-import UserChat from './components/UserChat.jsx';
-import NewChatButton from './components/NewChatButton.jsx'
 import UploadButton from './components/UploadButton.jsx'
 import useUpload from './hooks/useUpload.jsx'
+import { SidebarInset, SidebarProvider } from './components/ui/sidebar'
 
 function App() {
   const [ prompt, setPrompt ] = useState('');
   const [ toggleSidePanel, setSidePanel ] = useState(true);
   const [ toggleLoginModal, setLoginModal ] = useState(false);
   const [ toggleRegisterModal, setRegisterModal ] = useState(false);
-  const [ toggleUploadButton, setUploadButton ] = useState(false);
 
   const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat } = useChat();
   
@@ -41,11 +35,6 @@ function App() {
     setPrompt(e.target.value);
   }
 
-  function handleToggleState()
-  {
-    setSidePanel(!toggleSidePanel);
-  }
-
   function handleSend(prompt)
   {
     // Check for empty prompt
@@ -58,7 +47,6 @@ function App() {
 
   return (
     <>
-    <div className="container">
       {/* Login Modal */}
       {toggleLoginModal && <LoginModal onRegister={() => {setRegisterModal(true); setLoginModal(false);}} onClose={() => setLoginModal(false)} onLogin={clearChat} onLoginClose={() => setLoginModal(false)}/>}
 
@@ -66,67 +54,52 @@ function App() {
       {toggleRegisterModal && <RegisterModal onLogin={() => {setLoginModal(true); setRegisterModal(false)}} onClose={() => setRegisterModal(false)}/>}
       
       {/* Sidepanel */}
-      <div className='sidePanelContainer'> 
-        <div className='sidePanelWrapper'> 
-          <SidePanel isOpen={toggleSidePanel}>
-            <div className='sidePanelHeader'>
-              <NewChatButton isOpen={toggleSidePanel} onClick={clearChat}/>
-              <ToggleSidePanelButton isOpen={toggleSidePanel} onClick={handleToggleState} />
+      <SidebarProvider>
+        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} setLoginModal={setLoginModal} setRegisterModal={setRegisterModal}/>
+        <SidebarInset className='relative flex min-h-svh flex-col'>
+          
+          {/* Chat Area */}
+          <div className='min-h-0 flex-1 overflow-y-auto'>
+            <div className='mx-auto flex w-[75%] flex-col gap-5 pb-32 pt-[4%]'>
+              {messages.map((message) => {
+                if(message.role === 'user')
+                {
+                return(
+                  <div className='flex flex-col items-end'>
+                    <UserChatBubble value={message.content} />
+                  </div>
+                  );
+                }
+                return(
+                  <div className='flex flex-col items-start pb-5'>
+                    <ChatbotChatBubble value={message.content} />
+                  </div>
+                  );
+                }
+              )}
             </div>
-              {user ?  <>
-              <div className='userIconWrapper'>
-                <UserIcon isOpen={toggleSidePanel} firstName={firstName} lastName={lastName} />
-              </div>
-              {chats.map(chat => (
-                <UserChat key={chat.chatID} title={chat.title} onClick={() => updateUserChat(chat.chatID)} onDelete={() => deleteUserChat(chat.chatID)}/>
-              ))}
-              <LogoutButton isOpen={toggleSidePanel} onLogout={clearChat}/>
-              </> : <LoginButton isOpen={toggleSidePanel} onClick={() => {setLoginModal(true); setRegisterModal(false)}}/> }
-          </SidePanel>
-        </div>
-      </div>  
+          </div>
 
-      {/* Input Area */}
-      <div className='inputAreaContainer'>
-        <div className={`inputAreaWrapper ${user ? 'loggedIn' : ''}`}>
-          <UploadButton onFileSelect={uploadDocument} />
-          <UserTextArea value={prompt} onChange={handlePromptChange} 
-          onKeyDown={(e) => {
-            if(e.key === 'Enter')
-            {
-              e.preventDefault();
-              handleSend(prompt);
-            }
-          }} isLoggedIn={user} 
-          />
-          <SendButton onClick={(e) => {
-            handleSend(prompt);
-          }}/>
-        </div>
-      </div>
-
-        {/* Chat Area */}
-      <div className='chatAreaContainer'>
-        <div className='bubblesContainer'>
-          {messages.map((message) => {
-            if(message.role === 'user')
-            {
-            return(
-              <div className='userChatBubbleContainer'>
-                <UserChatBubble value={message.content} />
-              </div>
-              );
-            }
-            return(
-              <div className='chatbotChatBubbleContainer'>
-                <ChatbotChatBubble value={message.content} />
-              </div>
-              );
-            }
-          )}
-        </div>
-      </div>
-    </div>
+          {/* Input Area */}
+          <div className='absolute bottom-8 left-1/2 z-10 w-1/2 -translate-x-1/2'>
+            <div className='relative'>
+              <UploadButton onFileSelect={uploadDocument} />
+              <UserTextArea value={prompt} onChange={handlePromptChange} 
+              onKeyDown={(e) => {
+                if(e.key === 'Enter')
+                {
+                  e.preventDefault();
+                  handleSend(prompt);
+                }
+              }} isLoggedIn={user} 
+              />
+              <SendButton onClick={(e) => {
+                handleSend(prompt);
+              }}/>
+            </div>
+          </div>
+        </SidebarInset>
+      </SidebarProvider> 
     </>
   )
 }
