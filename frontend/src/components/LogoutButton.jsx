@@ -7,7 +7,7 @@ export default function LogoutButton({onLogout}) {
 
   return(
     <>  
-      <Button className='flex justify-center w-[calc(100%-40px)] mx-5 mb-5 mt-auto box-border overflow-hidden bg-[#508991]' onClick={() => {
+      <Button className='flex justify-center w-[calc(100%-40px)] mx-5 mb-5 mt-auto box-border overflow-hidden text-[var(--color-text)] bg-[var(--color-buttons)] hover:bg-[var(--color-buttons-hover)]' onClick={() => {
         logout();
         onLogout();
       }}>

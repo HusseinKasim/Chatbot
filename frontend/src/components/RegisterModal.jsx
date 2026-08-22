@@ -13,25 +13,25 @@ export default function RegisterModal({onLogin, onClose}) {
     <div className='modalBackdrop'>
       <div className='registerModalContainer'>
         <div className='relative flex justify-center items-center'>
-          <label className='text-black text-lg text-bold mt-[20px]'> Register </label>
-          <Button className='absolute top-[5px] right-[5px] text-black text-lg font-semibold border-none bg-none rounded-[10px]' onClick={onClose}> X </Button> 
+          <label className='text-[var(--color-modal-text)] text-lg text-bold mt-[20px]'> Register </label>
+          <Button className='absolute top-[5px] right-[5px] text-[var(--color-modal-text)] text-lg font-semibold border-none bg-none rounded-[10px]' onClick={onClose}> X </Button> 
         </div>
 
         <div className='modalBody'>
           <div className='loginComponents'>
             <div className='flex flex-row gap-[22px]'>
-                <Input type='text' className='bg-[#d3d3d3] text-black h-[35px] border-none pl-[10px]' placeholder='First Name' value={firstName} onChange={(e) => handleFirstNameChange(e)} />
-                <Input type='text' className='bg-[#d3d3d3] text-black h-[35px] border-none pl-[10px]' placeholder='Last Name' value={lastName} onChange={(e) => handleLastNameChange(e)} />
+                <Input type='text' className='bg-[var(--color-modal-textarea)] text-[var(--color-modal-text)] h-[35px] border-none pl-[10px]' placeholder='First Name' value={firstName} onChange={(e) => handleFirstNameChange(e)} />
+                <Input type='text' className='bg-[var(--color-modal-textarea)] text-[var(--color-modal-text)] h-[35px] border-none pl-[10px]' placeholder='Last Name' value={lastName} onChange={(e) => handleLastNameChange(e)} />
             </div>
-            <Input type='email' className='bg-[#d3d3d3] text-black h-[35px] border-none pl-[10px]' placeholder='Email' value={email} onChange={(e) => handleEmailChange(e)} />
-            <Input type='password' className='bg-[#d3d3d3] text-black h-[35px] border-none pl-[10px]' placeholder='Password' value={password} onChange={(e) => handlePasswordChange(e)} />
+            <Input type='email' className='bg-[var(--color-modal-textarea)] text-[var(--color-modal-text)] h-[35px] border-none pl-[10px]' placeholder='Email' value={email} onChange={(e) => handleEmailChange(e)} />
+            <Input type='password' className='bg-[var(--color-modal-textarea)] text-[var(--color-modal-text)] h-[35px] border-none pl-[10px]' placeholder='Password' value={password} onChange={(e) => handlePasswordChange(e)} />
             
             <div className='self-center pt-[10px]'>
               { registerLoading ? 
                 <>
                 <div className = 'loginLoadingDiv'></div>
                 </> : <>
-                <Button className='mt-[5px] pl-[20px] pr-[20px] text-black border-black rounded-[5px] bg-[#508991]' onClick={async () => {
+                <Button className='mt-[5px] pl-[20px] pr-[20px] text-[var(--color-text)] border-none rounded-[5px] bg-[#508991] hover:bg-[#427780]' onClick={async () => {
                   setRegisterLoading(true);
                   const success = await register();
                   if(success){
@@ -45,8 +45,8 @@ export default function RegisterModal({onLogin, onClose}) {
         </div>
 
          <div className='flex justify-center items-center mt-[10px]'>
-          <p className='text-black'> Already have an account? </p>
-          <Button className='bg-none border-none text-blue-500 pl-[5px] text-md' onClick={onLogin}> Login now!</Button>
+          <p className='text-[var(--color-modal-text)]'> Already have an account? </p>
+          <Button className='bg-none border-none text-[var(--color-modal-auth-button)] pl-[5px] text-md hover:text-[var(--color-modal-auth-button-hover)]' onClick={onLogin}> Login now!</Button>
          </div>
         </div>
       </div>

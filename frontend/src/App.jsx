@@ -15,7 +15,6 @@ import { SidebarInset, SidebarProvider } from './components/ui/sidebar'
 
 function App() {
   const [ prompt, setPrompt ] = useState('');
-  const [ toggleSidePanel, setSidePanel ] = useState(true);
   const [ toggleLoginModal, setLoginModal ] = useState(false);
   const [ toggleRegisterModal, setRegisterModal ] = useState(false);
 
@@ -55,7 +54,7 @@ function App() {
       
       {/* Sidepanel */}
       <SidebarProvider>
-        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} setLoginModal={setLoginModal} setRegisterModal={setRegisterModal}/>
+        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} setLoginModal={setLoginModal} setRegisterModal={setRegisterModal} />
         <SidebarInset className='relative flex min-h-svh flex-col'>
           
           {/* Chat Area */}
