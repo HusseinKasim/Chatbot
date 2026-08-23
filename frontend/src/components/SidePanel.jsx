@@ -1,4 +1,4 @@
-import { Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
+import { Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarTrigger, useSidebar, SidebarGroup } from '@/components/ui/sidebar';
 import NewChatButton from './NewChatButton';
 import UserIcon from './UserIcon';
 import LoginButton from './LoginButton';
@@ -26,7 +26,8 @@ export default function SidePanel({user, firstName, lastName, chats, clearChat, 
          ) : null }
       </SidebarHeader>
 
-      <SidebarContent className={'pt-[40px]'}>
+      <SidebarContent className='pt-[20px]'>
+        <SidebarGroup>
         {user ? (
           <>
             <div className='pl-[15px] text-[var(--color-text-muted)]'>
@@ -41,6 +42,7 @@ export default function SidePanel({user, firstName, lastName, chats, clearChat, 
             ))}
           </>
         ) : null }
+        </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter>
