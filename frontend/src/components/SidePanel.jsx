@@ -6,7 +6,7 @@ import LogoutButton from './LogoutButton';
 import UserChat from './UserChat';
 import { useState } from 'react';
 
-export default function SidePanel({user, firstName, lastName, chats, clearChat, updateUserChat, deleteUserChat, setLoginModal, setRegisterModal}) {
+export default function SidePanel({user, firstName, lastName, chats, clearChat, updateUserChat, deleteUserChat, setLoginCard, setRegisterModal}) {
   const { open } = useSidebar();
   const [ selectedChat, setSelectedChat ] = useState(null);
 
@@ -47,7 +47,7 @@ export default function SidePanel({user, firstName, lastName, chats, clearChat, 
 
       <SidebarFooter>
         {user ? <LogoutButton onLogout={clearChat} />
-        : <LoginButton onClick={() => {setLoginModal(true); setRegisterModal(false) }} />}
+        : <LoginButton onClick={() => {setLoginCard(true); setRegisterModal(false) }} />}
       </SidebarFooter>
     </Sidebar>
   )
