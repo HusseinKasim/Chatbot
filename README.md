@@ -8,7 +8,7 @@ https://chatbot-r1ui.onrender.com
 -----
 
 ## Tech Stack
-  - Frontend: HTML, CSS (currently migrating to Tailwind CSS), JavaScript, React
+  - Frontend: HTML, CSS (currently migrating to Tailwind CSS), JavaScript, React, shadcn/ui
   - Backend: FastAPI
   - LLM: Groq API
   - RAG: LangChain
