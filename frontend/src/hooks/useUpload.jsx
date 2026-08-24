@@ -1,5 +1,4 @@
 import {useState, useContext, useEffect} from 'react'
-import '../App.css'
 import AuthContext from '../context/AuthContext';
 import useChat from './useChat';
 

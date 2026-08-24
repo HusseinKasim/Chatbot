@@ -7,7 +7,7 @@ import ChatbotChatBubble from './components/ChatbotChatBubble'
 import SendButton from './components/SendButton'
 import SidePanel from './components/SidePanel'
 import LoginCard from './components/LoginCard'
-import RegisterModal from './components/RegisterModal'
+import RegisterCard from './components/RegisterCard'
 import AuthContext from './context/AuthContext.jsx'
 import UploadButton from './components/UploadButton.jsx'
 import useUpload from './hooks/useUpload.jsx'
@@ -16,7 +16,7 @@ import { SidebarInset, SidebarProvider } from './components/ui/sidebar'
 function App() {
   const [ prompt, setPrompt ] = useState('');
   const [ toggleLoginCard, setLoginCard ] = useState(false);
-  const [ toggleRegisterModal, setRegisterModal ] = useState(false);
+  const [ toggleRegisterCard, setRegisterCard ] = useState(false);
 
   const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat } = useChat();
   
@@ -47,14 +47,14 @@ function App() {
   return (
     <>
       {/* Login Card */}
-      {toggleLoginCard && <LoginCard onRegister={() => {setRegisterModal(true); setLoginCard(false);}} onClose={() => setLoginCard(false)} onLogin={clearChat} onLoginClose={() => setLoginCard(false)}/>}
+      {toggleLoginCard && <LoginCard onRegister={() => {setRegisterCard(true); setLoginCard(false);}} onClose={() => setLoginCard(false)} onLogin={clearChat} onLoginClose={() => setLoginCard(false)}/>}
 
       {/* Register Modal */}
-      {toggleRegisterModal && <RegisterModal onLogin={() => {setLoginCard(true); setRegisterModal(false)}} onClose={() => setRegisterModal(false)}/>}
+      {toggleRegisterCard && <RegisterCard onLogin={() => {setLoginCard(true); setRegisterCard(false);}} onClose={() => setRegisterCard(false)}/>}
       
       {/* Sidepanel */}
       <SidebarProvider>
-        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} setLoginCard={setLoginCard} setRegisterModal={setRegisterModal} />
+        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} setLoginCard={setLoginCard} setRegisterCard={setRegisterCard} />
         <SidebarInset className='relative flex min-h-svh flex-col'>
           
           {/* Chat Area */}
