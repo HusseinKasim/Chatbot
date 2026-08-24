@@ -134,7 +134,7 @@ def test_refresh_token_cookie_security():
     cookie.load(cookie_header)
     cookie_data = cookie['refresh_token']
 
-    assert cookie_data['httpOnly'] is True
+    assert cookie_data['httponly'] is True
     assert cookie_data['secure'] is True
     assert cookie_data['samesite'].lower() == 'none'
     
