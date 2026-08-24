@@ -89,8 +89,8 @@ def test_password_verification(sample_user):
     assert verify_password(test_password, hashed_password)
 
 
-# Test case: Test_Cookie_Security
-def test_cookie_security():
+# Test case: Test_Access_Token_Cookie_Security
+def test_access_token_cookie_security():
     USER_ID = 616 
     response = Response()
 
@@ -109,9 +109,32 @@ def test_cookie_security():
     cookie.load(cookie_header)
     cookie_data = cookie['access_token']
 
-    assert cookie_data['httpOnly'] is True
+    assert cookie_data['httponly'] is True
     assert cookie_data['secure'] is True
     assert cookie_data['samesite'].lower() == 'none'
 
 
+# Test case: Test_Refresh_Token_Cookie_Security
+def test_refresh_token_cookie_security():
+    USER_ID = 616 
+    response = Response()
+
+    refresh_token = create_refresh_token(USER_ID)
+    response.set_cookie(
+        key='refresh_token',
+        value=refresh_token,
+        httponly=True,
+        secure=True,
+        samesite='none'
+    )
+    cookie_header = response.headers.get('set-cookie')
+    assert cookie_header is not None
+
+    cookie = SimpleCookie()
+    cookie.load(cookie_header)
+    cookie_data = cookie['refresh_token']
+
+    assert cookie_data['httpOnly'] is True
+    assert cookie_data['secure'] is True
+    assert cookie_data['samesite'].lower() == 'none'
     
