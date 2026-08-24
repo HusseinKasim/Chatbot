@@ -8,7 +8,7 @@ https://chatbot-r1ui.onrender.com
 -----
 
 ## Tech Stack
-  - Frontend: HTML, CSS (currently migrating to Tailwind CSS), JavaScript, React, shadcn/ui
+  - Frontend: HTML, Tailwind CSS, JavaScript, React, shadcn/ui
   - Backend: FastAPI
   - LLM: Groq API
   - RAG: LangChain
@@ -31,7 +31,7 @@ https://chatbot-r1ui.onrender.com
 - JWT Authentication
 - Password hashing
 - Docker containerization support
-- Testing using pytest (IN PROGRESS)
+- Testing using pytest
 - CI/CD Pipeline using GitHub Actions for automated testing and Render deployment
 - Deployed on Render + Supabase
 - AWS S3 for user document storage
