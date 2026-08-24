@@ -1,10 +1,12 @@
 import pytest
 from fastapi.testclient import TestClient
+from fastapi import Response
 from unittest.mock import Mock, patch
 from src.app import app
 from src.hash import hash_password, verify_password
 from src.pass_auth import create_access_token, verify_access_token, create_refresh_token, verify_refresh_token
 from src import models
+from http.cookies import SimpleCookie
 
 client = TestClient(app)
 
@@ -85,3 +87,31 @@ def test_password_verification(sample_user):
     hashed_password = hash_password(test_password)
     
     assert verify_password(test_password, hashed_password)
+
+
+# Test case: Test_Cookie_Security
+def test_cookie_security():
+    USER_ID = 616 
+    response = Response()
+
+    access_token = create_access_token(USER_ID)
+    response.set_cookie(
+        key='access_token',
+        value=access_token,
+        httponly=True,
+        secure=True,
+        samesite='none'
+    )
+    cookie_header = response.headers.get('set-cookie')
+    assert cookie_header is not None
+
+    cookie = SimpleCookie()
+    cookie.load(cookie_header)
+    cookie_data = cookie['access_token']
+
+    assert cookie_data['httpOnly'] is True
+    assert cookie_data['secure'] is True
+    assert cookie_data['samesite'].lower() == 'none'
+
+
+    
