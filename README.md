@@ -44,7 +44,6 @@ The architecture overview shows the main components of the web application and h
 
 ### RAG System Overview
 The RAG system consists of two stages: ingestion and retrieval.
-
 #### RAG Ingestion Diagram
 During ingestion, uploaded documents are loaded, split into chunks, converted into embeddings, and stored in PostgreSQL using pgvector. Diagram created using Eraser.io.
 
@@ -82,6 +81,8 @@ During retrieval, relevant document chunks are retrieved based on semantic simil
 -----
 
 ##  Testing
+The automated tests are run on GitHub Actions as part of the CI pipeline.
+
 ### `auth`
 #### Integration Tests
 - `test_user_registration` -> Test `/api/auth/register` endpoint
@@ -100,6 +101,15 @@ During retrieval, relevant document chunks are retrieved based on semantic simil
 ### `prompt`
 #### Integration Tests
 - `test_guest_user_prompt_response` -> Test `/api/prompt/guest` endpoint
+
+-----
+
+## Infrastructure & Deployment
+- Containerization: Docker (and Docker Compose)
+- Frontend and Backend Deployment: Render
+- PostgreSQL DB Deployment: Supabase
+- Document Storage: AWS S3
+- CI/CD Pipeline: GitHub Actions
 
 -----
 
