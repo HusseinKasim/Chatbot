@@ -1,45 +1,64 @@
 
-# Chatbot
-An LLM Chatbot made with React, FastAPI, PostgreSQL, LangChain, and Groq API.
+# RAG-Based LLM Chatbot
+A full-stack LLM chatbot that lets users chat with an AI assistant and optionally ground its answers in their own uploaded PDFs, using a RAG pipeline built on LangChain and pgvector. Supports both guest sessions (no login required) and authenticated users with persistent chat history and document context.
 
-The website can be accessed here:
+Live demo:
 https://chatbot-r1ui.onrender.com
 
 -----
 
 ## Tech Stack
-  - Frontend: HTML, Tailwind CSS, JavaScript, React, shadcn/ui
+  - Frontend: React, Tailwind CSS, shadcn/ui
   - Backend: FastAPI
   - LLM: Groq API
-  - RAG: LangChain
-  - DB: PostgreSQL + pgvector
-  - Authentication: JWT (via PyJWT)
-  - Containerization: Docker (+ Docker Compose)
-  - Password Hashing: pwdlib
+  - RAG: LangChain, pgvector
+  - DB: PostgreSQL
+  - Authentication: JWT (PyJWT), password hashing (pwdlib)
+  - Object Storage: AWS S3 (uploaded PDFs)
   - Testing: pytest
-  - CI/CD: GitHub Actions (automated testing and Render deployment)
-  - Deployment: Render (Frontend + Backend), Supabase (DB)
-  - Object Storage: AWS S3
+  - CI/CD: GitHub Actions (automated testing + Render deployment)
+  - Containerization: Docker (+ Docker Compose)
+  - Deployment: Render (frontend + backend), Supabase (DB)
 
 -----
 
 ## Features
-- Processes user prompts via Groq API
-- RAG System for document-based knowledge retrieval and context-aware chatbot responses via LangChain
-- REST API for handling prompts, user registration/authentication, and chat management
-- PostgreSQL DB for user login data, user chats data, and vector storage using pgvector for RAG retrieval
-- JWT Authentication
-- Password hashing
-- Docker containerization support
-- Testing using pytest
-- CI/CD Pipeline using GitHub Actions for automated testing and Render deployment
-- Deployed on Render + Supabase
-- AWS S3 for user document storage
+- Guest chat sessions without requiring authentication
+- Authenticated users with persistent chat history
+- PDF document upload and document-based question answering using RAG
+- Semantic retrieval of relevant document chunks using pgvector
+- Context-aware responses generated using retrieved document chunks
+- AWS S3 storage for uploaded documents
+- REST API for authentication, prompts, chat management, and document uploads
+- JWT authentication using HTTP-only cookies
+- Access and refresh token support
+- Secure password hashing
 
 -----
 
-## API Endpoints
+## Architecture Models
+### Architecture Overview Diagram
+The architecture overview shows the main components of the web application and how the frontend, backend, database, RAG system, authentication, object storage, and external services interact. Diagram created using Eraser.io.
 
+<img width="1379" height="1036" alt="rag-based-llm-chatbot-architecture-diagram" src="https://github.com/user-attachments/assets/fc03f723-1273-4e65-9463-3f73628a331d" />
+
+### RAG System Overview
+The RAG system consists of two stages: ingestion and retrieval.
+
+#### RAG Ingestion Diagram
+During ingestion, uploaded documents are loaded, split into chunks, converted into embeddings, and stored in PostgreSQL using pgvector. Diagram created using Eraser.io.
+
+<img width="434" height="696" alt="rag-based-llm-chatbot-rag-ingestion-diagram" src="https://github.com/user-attachments/assets/b56c0843-2b0a-4042-b1b0-95124b0e2b98" />
+
+
+#### RAG Retrieval Diagram
+During retrieval, relevant document chunks are retrieved based on semantic similarity. An updated prompt is then built using the user's original prompt and the most similar (top k) chunks as context and is passed to the LLM to generate a response. Diagram created using Eraser.io.
+
+<img width="783" height="774" alt="rag-based-llm-chatbot-rag-retrieval-diagram" src="https://github.com/user-attachments/assets/c810db90-5ee6-4061-a7ed-0e9f71e2f404" />
+
+-----
+
+## API Reference
 ### REST API 
 #### `prompt` Router
   - `POST /api/prompt/guest` -> passes the guest user's prompt to the Groq model and retrieves the generated response
@@ -62,8 +81,29 @@ https://chatbot-r1ui.onrender.com
 
 -----
 
-## How to Run Locally
+##  Testing
+### `auth`
+#### Integration Tests
+- `test_user_registration` -> Test `/api/auth/register` endpoint
+- `test_user_login` -> Test `/api/auth/login` endpoint
 
+#### Unit Tests
+- `test_access_token_creation` -> Test successful access token creation
+- `test_access_token_verification` -> Test successful access token verification 
+- `test_refresh_token_creation` -> Test successful refresh token creation
+- `test_refresh_token_verification` -> Test successful refresh token verification
+- `test_password_hashing` -> Test successful password hashing
+- `test_password_verification` -> Test successful password verification
+- `test_access_token_cookie_security` -> Test successful access token cookie creation with correct security requirements
+- `test_refresh_token_cookie_security` -> Test successful refresh token cookie creation with correct security requirements
+
+### `prompt`
+#### Integration Tests
+- `test_guest_user_prompt_response` -> Test `/api/prompt/guest` endpoint
+
+-----
+
+## Running Locally
 ### Option 1: Run the entire project using Docker Compose (Recommended)
 
 ```bash
@@ -77,11 +117,11 @@ This option will run the frontend at:
 `http://localhost:5173`
 
 This option will run the database at: 
-`http://localhost:5432`
+`localhost:5432`
 
 -----
 
-### Option 2: Run each seperately
+### Option 2: Run each separately
 
 #### Frontend
 
@@ -95,11 +135,10 @@ npm run dev
 cd backend
 python -m uvicorn src.app:app --host 0.0.0.0 --port 8003
 ```
+
 -----
 
-## Assets Used
-- [Sidepanel] (https://www.flaticon.com/free-icon/side-menu_5405818?term=side+bar&page=1&position=9&origin=search&related_id=5405818)
-
+## Assets
 - [Send Prompt] (https://www.flaticon.com/free-icon/send_876777?term=send&page=1&position=9&origin=search&related_id=876777)
 
 - [New Chat] (https://www.flaticon.com/free-icon/add_3416075?term=add&page=1&position=6&origin=search&related_id=3416075)
