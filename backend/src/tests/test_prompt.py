@@ -9,6 +9,10 @@ client = TestClient(app)
 @patch('src.routers.prompt.client.chat.completions.create')
 def test_guest_user_prompt_response(mock_groq):
     test_messages = [{
+         'role': 'assistant',
+        'content': 'Hello! How can I help you today?'
+    },
+    {
         'role': 'user',
         'content': 'Hi! How are you?'
     },
@@ -28,3 +32,21 @@ def test_guest_user_prompt_response(mock_groq):
     data = response.json()
     assert data['response'] is not None
     assert data['response'] == mock_groq.return_value.choices[0].message.content
+
+
+# Test case: Guest_User_Prompt_Empty
+def test_guest_user_prompt_empty(mock_groq):
+    test_messages = [{
+            'role': 'assistant',
+            'content': 'Hello! How can I help you today?'
+            },
+            {
+            'role': 'user',
+            'content': ''
+        }]
+
+    mock_groq.return_value.choices[0].message.content = "I've processed an empty prompt!"
+    response = client.post('/api/prompt/guest', json={'messages': test_messages})
+    data = response.json()
+    
+    assert data['response'] is None
