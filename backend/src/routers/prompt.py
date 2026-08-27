@@ -27,6 +27,11 @@ class ChatMessages(BaseModel):
 # Guest prompt endpoint
 @router.post('/guest')
 async def captureUserInput(chatMessages: ChatMessages):
+    # Raise exception if empty prompt
+    for msg in chatMessages.messages:
+        if msg.role == 'user' and msg.content == '':
+            raise HTTPException(status_code=400, detail='Prompt cannot be empty')
+        
     try:
         chat_completion = client.chat.completions.create(
             messages=

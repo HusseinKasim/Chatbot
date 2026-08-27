@@ -5,7 +5,7 @@ from src.app import app
 
 client = TestClient(app)
 
-# Test case: Guest_User_Prompt_Response
+# Test case: Test_Guest_User_Prompt_Response
 @patch('src.routers.prompt.client.chat.completions.create')
 def test_guest_user_prompt_response(mock_groq):
     test_messages = [{
@@ -34,7 +34,7 @@ def test_guest_user_prompt_response(mock_groq):
     assert data['response'] == mock_groq.return_value.choices[0].message.content
 
 
-# Test case: Guest_User_Prompt_Empty
+# Test case: Test_Guest_User_Prompt_Empty
 @patch('src.routers.prompt.client.chat.completions.create')
 def test_guest_user_prompt_empty(mock_groq):
     test_messages = [{
@@ -48,6 +48,7 @@ def test_guest_user_prompt_empty(mock_groq):
 
     mock_groq.return_value.choices[0].message.content = "I've processed an empty prompt!"
     response = client.post('/api/prompt/guest', json={'messages': test_messages})
-    data = response.json()
+    assert response.status_code == 400
 
-    assert data['response'] is None
+    data = response.json()
+    assert data['detail'] == 'Prompt cannot be empty'
