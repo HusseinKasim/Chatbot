@@ -55,7 +55,10 @@ async def captureUserInput(chatMessages: ChatMessages):
 @router.post('/user')   
 async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(get_current_user), db: Session = Depends(get_db)):
     if not user:
-        return {'chatID': 0, 'response': 'invalid'}
+        raise HTTPException(status_code=400, detail='Invalid user')
+
+    if promptData.prompt == '':
+        raise HTTPException(status_code=400, detail='Prompt cannot be empty')
         
     if promptData.chatID == 0:
     # Add row in chats db, assign chatID, and return chatID
