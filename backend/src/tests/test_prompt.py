@@ -58,10 +58,10 @@ def test_guest_user_prompt_empty(mock_groq):
 
 # Test case: Test_Logged_In_User_Prompt_Response
 @patch('src.routers.prompt.client.chat.completions.create')
-def test_logged_in_user_prompt_response(mock_groq, db, db_user, db_user_chat):
+def test_logged_in_user_prompt_response(mock_groq, db, db_user):
 
     prompt = 'What is a test?'
-    chatID = db_user_chat.id
+    chatID = 0
 
     app.dependency_overrides[get_db] = lambda: db
 
@@ -72,6 +72,9 @@ def test_logged_in_user_prompt_response(mock_groq, db, db_user, db_user_chat):
 
     mock_groq.return_value.choices[0].message.content = 'A test is a planned procedure or set of actions executed to evaluate whether a software application, hardware component, or system functions correctly, securely, and efficiently.'
     response = client.post('/api/prompt/user', json={'prompt': prompt, 'chatID': chatID})
+
+    print(response.json())
+
     assert response.status_code == 200
     
     data = response.json()
