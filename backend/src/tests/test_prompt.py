@@ -58,10 +58,10 @@ def test_guest_user_prompt_empty(mock_groq):
 
 # Test case: Test_Logged_In_User_Prompt_Response
 @patch('src.routers.prompt.client.chat.completions.create')
-def test_logged_in_user_prompt_response(mock_groq, db, db_user):
+def test_logged_in_user_prompt_response(mock_groq, db, db_user, db_user_chat):
 
     prompt = 'What is a test?'
-    chatID = 1
+    chatID = db_user_chat.id
 
     app.dependency_overrides[get_db] = lambda: db
 
@@ -77,3 +77,5 @@ def test_logged_in_user_prompt_response(mock_groq, db, db_user):
     data = response.json()
     assert data['response'] is not None
     assert data['response'] == mock_groq.return_value.choices[0].message.content
+
+    app.dependency_overrides.clear()

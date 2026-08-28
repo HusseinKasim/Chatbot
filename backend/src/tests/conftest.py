@@ -37,3 +37,14 @@ def db_user(db):
     db.refresh(db_user)
 
     return db_user
+
+
+@pytest.fixture
+def db_user_chat(db, db_user):
+    db_user_chat = models.Chats(user_id = db_user.id)
+
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+
+    return db_user_chat
