@@ -31,7 +31,9 @@ def db_user(db):
         'password': 'testpassword'
     }
 
-    db_user = models.Users(first_name=db_user['first_name'].strip().capitalize(), last_name=db_user['last_name'].strip().capitalize(), email=db_user['email'].email, password=hash_password(db_user['password']))
+    db_user = models.Users(first_name=db_user['first_name'].strip().capitalize(), last_name=db_user['last_name'].strip().capitalize(), email=db_user['email'], password=hash_password(db_user['password']))
     db.add(db_user)
     db.commit()
-    db.refresh(db_user) 
+    db.refresh(db_user)
+
+    return db_user
