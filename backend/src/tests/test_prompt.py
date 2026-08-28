@@ -73,3 +73,22 @@ def test_logged_in_user_prompt_response(mock_groq, db, db_user_auth):
     assert data['response'] == mock_groq.return_value.choices[0].message.content
 
     app.dependency_overrides.clear()
+
+
+# Test case: Test_Logged_In_User_Prompt_Empty
+@patch('src.routers.prompt.client.chat.completions.create')
+def test_logged_in_user_prompt_empty(mock_groq, db, db_user_auth):
+    prompt = ''
+    chatID = 0
+
+    app.dependency_overrides[get_db] = lambda: db
+    app.dependency_overrides[get_current_user] = lambda: db_user_auth
+
+    mock_groq.return_value.choices[0].message.content = "I've processed an empty prompt!"
+    response = client.post('/api/prompt/user', json={'prompt': prompt, 'chatID': chatID})
+    assert response.status_code == 400
+    
+    data = response.json()
+    assert data['detail'] == 'Prompt cannot be empty'
+
+    app.dependency_overrides.clear()
