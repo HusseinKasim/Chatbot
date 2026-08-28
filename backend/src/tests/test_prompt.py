@@ -57,9 +57,29 @@ def test_guest_user_prompt_empty(mock_groq):
 
 # Test case: Test_Logged_In_User_Prompt_Response
 @patch('src.routers.prompt.client.chat.completions.create')
-def test_logged_in_user_prompt_response(mock_groq, db, db_user_auth):
+def test_logged_in_user_prompt_response_new_chat(mock_groq, db, db_user_auth):
     prompt = 'What is a test?'
     chatID = 0
+
+    app.dependency_overrides[get_db] = lambda: db
+    app.dependency_overrides[get_current_user] = lambda: db_user_auth
+
+    mock_groq.return_value.choices[0].message.content = 'A test is a planned procedure or set of actions executed to evaluate whether a software application, hardware component, or system functions correctly, securely, and efficiently.'
+    response = client.post('/api/prompt/user', json={'prompt': prompt, 'chatID': chatID})
+    assert response.status_code == 200
+    
+    data = response.json()
+    assert data['response'] is not None
+    assert data['response'] == mock_groq.return_value.choices[0].message.content
+
+    app.dependency_overrides.clear()
+
+
+# Test case: Test_Logged_In_User_Prompt_Response_Existing_Chat
+@patch('src.routers.prompt.client.chat.completions.create')
+def test_logged_in_user_prompt_response_existing_chat(mock_groq, db, db_user_auth, db_user_chat):
+    prompt = 'What is a test?'
+    chatID = int(db_user_chat.id)
 
     app.dependency_overrides[get_db] = lambda: db
     app.dependency_overrides[get_current_user] = lambda: db_user_auth
