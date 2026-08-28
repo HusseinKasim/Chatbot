@@ -2,6 +2,7 @@ import pytest
 from src.database import SessionLocal
 from src import models
 from src.hash import hash_password
+from src.pass_auth import create_access_token, verify_access_token
 
 @pytest.fixture
 def sample_user():
@@ -48,3 +49,11 @@ def db_user_chat(db, db_user):
     db.refresh(db_user)
 
     return db_user_chat
+
+
+@pytest.fixture
+def db_user_auth(db_user):
+    access_token = create_access_token(db_user.id)
+    payload = verify_access_token(access_token)
+
+    return payload

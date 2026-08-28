@@ -3,7 +3,6 @@ from fastapi.testclient import TestClient
 from unittest.mock import Mock, patch
 from src.app import app
 from src.dependencies import get_db, get_current_user
-from src.pass_auth import create_access_token, verify_access_token
 
 client = TestClient(app)
 
@@ -58,23 +57,15 @@ def test_guest_user_prompt_empty(mock_groq):
 
 # Test case: Test_Logged_In_User_Prompt_Response
 @patch('src.routers.prompt.client.chat.completions.create')
-def test_logged_in_user_prompt_response(mock_groq, db, db_user):
-
+def test_logged_in_user_prompt_response(mock_groq, db, db_user_auth):
     prompt = 'What is a test?'
     chatID = 0
 
     app.dependency_overrides[get_db] = lambda: db
-
-    access_token = create_access_token(db_user.id)
-    payload = verify_access_token(access_token)
-
-    app.dependency_overrides[get_current_user] = lambda: payload
+    app.dependency_overrides[get_current_user] = lambda: db_user_auth
 
     mock_groq.return_value.choices[0].message.content = 'A test is a planned procedure or set of actions executed to evaluate whether a software application, hardware component, or system functions correctly, securely, and efficiently.'
     response = client.post('/api/prompt/user', json={'prompt': prompt, 'chatID': chatID})
-
-    print(response.json())
-
     assert response.status_code == 200
     
     data = response.json()
