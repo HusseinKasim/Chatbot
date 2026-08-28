@@ -58,7 +58,7 @@ def test_guest_user_prompt_empty(mock_groq):
 
 # Test case: Test_Logged_In_User_Prompt_Response
 @patch('src.routers.prompt.client.chat.completions.create')
-def test_logged_in_user_prompt_response(db, db_user, mock_groq):
+def test_logged_in_user_prompt_response(mock_groq, db, db_user):
 
     prompt = 'What is a test?'
     chatID = 1
