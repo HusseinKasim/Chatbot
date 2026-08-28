@@ -50,9 +50,9 @@ def db_user(db):
 def db_user_chat(db, db_user):
     db_user_chat = models.Chats(user_id = db_user.id)
 
-    db.add(db_user)
+    db.add(db_user_chat)
     db.commit()
-    db.refresh(db_user)
+    db.refresh(db_user_chat)
 
     return db_user_chat
 

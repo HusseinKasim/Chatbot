@@ -72,6 +72,10 @@ def test_logged_in_user_prompt_response_new_chat(mock_groq, db, db_user_auth):
     assert data['response'] is not None
     assert data['response'] == mock_groq.return_value.choices[0].message.content
 
+    # TODO: ASSERT NEWLY GENERATED CHATID IN DB IS NOT 0
+
+    # TODO: ASSERT THAT THE PROMPT MESSAGE WAS STORED WITH THE NEWLY GENERATED CHATID IN DB
+
     app.dependency_overrides.clear()
 
 
@@ -79,7 +83,7 @@ def test_logged_in_user_prompt_response_new_chat(mock_groq, db, db_user_auth):
 @patch('src.routers.prompt.client.chat.completions.create')
 def test_logged_in_user_prompt_response_existing_chat(mock_groq, db, db_user_auth, db_user_chat):
     prompt = 'What is a test?'
-    chatID = int(db_user_chat.id)
+    chatID = db_user_chat.id
 
     app.dependency_overrides[get_db] = lambda: db
     app.dependency_overrides[get_current_user] = lambda: db_user_auth
@@ -91,6 +95,10 @@ def test_logged_in_user_prompt_response_existing_chat(mock_groq, db, db_user_aut
     data = response.json()
     assert data['response'] is not None
     assert data['response'] == mock_groq.return_value.choices[0].message.content
+
+    # TODO: ASSERT CHATID IN DB IS EQUAL TO db_user_chat.id
+
+    # TODO: ASSERT THAT THE PROMPT MESSAGE WAS STORED IN THE CHATID IN DB
 
     app.dependency_overrides.clear()
 
