@@ -20,6 +20,12 @@ def db():
     try:
         yield db
     finally:
+        db.query(models.Messages).delete()
+        db.query(models.Chats).delete()
+        db.query(models.Chunks).delete()
+        db.query(models.Documents).delete()
+        db.query(models.Users).delete()
+        db.commit()
         db.close()
 
     
