@@ -2,7 +2,8 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import Mock, patch
 from src.app import app
-from src.dependencies import get_current_user, get_db
+from src.dependencies import get_db, get_current_user
+from src.pass_auth import create_access_token, verify_access_token
 
 client = TestClient(app)
 
@@ -63,7 +64,11 @@ def test_logged_in_user_prompt_response(db, db_user, mock_groq):
     chatID = 1
 
     app.dependency_overrides[get_db] = lambda: db
-    app.dependency_overrides[get_current_user] = lambda: db_user
+
+    access_token = create_access_token(db_user.id)
+    payload = verify_access_token(access_token)
+
+    app.dependency_overrides[get_current_user] = lambda: payload
 
     mock_groq.return_value.choices[0].message.content = 'A test is a planned procedure or set of actions executed to evaluate whether a software application, hardware component, or system functions correctly, securely, and efficiently.'
     response = client.post('/api/prompt/user', json={'prompt': prompt, 'chatID': chatID})

@@ -6,9 +6,9 @@ from src.hash import hash_password
 @pytest.fixture
 def sample_user():
     return {
-        'first_name': 'Test', 
+        'first_name': 'Sample', 
         'last_name': 'User', 
-        'email': 'testuser@gmail.com', 
+        'email': 'sampleuser@gmail.com', 
         'password': 'testpassword'
     }
 
@@ -25,9 +25,9 @@ def db():
 @pytest.fixture
 def db_user(db):
     db_user = {
-        'first_name': 'Test', 
+        'first_name': 'DB', 
         'last_name': 'User', 
-        'email': 'testuser@gmail.com', 
+        'email': 'dbuser@gmail.com', 
         'password': 'testpassword'
     }
 
