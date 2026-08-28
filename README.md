@@ -102,7 +102,8 @@ The automated tests are run on GitHub Actions as part of the CI pipeline.
 #### Integration Tests
 - `test_guest_user_prompt_response` -> Test `/api/prompt/guest` endpoint
 - `test_guest_user_prompt_empty` -> Test behavior of `/api/prompt/guest` endpoint when a user passes in an empty prompt
-- `test_logged_in_user_prompt_response` -> Test `/api/prompt/user` endpoint
+- `test_logged_in_user_prompt_response_new_chat` -> Test `/api/prompt/user` endpoint for a brand new chat (creating a new chat)
+- `test_logged_in_user_prompt_response_existing_chat` -> Test `/api/prompt/user` endpoint for an already existing chat (adding a new message to an existing chat)
 - `test_logged_in_user_prompt_empty` -> Test behavior of `/api/prompt/user` endpoint when a user passes in an empty prompt
 
 -----
