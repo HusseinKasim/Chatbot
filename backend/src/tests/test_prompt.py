@@ -74,9 +74,10 @@ def test_logged_in_user_prompt_response_new_chat(mock_groq, db, db_user_auth):
         assert data['response'] is not None
         assert data['response'] == mock_groq.return_value.choices[0].message.content
 
-        # TODO: ASSERT NEWLY GENERATED CHATID IN DB IS NOT 0
-
-        # TODO: ASSERT THAT THE PROMPT MESSAGE WAS STORED WITH THE NEWLY GENERATED CHATID IN DB
+        # TODO: Assert newly generated chatID in DB is not still 0
+        newest_chat_id = db.query(models.Chats.id).filter(models.Chats.user_id == db_user_auth['sub']).order_by(models.Chats.id.desc()).first()
+        assert newest_chat_id is not None
+        assert newest_chat_id[0] != 0
     finally:
         app.dependency_overrides.clear()
 
@@ -106,7 +107,6 @@ def test_logged_in_user_prompt_response_existing_chat(mock_groq, db, db_user_aut
 
         # Assert if mocked LLM response stored correctly in DB
         assert db.query(models.Messages).join(models.Chats).filter(models.Chats.user_id == db_user_auth['sub'], models.Messages.chat_id == db_user_chat.id, models.Messages.role == 'assistant', models.Messages.message_text == mock_groq.return_value.choices[0].message.content).order_by(models.Messages.id.desc()).first() is not None
-        
     finally:
         app.dependency_overrides.clear()
 
