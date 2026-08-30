@@ -3,6 +3,7 @@ from fastapi.testclient import TestClient
 from unittest.mock import Mock, patch
 from src.app import app
 from src.dependencies import get_db, get_current_user
+from src import models
 
 client = TestClient(app)
 
@@ -95,12 +96,17 @@ def test_logged_in_user_prompt_response_existing_chat(mock_groq, db, db_user_aut
         assert response.status_code == 200
         
         data = response.json()
-        assert data['response'] is not None
         assert data['response'] == mock_groq.return_value.choices[0].message.content
 
-        # TODO: ASSERT CHATID IN DB IS EQUAL TO db_user_chat.id
+        # Assert chatID in db is equal to db_user_chat.id
+        assert db.query(models.Chats.id).filter(models.Chats.user_id == db_user_auth['sub'], models.Chats.id == db_user_chat.id).first() is not None
 
-        # TODO: ASSERT THAT THE PROMPT MESSAGE WAS STORED IN THE CHATID IN DB
+        # Assert prompt message was stored under correct chatID in DB
+        assert db.query(models.Messages).join(models.Chats).filter(models.Chats.user_id == db_user_auth['sub'], models.Messages.chat_id == db_user_chat.id, models.Messages.role == 'user', models.Messages.message_text == prompt).order_by(models.Messages.id.desc()).first() is not None
+
+        # Assert if mocked LLM response stored correctly in DB
+        assert db.query(models.Messages).join(models.Chats).filter(models.Chats.user_id == db_user_auth['sub'], models.Messages.chat_id == db_user_chat.id, models.Messages.role == 'assistant', models.Messages.message_text == mock_groq.return_value.choices[0].message.content).order_by(models.Messages.id.desc()).first() is not None
+        
     finally:
         app.dependency_overrides.clear()
 
