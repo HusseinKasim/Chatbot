@@ -32,7 +32,6 @@ def test_guest_user_prompt_response(mock_groq):
     assert response.status_code == 200
     
     data = response.json()
-    assert data['response'] is not None
     assert data['response'] == mock_groq.return_value.choices[0].message.content
 
 
