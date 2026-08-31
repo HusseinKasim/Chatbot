@@ -8,7 +8,7 @@ router = APIRouter(prefix='/api/chats')
 @router.get('/')
 async def get_user_chats(user=Depends(get_current_user_optional), db: Session = Depends(get_db)):
     if not user:
-        return {'chats': []}
+        raise HTTPException(status_code=401, detail='Invalid user')
     
     chats = db.query(models.Chats).filter(models.Chats.user_id == int(user['sub'])).order_by(models.Chats.created_at.desc()).all()
     return {'chats': chats}
