@@ -12,20 +12,32 @@ client = TestClient(app)
 # Test case: Test_User_Registration
 def test_user_registration(sample_user):
     request = client.post('/api/auth/register', json={'firstName': sample_user['first_name'], 'lastName': sample_user['last_name'], 'email': sample_user['email'], 'password': sample_user['password']})
+
+    # Assert successful response
     assert request.status_code == 200
 
     data = request.json()
+
+    # Assert response exists
     assert data['response'] is not None
+
+    # Assert response contains expected value
     assert data['response'] == 'ok'
 
 
 # Test case: Test_User_Login
 def test_user_login(sample_user):
     request = client.post('/api/auth/login', json={'email': sample_user['email'], 'password': sample_user['password']})
+
+    # Assert successful response
     assert request.status_code == 200
 
     data = request.json()
+
+    # Assert response exists
     assert data['response'] is not None
+
+    # Assert response contains expected value
     assert data['response'] == 'authenticated'
 
 
@@ -35,6 +47,7 @@ def test_access_token_creation():
 
     access_token = create_access_token(USER_ID)
 
+    # Assert access token exists
     assert access_token is not None
 
 
@@ -44,8 +57,11 @@ def test_access_token_verification():
     
     access_token = create_access_token(USER_ID)
     payload = verify_access_token(access_token)
-    
+
+    # Assert payload exists
     assert payload is not None
+
+    # Assert access token's userID matches the correct userID value
     assert payload['sub'] == str(USER_ID)
 
 
@@ -55,6 +71,7 @@ def test_refresh_token_creation():
 
     refresh_token = create_refresh_token(USER_ID)
 
+    # Assert refresh token exists
     assert refresh_token is not None
 
 
@@ -64,8 +81,11 @@ def test_refresh_token_verification():
     
     refresh_token = create_refresh_token(USER_ID)
     payload = verify_refresh_token(refresh_token)
-    
+
+    # Assert payload exists
     assert payload is not None
+
+    # Assert refresh token's userID matches the correct userID value
     assert payload['sub'] == str(USER_ID)
 
 
@@ -75,7 +95,10 @@ def test_password_hashing(sample_user):
 
     hashed_password = hash_password(test_password)
 
+    # Assert hashed password is of string data type
     assert isinstance(hashed_password, str)
+
+    # Assert hashed password contains a different value than the user's password
     assert hashed_password != test_password
 
 
@@ -84,7 +107,8 @@ def test_password_verification(sample_user):
     test_password = sample_user['password']
 
     hashed_password = hash_password(test_password)
-    
+
+    # Assert user's password can be correctly verified to hashed password
     assert verify_password(test_password, hashed_password)
 
 
@@ -102,14 +126,21 @@ def test_access_token_cookie_security():
         samesite='none'
     )
     cookie_header = response.headers.get('set-cookie')
+
+    # Assert cookie header exists
     assert cookie_header is not None
 
     cookie = SimpleCookie()
     cookie.load(cookie_header)
     cookie_data = cookie['access_token']
 
+    # Assert cookie is configured with the HttpOnly attribute
     assert cookie_data['httponly'] is True
+
+    # Assert cookie is configured with the Secure attribute
     assert cookie_data['secure'] is True
+
+    # Assert cookie is configured with SameSite=None
     assert cookie_data['samesite'].lower() == 'none'
 
 
@@ -127,13 +158,20 @@ def test_refresh_token_cookie_security():
         samesite='none'
     )
     cookie_header = response.headers.get('set-cookie')
+
+    # Assert cookie header exists
     assert cookie_header is not None
 
     cookie = SimpleCookie()
     cookie.load(cookie_header)
     cookie_data = cookie['refresh_token']
 
+    # Assert cookie is configured with the HttpOnly attribute
     assert cookie_data['httponly'] is True
+
+    # Assert cookie is configured with the Secure attribute
     assert cookie_data['secure'] is True
+
+    # Assert cookie is configured with SameSite=None
     assert cookie_data['samesite'].lower() == 'none'
     
