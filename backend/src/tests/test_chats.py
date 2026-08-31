@@ -1,7 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 from src.app import app
-from src.dependencies import get_db, get_current_user
+from src.dependencies import get_db, get_current_user_optional
 from src import models
 
 client = TestClient(app)
@@ -9,7 +9,7 @@ client = TestClient(app)
 # Test case: Test_User_Chats_Fetch
 def test_user_chats_fetch(db, db_user_auth, db_user_chat):
     app.dependency_overrides[get_db] = lambda: db
-    app.dependency_overrides[get_current_user] = lambda: db_user_auth
+    app.dependency_overrides[get_current_user_optional] = lambda: db_user_auth
 
     response = client.get('/api/chats/')
     data = response.json()
