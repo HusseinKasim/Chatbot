@@ -47,8 +47,16 @@ def db_user(db):
 
 
 @pytest.fixture
-def db_user_chat(db, db_user):
-    db_user_chat = models.Chats(user_id = db_user.id)
+def db_user_auth(db_user):
+    access_token = create_access_token(db_user.id)
+    payload = verify_access_token(access_token)
+
+    return payload
+
+
+@pytest.fixture
+def db_user_chat(db, db_user_auth):
+    db_user_chat = models.Chats(chat_title='Test Chat', user_id=db_user_auth['sub'])
 
     db.add(db_user_chat)
     db.commit()
@@ -58,8 +66,12 @@ def db_user_chat(db, db_user):
 
 
 @pytest.fixture
-def db_user_auth(db_user):
-    access_token = create_access_token(db_user.id)
-    payload = verify_access_token(access_token)
+def db_user_chat_messages(db, db_user_chat):
+    db_user_message = models.Messages(role='user', message_text='This is an example prompt', chat_id=db_user_chat.id)
+    db_assistant_message = models.Messages(role='assistant', message_text='This is an example bot response', chat_id=db_user_chat.id)
 
-    return payload
+    db.add(db_user_message)
+    db.add(db_assistant_message)
+    db.commit()
+
+    return [db_user_message, db_assistant_message]
