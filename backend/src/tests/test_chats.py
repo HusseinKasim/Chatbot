@@ -42,7 +42,7 @@ def test_user_chats_fetch_invalid_user(db):
 # Test case: Test_User_Chat_Messages_Fetch
 def test_user_chat_messages_fetch(db, db_user_auth, db_user_chat, db_user_chat_messages):
     app.dependency_overrides[get_db] = lambda: db
-    app.dependency_overrides[get_current_user_optional] = lambda: db_user_auth
+    app.dependency_overrides[get_current_user] = lambda: db_user_auth
 
     response = client.get(f'/api/chats/{db_user_chat.id}/messages')
     data = response.json()
