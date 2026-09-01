@@ -1,7 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 from src.app import app
-from src.dependencies import get_db, get_current_user_optional
+from src.dependencies import get_db, get_current_user_optional, get_current_user
 from src import models
 
 client = TestClient(app)
