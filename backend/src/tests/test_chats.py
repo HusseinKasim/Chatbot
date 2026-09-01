@@ -37,3 +37,28 @@ def test_user_chats_fetch_invalid_user(db):
 
     # Assert response contains the expected error message 
     assert data['detail'] == 'Invalid user'
+
+
+# Test case: Test_User_Chat_Messages_Fetch
+def test_user_chat_messages_fetch(db, db_user_auth, db_user_chat_messages):
+    app.dependency_overrides[get_db] = lambda: db
+    app.dependency_overrides[get_current_user_optional] = lambda: db_user_auth
+
+    response = client.get(f'/api/chats/{db_user_chat_messages.chat_id}/messages')
+    data = response.json()
+
+    # Assert successful response
+    assert response.status_code == 200 
+
+    # Assert response exists
+    assert data['messages'] is not None
+
+    # Assert db user message is correctly fetched
+    if data['messages'][0]['role'] == 'user':
+        user_message_id = data['messages'][0]['id']
+    assert user_message_id == db_user_chat_messages[0].id
+
+    # Assert db assistant message is correctly fetched
+    if data['messages'][1]['role'] == 'assistant':
+        assistant_message_id = data['messages'][1]['id']
+    assert assistant_message_id == db_user_chat_messages[1].id
