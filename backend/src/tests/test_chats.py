@@ -44,7 +44,7 @@ def test_user_chat_messages_fetch(db, db_user_auth, db_user_chat, db_user_chat_m
     app.dependency_overrides[get_db] = lambda: db
     app.dependency_overrides[get_current_user_optional] = lambda: db_user_auth
 
-    response = client.get(f'/api/chats/{db_user_chat.chat_id}/messages')
+    response = client.get(f'/api/chats/{db_user_chat.id}/messages')
     data = response.json()
 
     # Assert successful response
