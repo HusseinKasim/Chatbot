@@ -67,7 +67,7 @@ def test_user_chat_messages_fetch(db, db_user_auth, db_user_chat, db_user_chat_m
 # Test case: Test_User_Chat_Delete
 def test_user_chat_delete(db, db_user_auth, db_user_chat):
     app.dependency_overrides[get_db] = lambda: db
-    app.dependency_overrides[get_current_user_optional] = lambda: db_user_auth
+    app.dependency_overrides[get_current_user] = lambda: db_user_auth
 
     response = client.delete(f'/api/chats/{db_user_chat.id}/')
 
