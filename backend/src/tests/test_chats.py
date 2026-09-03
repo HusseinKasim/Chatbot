@@ -62,3 +62,19 @@ def test_user_chat_messages_fetch(db, db_user_auth, db_user_chat, db_user_chat_m
     if data['messages'][1]['role'] == 'assistant':
         assistant_message_id = data['messages'][1]['id']
     assert assistant_message_id == db_user_chat_messages[1].id
+
+
+# Test case: Test_User_Chat_Delete
+def test_user_chat_delete(db, db_user_auth, db_user_chat):
+    app.dependency_overrides[get_db] = lambda: db
+    app.dependency_overrides[get_current_user_optional] = lambda: db_user_auth
+
+    response = client.delete(f'/api/chats/{db_user_chat.id}/')
+
+    # Assert successful response
+    assert response.status_code == 200
+
+    deleted_db_chat = db.query(models.Chats).filter(models.Chats.id == db_user_chat.id, models.Chats.user_id == db_user_auth['sub']).first()
+
+    # Assert deleted db chat does not exist anymore
+    assert deleted_db_chat is None
