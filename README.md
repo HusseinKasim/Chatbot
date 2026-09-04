@@ -83,12 +83,8 @@ During retrieval, relevant document chunks are retrieved based on semantic simil
 ##  Testing
 The automated tests are run on GitHub Actions as part of the CI pipeline.
 
-### `auth`
-#### Integration Tests
-- `test_user_registration` -> Test `/api/auth/register` endpoint
-- `test_user_login` -> Test `/api/auth/login` endpoint
-
-#### Unit Tests
+### Unit Tests
+#### `auth`
 - `test_access_token_creation` -> Test successful access token creation
 - `test_access_token_verification` -> Test successful access token verification 
 - `test_refresh_token_creation` -> Test successful refresh token creation
@@ -98,16 +94,20 @@ The automated tests are run on GitHub Actions as part of the CI pipeline.
 - `test_access_token_cookie_security` -> Test successful access token cookie creation with correct security requirements
 - `test_refresh_token_cookie_security` -> Test successful refresh token cookie creation with correct security requirements
 
-### `prompt`
-#### Integration Tests
+
+### Integration Tests
+#### `auth`
+- `test_user_registration` -> Test `/api/auth/register` endpoint
+- `test_user_login` -> Test `/api/auth/login` endpoint
+
+#### `prompt`
 - `test_guest_user_prompt_response` -> Test `/api/prompt/guest` endpoint
 - `test_guest_user_prompt_empty` -> Test behavior of `/api/prompt/guest` endpoint when a user passes in an empty prompt
 - `test_logged_in_user_prompt_response_new_chat` -> Test `/api/prompt/user` endpoint for a brand new chat (creating a new chat correctly)
 - `test_logged_in_user_prompt_response_existing_chat` -> Test `/api/prompt/user` endpoint for an already existing chat (adding a new message correctly to an existing chat)
 - `test_logged_in_user_prompt_empty` -> Test behavior of `/api/prompt/user` endpoint when a user passes in an empty prompt
 
-### `chats`
-#### Integration Tests
+#### `chats`
 - `test_user_chats_fetch` -> Test `/api/chats/` endpoint
 - `test_user_chats_fetch_invalid_user` -> Test behavior of `/api/chats/` endpoint when a guest user attempts to retrieve chats
 - `test_user_chat_messages_fetch` -> Test `/api/chats/{chatID}/messages/` endpoint
