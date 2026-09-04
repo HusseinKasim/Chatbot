@@ -1,11 +1,5 @@
-import pytest
 from fastapi.testclient import TestClient
-from fastapi import Response
-from unittest.mock import Mock, patch
 from src.app import app
-from src.hash import hash_password, verify_password
-from src.pass_auth import create_access_token, verify_access_token, create_refresh_token, verify_refresh_token
-from http.cookies import SimpleCookie
 
 client = TestClient(app)
 
