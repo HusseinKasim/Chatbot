@@ -1,5 +1,5 @@
 from pathlib import Path
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_unstructured import UnstructuredLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from src import dependencies
 from src import models
@@ -8,7 +8,7 @@ import uuid
 # Document (PDF) Ingestion
 def ingest_doc(uploadedFilePath: Path, db, user, s3_key):
     # Load PDFs
-    loader = PyPDFLoader(str(uploadedFilePath))
+    loader = UnstructuredLoader(str(uploadedFilePath))
     documents = loader.load()
 
     # Extract document title and file type from source
