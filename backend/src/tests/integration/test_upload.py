@@ -15,7 +15,7 @@ def test_upload_dev_environment(db, db_user_auth, sample_pdf_file):
     monkeypatch = MonkeyPatch()
     monkeypatch.setenv('ENVIRONMENT', 'development')
 
-    response = client.post('/api/upload/', file={'pdfFile': sample_pdf_file})
+    response = client.post('/api/upload/', files={'pdfFile': sample_pdf_file})
 
     # Assert successful response
     assert response.status_code == 200
