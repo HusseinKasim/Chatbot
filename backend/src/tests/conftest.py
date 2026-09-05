@@ -3,6 +3,7 @@ from src.database import SessionLocal
 from src import models
 from src.hash import hash_password
 from src.pass_auth import create_access_token, verify_access_token
+import io
 
 @pytest.fixture
 def sample_user():
@@ -13,6 +14,10 @@ def sample_user():
         'password': 'testpassword'
     }
 
+@pytest.fixture
+def sample_pdf_file():
+    content = 'This is a sample pdf file for testing purposes.'
+    return ('sample.pdf', io.BytesIO(content), 'application/pdf')
 
 @pytest.fixture
 def db():
