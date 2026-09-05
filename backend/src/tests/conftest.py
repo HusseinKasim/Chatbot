@@ -16,7 +16,7 @@ def sample_user():
 
 @pytest.fixture
 def sample_pdf_file():
-    content = 'This is a sample pdf file for testing purposes.'
+    content = b'This is a sample pdf file for testing purposes.'
     return ('sample.pdf', io.BytesIO(content), 'application/pdf')
 
 @pytest.fixture
