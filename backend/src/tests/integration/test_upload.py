@@ -9,8 +9,8 @@ client = TestClient(app)
 
 # Test case: Test_Upload_Development_Environment
 def test_upload_dev_environment(db, db_user_auth, sample_pdf_file):
-    app.dependency_override[get_db] = lambda: db
-    app.dependency_override[get_current_user] = lambda: db_user_auth
+    app.dependency_overrides[get_db] = lambda: db
+    app.dependency_overrides[get_current_user] = lambda: db_user_auth
 
     monkeypatch = MonkeyPatch()
     monkeypatch.setenv('ENVIRONMENT', 'development')
