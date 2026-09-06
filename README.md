@@ -113,6 +113,9 @@ The automated tests are run on GitHub Actions as part of the CI pipeline.
 - `test_user_chat_messages_fetch` -> Test `/api/chats/{chatID}/messages/` endpoint
 - `test_user_chat_delete` -> Test `/api/chats/{chatID}/` delete endpoint
 
+#### `upload`
+- `test_upload_dev_environment` -> Test `/api/upload` endpoint for development environment
+
 -----
 
 ## Infrastructure & Deployment
