@@ -33,8 +33,10 @@ def sample_pdf_file_path():
     pdf.add_page()
     pdf.set_font('Arial', size=11)
     pdf.cell(text='This is a sample pdf file for testing purposes.')
-    
+
     pdf_path = Path('tests') / 'sample.pdf'
+    pdf_path.mkdir(parents=True, exist_ok=True)
+
     pdf.output(str(pdf_path))
 
     return pdf_path
