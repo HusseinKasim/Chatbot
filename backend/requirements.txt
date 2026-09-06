@@ -16,3 +16,5 @@ langchain_openai
 pgvector
 pypdf
 boto3
+unstructured
+fpdf2

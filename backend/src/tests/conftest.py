@@ -4,6 +4,7 @@ from src import models
 from src.hash import hash_password
 from src.pass_auth import create_access_token, verify_access_token
 import io
+from fpdf import FPDF
 
 @pytest.fixture
 def sample_user():
@@ -14,10 +15,17 @@ def sample_user():
         'password': 'testpassword'
     }
 
+
 @pytest.fixture
 def sample_pdf_file():
-    content = b'This is a sample pdf file for testing purposes.'
-    return ('sample.pdf', io.BytesIO(content), 'application/pdf')
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font('Arial', size=11)
+    pdf.cell(text='This is a sample pdf file for testing purposes.')
+
+    return ('sample.pdf', io.BytesIO(pdf.output()), 'application/pdf')
+
+
 
 @pytest.fixture
 def db():
