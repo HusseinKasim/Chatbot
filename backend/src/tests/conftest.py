@@ -5,7 +5,6 @@ from src.hash import hash_password
 from src.pass_auth import create_access_token, verify_access_token
 import io
 from fpdf import FPDF
-from pathlib import Path
 
 @pytest.fixture
 def sample_user():
@@ -28,14 +27,14 @@ def sample_pdf_file():
 
 
 @pytest.fixture
-def sample_pdf_file_path():
+def sample_pdf_file_path(tmp_path):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font('Arial', size=11)
     pdf.cell(text='This is a sample pdf file for testing purposes.')
 
-    pdf_path = Path('tests') / 'sample.pdf'
-    pdf_path.mkdir(parents=True, exist_ok=True)
+    pdf_path = tmp_path / 'sample.pdf'
+    pdf_path.parent.mkdir(parents=True, exist_ok=True)
 
     pdf.output(str(pdf_path))
 
