@@ -34,8 +34,6 @@ def sample_pdf_file_path(tmp_path):
     pdf.cell(text='This is a sample pdf file for testing purposes.')
 
     pdf_path = tmp_path / 'sample.pdf'
-    pdf_path.parent.mkdir(parents=True, exist_ok=True)
-
     pdf.output(str(pdf_path))
 
     return pdf_path
