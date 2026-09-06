@@ -26,12 +26,12 @@ def test_upload_dev_environment(mock_ingest_doc, db, db_user_auth, sample_pdf_fi
 
 
 # Test case: Test_Ingest_Doc_Dev_Env
-def test_ingest_doc_dev_environment(db, db_user_auth, sample_pdf_file):
+def test_ingest_doc_dev_environment(db, db_user_auth, sample_pdf_file_path):
     app.dependency_overrides[get_db] = lambda: db
     app.dependency_overrides[get_current_user] = lambda: db_user_auth
 
     try:
-        results = ingest_doc(sample_pdf_file, db, db_user_auth, s3_key=None)
+        results = ingest_doc(sample_pdf_file_path, db, db_user_auth, s3_key=None)
         data = results.json()
 
         # Assert document added to db
