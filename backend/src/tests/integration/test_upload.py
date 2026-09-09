@@ -32,14 +32,13 @@ def test_ingest_doc_dev_environment(db, db_user_auth, sample_pdf_file_path):
 
     try:
         results = ingest_doc(sample_pdf_file_path, db, db_user_auth, s3_key=None)
-        data = results.json()
 
         # Assert document added to db
         new_db_document = db.query(models.Documents).filter(models.Documents.user_id == db_user_auth['sub']).order_by(models.Documents.id.desc).first()
-        assert data['document_added'] == new_db_document.id
+        assert results['document_added'] == new_db_document.id
 
         # Assert document chunks added to db
         new_db_document_chunks = db.query(models.Chunks).join(models.Documents).filter(models.Documents.user_id == db_user_auth['sub'], models.Chunks.document_id == new_db_document.id).all()
-        assert data['chunks'] == len(new_db_document_chunks)
+        assert results['chunks'] == len(new_db_document_chunks)
     finally:
         app.dependency_overrides.clear()
