@@ -5,8 +5,9 @@ import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
 import UserChat from './UserChat';
 import { useState } from 'react';
+import UserDocument from './UserDocument';
 
-export default function SidePanel({user, firstName, lastName, chats, clearChat, updateUserChat, deleteUserChat, setLoginCard, setRegisterCard}) {
+export default function SidePanel({user, firstName, lastName, chats, clearChat, updateUserChat, deleteUserChat, documents, updateDocumentSidebar, setLoginCard, setRegisterCard}) {
   const { open } = useSidebar();
   const [ selectedChat, setSelectedChat ] = useState(null);
 
@@ -39,6 +40,22 @@ export default function SidePanel({user, firstName, lastName, chats, clearChat, 
                 updateUserChat(chat.chatID);
               }
             } onDelete={() => deleteUserChat(chat.chatID)} isSelected={selectedChat == chat.chatID}/>
+            ))}
+          </>
+        ) : null }
+        </SidebarGroup>
+
+        <SidebarGroup>
+        {user ? (
+          <>
+            <div className='pl-[15px] text-[var(--color-text-muted)]'>
+              <text>My Documents</text>
+            </div>
+            {documents.map(document => (
+              <UserDocument key={document.documentID} title={document.title} onClick={() => {
+                setSelectedDocument(/*docID*/);
+              }
+            }/>
             ))}
           </>
         ) : null }

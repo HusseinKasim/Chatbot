@@ -12,6 +12,7 @@ import AuthContext from './context/AuthContext.jsx'
 import UploadButton from './components/UploadButton.jsx'
 import useUpload from './hooks/useUpload.jsx'
 import { SidebarInset, SidebarProvider } from './components/ui/sidebar'
+import useDocument from './hooks/useDocument'
 
 function App() {
   const [ prompt, setPrompt ] = useState('');
@@ -19,6 +20,7 @@ function App() {
   const [ toggleRegisterCard, setRegisterCard ] = useState(false);
 
   const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat } = useChat();
+  const { documents, updateDocumentSidebar } = useDocument();
   
   const { uploadDocument } = useUpload();
 
@@ -54,7 +56,7 @@ function App() {
       
       {/* Sidepanel */}
       <SidebarProvider>
-        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} setLoginCard={setLoginCard} setRegisterCard={setRegisterCard} />
+        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} documents={documents} updateDocumentSidebar={updateDocumentSidebar} setLoginCard={setLoginCard} setRegisterCard={setRegisterCard} />
         <SidebarInset className='relative flex min-h-svh flex-col'>
           
           {/* Chat Area */}
