@@ -30,6 +30,7 @@ function App() {
   useEffect(() => {
     checkAuth();
     updateChatSidebar();
+    updateDocumentSidebar();
   }, []);
 
   function handlePromptChange(e) {
