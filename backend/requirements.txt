@@ -11,10 +11,10 @@ pyjwt
 pytest
 python-multipart
 langchain_unstructured
+langchain_community
 langchain_text_splitters
 langchain_openai
 pgvector
 pypdf
 boto3
-unstructured[pdf]
 fpdf2
