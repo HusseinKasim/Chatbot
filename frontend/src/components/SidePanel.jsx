@@ -7,7 +7,7 @@ import UserChat from './UserChat';
 import { useState } from 'react';
 import UserDocument from './UserDocument';
 
-export default function SidePanel({user, firstName, lastName, chats, clearChat, updateUserChat, deleteUserChat, documents, updateDocumentSidebar, setLoginCard, setRegisterCard}) {
+export default function SidePanel({user, firstName, lastName, chats, clearChat, updateUserChat, deleteUserChat, documents, setLoginCard, setRegisterCard}) {
   const { open } = useSidebar();
   const [ selectedChat, setSelectedChat ] = useState(null);
 
@@ -52,10 +52,7 @@ export default function SidePanel({user, firstName, lastName, chats, clearChat, 
               <text>My Documents</text>
             </div>
             {documents.map(document => (
-              <UserDocument key={document.documentID} title={document.title} onClick={() => {
-                setSelectedDocument(/*docID*/);
-              }
-            }/>
+              <UserDocument key={document.documentID} title={document.title} />
             ))}
           </>
         ) : null }

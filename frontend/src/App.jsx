@@ -57,7 +57,7 @@ function App() {
       
       {/* Sidepanel */}
       <SidebarProvider>
-        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} documents={documents} updateDocumentSidebar={updateDocumentSidebar} setLoginCard={setLoginCard} setRegisterCard={setRegisterCard} />
+        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} documents={documents} setLoginCard={setLoginCard} setRegisterCard={setRegisterCard} />
         <SidebarInset className='relative flex min-h-svh flex-col'>
           
           {/* Chat Area */}

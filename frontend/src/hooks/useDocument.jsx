@@ -15,8 +15,7 @@ export default function useDocument()
     }, [user]);
 
     async function updateDocumentSidebar(){
-        // Fetch user chats from backend via HTTP GET
-        /*
+        // Fetch user documents from backend via HTTP GET
         try{
             let response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/documents/`, {
             method: 'GET',
@@ -24,12 +23,12 @@ export default function useDocument()
             })
 
             const data = await response.json();
-            if(data.chats != null)
+            if(data.documents != null)
             {
-                setChats(
-                    data.chats.map(chat => ({
-                        chatID: chat.id,
-                        title: chat.chat_title
+                setDocuments(
+                    data.documents.map(document => ({
+                        documentID: document.id,
+                        title: document.document_name
                     }))
                 );
             }
@@ -37,7 +36,6 @@ export default function useDocument()
         catch(err){
             console.log('Error when updating documents sidebar: ' + err);
         }
-        */
     }
 
     async function fetchWithAuth(url, options={}){
