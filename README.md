@@ -120,6 +120,9 @@ The automated tests are run on GitHub Actions as part of the CI pipeline.
 - `test_upload_dev_environment` -> Test `/api/upload` endpoint for development environment
 - `test_ingest_doc_dev_environment` -> Test behavior of document ingestion `ingest_doc` in a development environment
 
+#### `documents`
+- `test_user_documents_fetch` -> Test `/api/documents/` endpoint
+
 -----
 
 ## Infrastructure & Deployment
