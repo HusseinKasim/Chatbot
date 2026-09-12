@@ -78,6 +78,9 @@ During retrieval, relevant document chunks are retrieved based on semantic simil
 #### `upload` Router
   - `POST /api/upload/` -> uploads a PDF file
 
+#### `documents` Router
+- `GET /api/documents/` -> retrieves user documents
+
 -----
 
 ##  Testing
