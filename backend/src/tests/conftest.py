@@ -100,3 +100,14 @@ def db_user_chat_messages(db, db_user_chat):
     db.commit()
 
     return [db_user_message, db_assistant_message]
+
+
+@pytest.fixture
+def db_user_document(db, db_user_auth):
+    db_user_document = models.Documents(document_name='Test Chat', user_id=db_user_auth['sub'], s3_key=None, file_type='pdf')
+
+    db.add(db_user_document)
+    db.commit()
+    db.refresh(db_user_document)
+
+    return db_user_document
