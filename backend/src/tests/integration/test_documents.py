@@ -45,10 +45,10 @@ def test_user_documents_fetch_invalid_user(db):
 
     response = client.get('/api/documents/')
 
-    # Assert successful response
+    # Assert unauthorized response
     assert response.status_code == 401 
 
     data = response.json()
     
-    # Assert db document is correctly fetched
+    # Assert response contains the expected error message
     assert data['detail'] == 'Invalid user'
