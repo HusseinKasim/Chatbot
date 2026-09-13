@@ -122,6 +122,7 @@ The automated tests are run on GitHub Actions as part of the CI pipeline.
 
 #### `documents`
 - `test_user_documents_fetch` -> Test `/api/documents/` endpoint
+- `test_user_documents_fetch_invalid_user` -> Test behavior of `/api/documents/` endpoint when a guest user attempts to retrieve chats
 
 -----
 
