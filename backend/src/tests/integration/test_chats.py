@@ -35,7 +35,7 @@ def test_user_chats_fetch_empty(db, db_user_auth):
     assert response.status_code == 200 
 
     # Assert response is empty
-    assert data['chats'] is None
+    assert data['chats'] == []
 
 
 # Test case: Test_User_Chats_Fetch_Invalid_User
