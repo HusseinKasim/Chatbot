@@ -112,6 +112,7 @@ The automated tests are run on GitHub Actions as part of the CI pipeline.
 
 #### `chats`
 - `test_user_chats_fetch` -> Test `/api/chats/` endpoint
+- `test_user_chats_fetch_empty` -> Test `/api/chats/` endpoint for user with no chats
 - `test_user_chats_fetch_invalid_user` -> Test behavior of `/api/chats/` endpoint when a guest user attempts to retrieve chats
 - `test_user_chat_messages_fetch` -> Test `/api/chats/{chatID}/messages/` endpoint
 - `test_user_chat_delete` -> Test `/api/chats/{chatID}/` delete endpoint
@@ -122,6 +123,7 @@ The automated tests are run on GitHub Actions as part of the CI pipeline.
 
 #### `documents`
 - `test_user_documents_fetch` -> Test `/api/documents/` endpoint
+- `test_user_documents_fetch_empty` -> Test `/api/documents/` endpoint for user with no uploaded documents 
 - `test_user_documents_fetch_invalid_user` -> Test behavior of `/api/documents/` endpoint when a guest user attempts to retrieve chats
 
 -----
