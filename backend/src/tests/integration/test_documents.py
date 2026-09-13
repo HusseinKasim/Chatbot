@@ -23,6 +23,21 @@ def test_user_documents_fetch(db, db_user_auth, db_user_document):
     assert data['documents'][0]['id'] == db_user_document.id
 
 
+# Test case: test_user_documents_fetch_empty
+def test_user_documents_fetch_empty(db, db_user_auth):
+    app.dependency_overrides[get_db] = lambda: db
+    app.dependency_overrides[get_current_user_optional] = lambda: db_user_auth
+
+    response = client.get('/api/documents/')
+    data = response.json()
+
+    # Assert successful response
+    assert response.status_code == 200 
+
+    # Assert response is empty
+    assert data['documents'] == []
+
+ 
 # Test case: Test_User_Documents_Fetch_Invalid_User
 def test_user_documents_fetch_invalid_user(db):
     app.dependency_overrides[get_db] = lambda: db
