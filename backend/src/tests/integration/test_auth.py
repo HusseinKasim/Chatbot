@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 from src.app import app
 from src import models
 from src.dependencies import get_db
-from hash import hash_password
+from src.hash import hash_password
 
 client = TestClient(app)
 
