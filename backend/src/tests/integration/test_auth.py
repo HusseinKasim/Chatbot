@@ -26,7 +26,9 @@ def test_user_registration(db, sample_user):
 
 
 # Test case: Test_User_Login
-def test_user_login(sample_user):
+def test_user_login(db, sample_user):
+    app.dependency_overrides[get_db] = lambda: db
+    
     request = client.post('/api/auth/login', json={'email': sample_user['email'], 'password': sample_user['password']})
 
     # Assert successful response
