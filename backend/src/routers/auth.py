@@ -29,8 +29,9 @@ async def get_user_info(user=Depends(get_current_user_optional), db: Session = D
 
 @router.post('/register')
 async def register(payload: RegisterData, db: Session = Depends(get_db)):
+    payload_email = payload.email.strip().lower()
 
-    existing_user = db.query(models.Users).filter(models.Users.email == payload.email.strip().lower()).first()
+    existing_user = db.query(models.Users).filter(models.Users.email == payload_email).first()
     if existing_user:
         raise HTTPException(status_code=409, detail='Email already exists!')
 
@@ -43,7 +44,7 @@ async def register(payload: RegisterData, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_user) 
 
-    return {'response': "ok"}
+    return {'response': 'ok', 'registered_user_email': payload_email}
 
 
 @router.post('/login')
