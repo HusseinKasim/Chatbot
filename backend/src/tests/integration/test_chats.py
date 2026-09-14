@@ -23,7 +23,7 @@ def test_user_chats_fetch(db, db_user_auth, db_user_chat):
     assert data['chats'][0]['id'] == db_user_chat.id
 
 
-# Test case: test_user_chats_fetch_empty
+# Test case: Test_User_Chats_Fetch_Empty
 def test_user_chats_fetch_empty(db, db_user_auth):
     app.dependency_overrides[get_db] = lambda: db
     app.dependency_overrides[get_current_user_optional] = lambda: db_user_auth
