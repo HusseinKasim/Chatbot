@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 from src.app import app
 from src import models
 from src.dependencies import get_db
+from hash import hash_password
 
 client = TestClient(app)
 
@@ -28,8 +29,13 @@ def test_user_registration(db, sample_user):
 # Test case: Test_User_Login
 def test_user_login(db, sample_user):
     app.dependency_overrides[get_db] = lambda: db
-    
-    request = client.post('/api/auth/login', json={'email': sample_user['email'], 'password': sample_user['password']})
+
+    sample_user_to_db = models.Users(first_name=sample_user['first_name'].strip().capitalize(), last_name=sample_user['last_name'].strip().capitalize(), email=sample_user['email'], password=hash_password(sample_user['password']))
+    db.add(sample_user_to_db)
+    db.commit()
+    db.refresh(sample_user_to_db)
+
+    request = client.post('/api/auth/login', json={'email': sample_user_to_db.email, 'password': sample_user_to_db.email})
 
     # Assert successful response
     assert request.status_code == 200
