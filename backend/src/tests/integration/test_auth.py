@@ -35,7 +35,7 @@ def test_user_login(db, sample_user):
     db.commit()
     db.refresh(sample_user_to_db)
 
-    request = client.post('/api/auth/login', json={'email': sample_user_to_db.email, 'password': sample_user_to_db.password})
+    request = client.post('/api/auth/login', json={'email': sample_user_to_db.email, 'password': sample_user['password']})
 
     # Assert successful response
     assert request.status_code == 200
