@@ -20,7 +20,7 @@ def sample_user():
 def sample_pdf_file():
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font('Arial', size=11)
+    pdf.set_font('Helvetica', size=11)
     pdf.cell(text='This is a sample pdf file for testing purposes.')
 
     return ('sample.pdf', io.BytesIO(pdf.output()), 'application/pdf')
@@ -30,7 +30,7 @@ def sample_pdf_file():
 def sample_pdf_file_path(tmp_path):
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font('Arial', size=11)
+    pdf.set_font('Helvetica', size=11)
     pdf.cell(text='This is a sample pdf file for testing purposes.')
 
     pdf_path = tmp_path / 'sample.pdf'
