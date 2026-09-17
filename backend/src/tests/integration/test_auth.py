@@ -10,13 +10,13 @@ client = TestClient(app)
 def test_user_registration(db, sample_user):
     app.dependency_overrides[get_db] = lambda: db
 
-    request = client.post('/api/auth/register', json={'firstName': sample_user['first_name'], 'lastName': sample_user['last_name'], 'email': sample_user['email'], 'password': sample_user['password']})
+    response = client.post('/api/auth/register', json={'firstName': sample_user['first_name'], 'lastName': sample_user['last_name'], 'email': sample_user['email'], 'password': sample_user['password']})
 
     # Assert successful response
-    assert request.status_code == 200
+    assert response.status_code == 200
 
-    data = request.json()
-    
+    data = response.json()
+
     registered_user = db.query(models.Users).filter(models.Users.email == sample_user['email'].strip().lower()).first()
 
     # Assert registered user exists
@@ -67,12 +67,12 @@ def test_user_login(db, sample_user):
     db.commit()
     db.refresh(sample_user_to_db)
 
-    request = client.post('/api/auth/login', json={'email': sample_user_to_db.email, 'password': sample_user['password']})
+    response = client.post('/api/auth/login', json={'email': sample_user_to_db.email, 'password': sample_user['password']})
 
     # Assert successful response
-    assert request.status_code == 200
+    assert response.status_code == 200
 
-    data = request.json()
+    data = response.json()
 
     # Assert response exists
     assert data['response'] is not None
