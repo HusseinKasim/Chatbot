@@ -39,7 +39,7 @@ async def register(payload: RegisterData, db: Session = Depends(get_db)):
     hashed_password = hash_password(payload.password)
 
     # Store data in database
-    db_user = models.Users(first_name=payload.firstName.strip().capitalize(), last_name=payload.lastName.strip().capitalize(), email=payload.email, password=hashed_password)
+    db_user = models.Users(first_name=payload.firstName.strip().capitalize(), last_name=payload.lastName.strip().capitalize(), email=payload_email, password=hashed_password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user) 
