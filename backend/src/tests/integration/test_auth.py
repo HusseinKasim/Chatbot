@@ -26,6 +26,38 @@ def test_user_registration(db, sample_user):
     assert data['registered_user_email'] == registered_user.email.strip().lower()
 
 
+# Test case: Test_User_Registration_Duplicate_Email
+def test_user_registration_duplicate_email(db, sample_user):
+    app.dependency_overrides[get_db] = lambda: db
+    sample_user_2 = {
+        'first_name': 'Sample2', 
+        'last_name': 'User2', 
+        'email': 'sampleuser@gmail.com', # Duplicate email as sample_user
+        'password': 'testpassword2'
+    }
+
+    # Add sample_user_2 to DB
+    sample_user_2 = models.Users(first_name=sample_user_2['first_name'].strip().capitalize(), last_name=sample_user_2['last_name'].strip().capitalize(), email=sample_user_2['email'], password=sample_user_2['password'])
+    db.add(sample_user_2)
+    db.commit()
+
+    # Register sample_user with the same email
+    response = client.post('/api/auth/register', json={'firstName': sample_user['first_name'], 'lastName': sample_user['last_name'], 'email': sample_user['email'], 'password': sample_user['password']})
+
+    # Assert conflict error
+    assert response.status_code == 409
+
+    data = response.json()
+
+    # Assert correct error message
+    assert data['detail'] == 'Email already exists!'
+
+    email_count = db.query(models.Users).filter(models.Users.email == sample_user['email']).count()
+    
+    # Assert the duplicate was not added
+    assert email_count == 1
+
+
 # Test case: Test_User_Login
 def test_user_login(db, sample_user):
     app.dependency_overrides[get_db] = lambda: db
