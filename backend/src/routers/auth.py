@@ -30,7 +30,7 @@ async def get_user_info(user=Depends(get_current_user_optional), db: Session = D
 @router.post('/register')
 async def register(payload: RegisterData, db: Session = Depends(get_db)):
     # Normalize payload email format
-    nomalized_payload_email = normalize_payload_email(payload)
+    nomalized_payload_email = normalize_payload_email(payload.email)
 
     # Check if email already in use
     existing_user = db.query(models.Users).filter(models.Users.email == nomalized_payload_email).first()
@@ -119,5 +119,5 @@ async def create_new_access_token(request: Request, response:Response):
 
 
 # Normalize payload email format
-def normalize_payload_email(payload: RegisterData):
-    return payload.email.strip().lower()
+def normalize_payload_email(email: str):
+    return email.strip().lower()
