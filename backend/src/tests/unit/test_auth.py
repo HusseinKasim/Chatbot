@@ -4,6 +4,7 @@ from src.app import app
 from src.hash import hash_password, verify_password
 from src.pass_auth import create_access_token, verify_access_token, create_refresh_token, verify_refresh_token
 from http.cookies import SimpleCookie
+from src.routers.auth import normalize_payload_email
 
 client = TestClient(app)
 
@@ -140,4 +141,9 @@ def test_refresh_token_cookie_security():
 
     # Assert cookie is configured with SameSite=None
     assert cookie_data['samesite'].lower() == 'none'
+    
+
+# Test case: Test_Email_Normalization
+def test_email_normalization(sample_user):
+    assert normalize_payload_email(sample_user['email']) == sample_user['email'].strip().lower()
     
