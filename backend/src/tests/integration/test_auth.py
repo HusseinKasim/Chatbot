@@ -100,10 +100,12 @@ def test_user_logout():
     assert response.status_code == 200
 
     data = response.json()
-    
+
     # Assert response exists
     assert data['response'] is not None
 
+    set_cookie_headers = response.headers.get_list('set-cookie')
+
     # Assert JWT cookies were deleted
-    assert client.cookies.get('access_token') is None
-    assert client.cookies.get('refresh_token') is None
+    assert any('access_token=' in cookie and 'Max-Age=0' in cookie for cookie in set_cookie_headers)
+    assert any('refresh_token=' in cookie and 'Max-Age=0' in cookie for cookie in set_cookie_headers)
