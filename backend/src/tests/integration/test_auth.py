@@ -78,8 +78,9 @@ def test_user_login(db, sample_user):
     # Assert response exists
     assert data['response'] is not None
 
-    # Assert response contains expected value
-    assert data['response'] == 'authenticated'
+    # Assert JWT cookies exist
+    assert client.cookies.get('access_token') is not None
+    assert client.cookies.get('refresh_token') is not None
 
 
 # Test case: Test_User_Logout
