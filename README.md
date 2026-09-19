@@ -96,6 +96,7 @@ The automated tests are run on GitHub Actions as part of the CI pipeline.
 - `test_password_verification` -> Test successful password verification
 - `test_access_token_cookie_security` -> Test successful access token cookie creation with correct security requirements
 - `test_refresh_token_cookie_security` -> Test successful refresh token cookie creation with correct security requirements
+- `test_email_normalization` -> Test successful normalization of user email
 
 
 ### Integration Tests
