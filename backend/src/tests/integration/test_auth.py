@@ -3,6 +3,7 @@ from src.app import app
 from src import models
 from src.dependencies import get_db
 from src.hash import hash_password
+from src.pass_auth import create_access_token, create_refresh_token
 
 client = TestClient(app)
 
@@ -79,3 +80,30 @@ def test_user_login(db, sample_user):
 
     # Assert response contains expected value
     assert data['response'] == 'authenticated'
+
+
+# Test case: Test_User_Logout
+def test_user_logout():
+    USER_ID = 616
+
+    # Create JWT tokens
+    access_token = create_access_token(USER_ID)
+    refresh_token = create_refresh_token(USER_ID)
+
+    # Create cookies with JWT tokens
+    client.cookies.set('access_token', access_token)
+    client.cookies.set('refresh_token', refresh_token)
+
+    response = client.post('/api/auth/logout')
+
+    # Assert successful response
+    assert response.status_code == 200
+
+    data = response.json()
+    
+    # Assert response exists
+    assert data['response'] is not None
+
+    # Assert JWT cookies were deleted
+    assert client.cookies.get('access_token') is None
+    assert client.cookies.get('refresh_token') is None
