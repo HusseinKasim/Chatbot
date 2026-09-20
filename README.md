@@ -104,6 +104,7 @@ The automated tests are run on GitHub Actions as part of the CI pipeline.
 - `test_user_registration` -> Test `/api/auth/register` endpoint
 - `test_user_registration_duplicate_email` -> Test `/api/auth/register` endpoint when a user tries to register with an existing email
 - `test_user_login` -> Test `/api/auth/login` endpoint
+- `test_user_login_non_existent_email` -> Test `/api/auth/login` endpoint using an email that is non-existent
 - `test_user_logout` -> Test `/api/auth/logout` endpoint
 
 #### `prompt`
