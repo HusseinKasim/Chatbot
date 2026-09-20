@@ -51,11 +51,12 @@ async def register(payload: RegisterData, db: Session = Depends(get_db)):
 
 @router.post('/login')
 async def login(payload: LoginData, response: Response, db: Session = Depends(get_db)):
-    # Verify password
+    # Verify user email
     user = db.query(models.Users).filter(models.Users.email == payload.email).first()
     if not user:
         raise HTTPException(status_code=401, detail='Invalid login credentials')
-    
+
+    # Verify user password
     if not verify_password(payload.password, user.password):
         raise HTTPException(status_code=401, detail='Invalid login credentials')
     
