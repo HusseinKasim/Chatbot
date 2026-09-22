@@ -107,6 +107,30 @@ def test_user_login_non_existent_email(db, sample_user):
     assert data['detail'] == 'Invalid login credentials'
 
 
+# Test case: Test_User_Login_Invalid_Password
+def test_user_login_invalid_password(db, sample_user):
+    app.dependency_overrides[get_db] = lambda: db
+
+    # Set up invalid password
+    INVALID_PASSWORD = 'invalidpassword'
+
+    # Add sample user to db
+    sample_user_to_db = models.Users(first_name=sample_user['first_name'].strip().capitalize(), last_name=sample_user['last_name'].strip().capitalize(), email=sample_user['email'], password=hash_password(sample_user['password']))
+    db.add(sample_user_to_db)
+    db.commit()
+    db.refresh(sample_user_to_db)
+
+    response = client.post('/api/auth/login', json={'email': sample_user['email'], 'password': INVALID_PASSWORD})
+
+    # Assert unauthorized response
+    assert response.status_code == 401
+
+    data = response.json()
+
+    # Assert response contains the expected error message
+    assert data['detail'] == 'Invalid login credentials'
+
+
 # Test case: Test_User_Logout
 def test_user_logout():
     USER_ID = 616
