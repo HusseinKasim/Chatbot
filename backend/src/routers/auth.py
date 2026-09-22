@@ -57,7 +57,7 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
         raise HTTPException(status_code=401, detail='Invalid login credentials')
 
     # Verify user password
-    if not verify_password(payload.password, user.password) or not payload.password.strip():
+    if not payload.password.strip() or not verify_password(payload.password, user.password):
         raise HTTPException(status_code=401, detail='Invalid login credentials')
     
     access_token = pass_auth.create_access_token(user.id)
