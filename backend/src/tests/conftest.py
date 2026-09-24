@@ -111,3 +111,28 @@ def db_user_document(db, db_user_auth):
     db.refresh(db_user_document)
 
     return db_user_document
+
+
+@pytest.fixture
+def db_secondary_user(db):
+    secondary_db_user = {
+        'first_name': 'Secondary_DB', 
+        'last_name': 'User', 
+        'email': 'secondarydbuser@gmail.com', 
+        'password': 'testpassword11'
+    }
+
+    secondary_db_user = models.Users(first_name=secondary_db_user['first_name'].strip().capitalize(), last_name=secondary_db_user['last_name'].strip().capitalize(), email=secondary_db_user['email'], password=hash_password(secondary_db_user['password']))
+    db.add(secondary_db_user)
+    db.commit()
+    db.refresh(secondary_db_user)
+
+    return secondary_db_user
+
+
+@pytest.fixture
+def db_secondary_user_auth(db_secondary_user):
+    access_token = create_access_token(db_secondary_user.id)
+    payload = verify_access_token(access_token)
+
+    return payload

@@ -53,6 +53,18 @@ def test_user_chats_fetch_invalid_user(db):
     assert data['detail'] == 'Invalid user'
 
 
+# Test case: Test_User_Chats_Fetch_Different_User
+def test_user_chats_fetch_different_user(db, db_secondary_user_auth, db_user_chat):
+    app.dependency_overrides[get_db] = lambda: db
+    app.dependency_overrides[get_current_user_optional] = lambda: db_secondary_user_auth
+
+    response = client.get('/api/chats/')
+    data = response.json()
+
+    # Assert fetched db user's chat is not accessible by the secondary db user
+    assert db_user_chat.id not in [chat['id'] for chat in data['chats']]
+
+
 # Test case: Test_User_Chat_Messages_Fetch
 def test_user_chat_messages_fetch(db, db_user_auth, db_user_chat, db_user_chat_messages):
     app.dependency_overrides[get_db] = lambda: db
