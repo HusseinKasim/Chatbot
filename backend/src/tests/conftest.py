@@ -45,7 +45,6 @@ def db():
     try:
         yield db
     finally:
-        db.rollback()
         db.query(models.Messages).delete()
         db.query(models.Chats).delete()
         db.query(models.Chunks).delete()
