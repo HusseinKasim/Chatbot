@@ -18,3 +18,4 @@ pgvector
 pypdf
 boto3
 fpdf2
+psycopg
