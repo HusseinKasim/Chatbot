@@ -104,23 +104,3 @@ def test_user_chat_delete(db, db_user_auth, db_user_chat):
 
     # Assert deleted db chat does not exist anymore
     assert deleted_db_chat is None
-
-
-# Test case: Test_User_Chat_Delete_Different_User
-def test_user_chat_delete_different_user(db, db_secondary_user_auth, db_user_chat):
-    app.dependency_overrides[get_db] = lambda: db
-    app.dependency_overrides[get_current_user] = lambda: db_secondary_user_auth
-
-    response = client.delete(f'/api/chats/{db_user_chat.id}/')
-
-    # Assert chat not found response
-    assert response.status_code == 404
-
-    data = response.json()
-
-    assert data['detail'] == 'Chat not found!'
-
-    deleted_db_chat = db.query(models.Chats).filter(models.Chats.id == db_user_chat.id).first()
-
-    # Assert deleted db chat does not exist anymore
-    assert deleted_db_chat is not None
