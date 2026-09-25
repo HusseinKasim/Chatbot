@@ -25,7 +25,7 @@ def test_upload_dev_environment(mock_ingest_doc, db, db_user_auth, sample_pdf_fi
         app.dependency_overrides.clear()
 
 
-# Test case: Test_Ingest_Doc_Dev_Env
+# Test case: Test_Ingest_Doc_Dev_Environment
 def test_ingest_doc_dev_environment(db, db_user_auth, sample_pdf_file_path):
     app.dependency_overrides[get_db] = lambda: db
     app.dependency_overrides[get_current_user] = lambda: db_user_auth
