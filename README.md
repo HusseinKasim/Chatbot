@@ -123,6 +123,7 @@ The automated tests are run on GitHub Actions as part of the CI pipeline.
 - `test_user_chats_fetch_different_user` -> Test behavior of `/api/chats/` endpoint when a user attempts to fetch another user's chats
 - `test_user_chat_messages_fetch` -> Test `/api/chats/{chatID}/messages/` endpoint
 - `test_user_chat_delete` -> Test `/api/chats/{chatID}/` delete endpoint
+- `test_user_chat_delete_different_user` -> Test `/api/chats/{chatID}/` delete endpoint when a user attempts to delete another user's chats
 
 #### `upload`
 - `test_upload_dev_environment` -> Test `/api/upload` endpoint for development environment
