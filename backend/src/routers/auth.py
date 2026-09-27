@@ -37,10 +37,10 @@ async def register(payload: RegisterData, db: Session = Depends(get_db)):
             raise HTTPException(status_code=422, detail='Invalid email format')
     
     # Normalize payload email format
-    nomalized_payload_email = normalize_payload_email(payload.email)
+    normalized_payload_email = normalize_payload_email(payload.email)
 
     # Check if email already in use
-    existing_user = db.query(models.Users).filter(models.Users.email == nomalized_payload_email).first()
+    existing_user = db.query(models.Users).filter(models.Users.email == normalized_payload_email).first()
     if existing_user:
         raise HTTPException(status_code=409, detail='Email already exists!')
 
@@ -48,12 +48,12 @@ async def register(payload: RegisterData, db: Session = Depends(get_db)):
     hashed_password = hash_password(payload.password)
 
     # Store data in database
-    db_user = models.Users(first_name=payload.firstName.strip().capitalize(), last_name=payload.lastName.strip().capitalize(), email=nomalized_payload_email, password=hashed_password)
+    db_user = models.Users(first_name=payload.firstName.strip().capitalize(), last_name=payload.lastName.strip().capitalize(), email=normalized_payload_email, password=hashed_password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user) 
 
-    return {'response': 'ok', 'registered_user_email': nomalized_payload_email}
+    return {'response': 'ok', 'registered_user_email': normalized_payload_email}
 
 
 @router.post('/login')
