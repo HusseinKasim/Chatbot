@@ -5,6 +5,7 @@ from src.hash import hash_password, verify_password
 from src.dependencies import get_db, get_current_user, get_current_user_optional
 from src import models
 from src import pass_auth
+from email_validator import validate_email, EmailNotValidError
 
 router = APIRouter(prefix='/api/auth')
 
@@ -29,6 +30,9 @@ async def get_user_info(user=Depends(get_current_user_optional), db: Session = D
 
 @router.post('/register')
 async def register(payload: RegisterData, db: Session = Depends(get_db)):
+    # Validate email format
+    validate_payload_email(payload.email, check_deliverability_bool=True)
+
     # Normalize payload email format
     nomalized_payload_email = normalize_payload_email(payload.email)
 
@@ -51,6 +55,9 @@ async def register(payload: RegisterData, db: Session = Depends(get_db)):
 
 @router.post('/login')
 async def login(payload: LoginData, response: Response, db: Session = Depends(get_db)):
+    # Validate email format
+    validate_payload_email(payload.email, check_deliverability_bool=False)
+
     # Verify user email
     user = db.query(models.Users).filter(models.Users.email == payload.email).first()
     if not user:
@@ -122,3 +129,12 @@ async def create_new_access_token(request: Request, response:Response):
 # Normalize payload email format
 def normalize_payload_email(email: str):
     return email.strip().lower()
+
+
+# Validate Payload Email
+def validate_payload_email(email: str, check_deliverability_bool: bool):
+    try:
+        validated_email = validate_email(email, check_deliverability=check_deliverability_bool)
+        email = validated_email.normalized
+    except EmailNotValidError as e:
+        raise HTTPException(status_code=422, detail='Invalid email format')
