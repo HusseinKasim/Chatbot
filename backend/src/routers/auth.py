@@ -64,8 +64,11 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
     except EmailNotValidError as e:
             raise HTTPException(status_code=422, detail='Invalid email format')
 
+    # Normalize payload email format
+    normalized_payload_email = normalize_payload_email(payload.email)
+
     # Verify user email
-    user = db.query(models.Users).filter(models.Users.email == payload.email).first()
+    user = db.query(models.Users).filter(models.Users.email == normalized_payload_email).first()
     if not user:
         raise HTTPException(status_code=401, detail='Invalid login credentials')
 
