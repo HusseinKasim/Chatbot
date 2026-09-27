@@ -1,10 +1,11 @@
 from fastapi.testclient import TestClient
 from fastapi import Response
 from src.app import app
+from unittest.mock import patch
 from src.hash import hash_password, verify_password
 from src.pass_auth import create_access_token, verify_access_token, create_refresh_token, verify_refresh_token
 from http.cookies import SimpleCookie
-from src.routers.auth import normalize_payload_email
+from src.routers.auth import normalize_payload_email, validate_payload_email
 
 client = TestClient(app)
 
@@ -146,4 +147,8 @@ def test_refresh_token_cookie_security():
 # Test case: Test_Email_Normalization
 def test_email_normalization(sample_user):
     assert normalize_payload_email(sample_user['email']) == sample_user['email'].strip().lower()
-    
+
+
+# Test case: Test_Email_Validation
+def test_email_validation(sample_user):
+    assert validate_payload_email(sample_user['email'], check_deliverability_bool=False) == sample_user['email'].strip().lower()
