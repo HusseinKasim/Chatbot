@@ -31,7 +31,7 @@ async def get_user_info(user=Depends(get_current_user_optional), db: Session = D
 @router.post('/register')
 async def register(payload: RegisterData, db: Session = Depends(get_db)):
     # Validate email format
-    validate_payload_email(payload.email, check_deliverability_bool=True)
+    payload.email = validate_payload_email(payload.email, check_deliverability_bool=True)
 
     # Normalize payload email format
     nomalized_payload_email = normalize_payload_email(payload.email)
@@ -56,7 +56,7 @@ async def register(payload: RegisterData, db: Session = Depends(get_db)):
 @router.post('/login')
 async def login(payload: LoginData, response: Response, db: Session = Depends(get_db)):
     # Validate email format
-    validate_payload_email(payload.email, check_deliverability_bool=False)
+    payload.email = validate_payload_email(payload.email, check_deliverability_bool=False)
 
     # Verify user email
     user = db.query(models.Users).filter(models.Users.email == payload.email).first()
@@ -136,5 +136,6 @@ def validate_payload_email(email: str, check_deliverability_bool: bool):
     try:
         validated_email = validate_email(email, check_deliverability=check_deliverability_bool)
         email = validated_email.normalized
+        return email
     except EmailNotValidError as e:
         raise HTTPException(status_code=422, detail='Invalid email format')
