@@ -7,48 +7,57 @@ client = TestClient(app)
 
 # Test case: Test_User_Documents_Fetch
 def test_user_documents_fetch(db, db_user_auth, db_user_document):
-    app.dependency_overrides[get_db] = lambda: db
-    app.dependency_overrides[get_current_user_optional] = lambda: db_user_auth
+    try:
+        app.dependency_overrides[get_db] = lambda: db
+        app.dependency_overrides[get_current_user_optional] = lambda: db_user_auth
 
-    response = client.get('/api/documents/')
-    data = response.json()
+        response = client.get('/api/documents/')
+        data = response.json()
 
-    # Assert successful response
-    assert response.status_code == 200 
+        # Assert successful response
+        assert response.status_code == 200 
 
-    # Assert response exists
-    assert data['documents'] is not None
+        # Assert response exists
+        assert data['documents'] is not None
 
-    # Assert db document is correctly fetched
-    assert data['documents'][0]['id'] == db_user_document.id
+        # Assert db document is correctly fetched
+        assert data['documents'][0]['id'] == db_user_document.id
+    finally:
+        app.dependency_overrides.clear()
 
 
 # Test case: Test_User_Documents_Fetch_Empty
 def test_user_documents_fetch_empty(db, db_user_auth):
-    app.dependency_overrides[get_db] = lambda: db
-    app.dependency_overrides[get_current_user_optional] = lambda: db_user_auth
+    try:
+        app.dependency_overrides[get_db] = lambda: db
+        app.dependency_overrides[get_current_user_optional] = lambda: db_user_auth
 
-    response = client.get('/api/documents/')
-    data = response.json()
+        response = client.get('/api/documents/')
+        data = response.json()
 
-    # Assert successful response
-    assert response.status_code == 200 
+        # Assert successful response
+        assert response.status_code == 200 
 
-    # Assert response is empty
-    assert data['documents'] == []
+        # Assert response is empty
+        assert data['documents'] == []
+    finally:
+        app.dependency_overrides.clear()
 
  
 # Test case: Test_User_Documents_Fetch_Invalid_User
-def test_user_documents_fetch_invalid_user(db):
-    app.dependency_overrides[get_db] = lambda: db
-    app.dependency_overrides[get_current_user_optional] = lambda: None
+def test_user_documents_fetch_invalid_user(db): 
+    try:
+        app.dependency_overrides[get_db] = lambda: db
+        app.dependency_overrides[get_current_user_optional] = lambda: None
 
-    response = client.get('/api/documents/')
+        response = client.get('/api/documents/')
 
-    # Assert unauthorized response
-    assert response.status_code == 401 
+        # Assert unauthorized response
+        assert response.status_code == 401 
 
-    data = response.json()
-    
-    # Assert response contains the expected error message
-    assert data['detail'] == 'Invalid user'
+        data = response.json()
+        
+        # Assert response contains the expected error message
+        assert data['detail'] == 'Invalid user'
+    finally:
+        app.dependency_overrides.clear()

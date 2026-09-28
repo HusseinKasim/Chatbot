@@ -10,12 +10,12 @@ client = TestClient(app)
 # Test case: Test_Upload_Dev_Environment
 @patch('src.routers.upload.ingest_doc')
 def test_upload_dev_environment(mock_ingest_doc, db, db_user_auth, sample_pdf_file, monkeypatch):
-    monkeypatch.setenv('ENVIRONMENT', 'development')
-    
-    app.dependency_overrides[get_db] = lambda: db
-    app.dependency_overrides[get_current_user] = lambda: db_user_auth
-
     try:
+        monkeypatch.setenv('ENVIRONMENT', 'development')
+            
+        app.dependency_overrides[get_db] = lambda: db
+        app.dependency_overrides[get_current_user] = lambda: db_user_auth
+        
         mock_ingest_doc.return_value = {'document_id': 1, 'chunks': 5}
         response = client.post('/api/upload/', files={'pdfFile': sample_pdf_file})
 
@@ -27,10 +27,10 @@ def test_upload_dev_environment(mock_ingest_doc, db, db_user_auth, sample_pdf_fi
 
 # Test case: Test_Ingest_Doc_Dev_Environment
 def test_ingest_doc_dev_environment(db, db_user_auth, sample_pdf_file_path):
-    app.dependency_overrides[get_db] = lambda: db
-    app.dependency_overrides[get_current_user] = lambda: db_user_auth
-
     try:
+        app.dependency_overrides[get_db] = lambda: db
+        app.dependency_overrides[get_current_user] = lambda: db_user_auth
+
         results = ingest_doc(sample_pdf_file_path, db, db_user_auth, s3_key=None)
 
         # Assert document added to db
