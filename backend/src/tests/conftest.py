@@ -1,5 +1,4 @@
 import pytest
-from fastapi import UploadFile
 from src.database import SessionLocal
 from src import models
 from src.hash import hash_password
@@ -42,10 +41,10 @@ def sample_pdf_file_path(tmp_path):
 
 @pytest.fixture
 def sample_exe_file():
-    return UploadFile(
-        filename='test.exe',
-        file=io.BytesIO(b'test executable'),
-        headers={'content-type': 'application/x-msdownload'}
+    return (
+        'test.exe',
+        io.BytesIO(b'test executable'),
+        'application/x-msdownload'
     )
 
 
