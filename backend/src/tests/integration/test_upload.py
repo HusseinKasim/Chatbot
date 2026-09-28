@@ -43,3 +43,28 @@ def test_ingest_doc_dev_environment(db, db_user_auth, sample_pdf_file_path):
         assert results['chunks'] == len(new_db_document_chunks)
     finally:
         app.dependency_overrides.clear()
+
+
+# Test case: Test_Upload_Unsupported_File_Type
+@patch('src.routers.upload.ingest_doc')
+def test_upload_unsupported_file_type(mock_ingest_doc, db, db_user_auth, sample_exe_file, monkeypatch):
+    try:
+        monkeypatch.setenv('ENVIRONMENT', 'development')
+                
+        app.dependency_overrides[get_db] = lambda: db
+        app.dependency_overrides[get_current_user] = lambda: db_user_auth
+            
+        response = client.post('/api/upload/', files={'pdfFile': sample_exe_file})
+    
+        # Assert unsupported media type response
+        assert response.status_code == 415
+
+        data = response.json()
+
+        # Assert response contains the expected error message
+        assert data['detail'] == 'File type is not supported. Uploaded file must be a PDF.'
+
+        # Assert ingest_doc is not called
+        mock_ingest_doc.assert_not_called()
+    finally:
+        app.dependency_overrides.clear()
