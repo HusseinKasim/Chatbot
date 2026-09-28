@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, Depends
+from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from pathlib import Path
 from src.rag.ingest import ingest_doc
 import shutil
@@ -21,6 +21,10 @@ AWS_BUCKET = os.getenv('AWS_BUCKET')
 
 @router.post('/')
 async def upload(pdfFile: UploadFile = File(...), db: Session = Depends(get_db), user = Depends(get_current_user)):
+    # Check if file type is supported (pdf)
+    if pdfFile.content_type != 'application/pdf': # add other types as required
+        raise HTTPException(status_code=415, detail='File type is not supported. Uploaded file must be a PDF.')
+
     # Create uploads folder (if not already created)
     UPLOAD_DIR = Path('uploads') / user['sub']
     UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
