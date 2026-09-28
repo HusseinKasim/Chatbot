@@ -64,5 +64,8 @@ def test_upload_unsupported_file_type(mock_ingest_doc, db, db_user_auth, sample_
 
         # Assert response contains the expected error message
         assert data['detail'] == 'File type is not supported. Uploaded file must be a PDF.'
+    
+        # Assert mocked function is not called
+        mock_ingest_doc.assert_not_called()
     finally:
         app.dependency_overrides.clear()
