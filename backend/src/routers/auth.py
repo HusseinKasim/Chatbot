@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Response, Request
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
 from src.hash import hash_password, verify_password
-from src.dependencies import get_db, get_current_user, get_current_user_optional
+from src.dependencies import get_db, get_current_user_optional
 from src import models
 from src import pass_auth
 from email_validator import validate_email, EmailNotValidError
@@ -97,7 +97,7 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
 
 
 @router.post('/logout')
-async def logout(response: Response, request: Request):
+async def logout(response: Response):
     response.delete_cookie(
         key='access_token',
         httponly=True,

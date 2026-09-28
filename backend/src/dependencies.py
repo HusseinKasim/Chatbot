@@ -1,6 +1,6 @@
 from fastapi import Request, HTTPException
 from langchain_openai import OpenAIEmbeddings
-from .database import Base, SessionLocal
+from .database import SessionLocal
 from . import pass_auth
 from dotenv import load_dotenv
 import os

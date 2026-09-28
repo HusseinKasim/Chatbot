@@ -1,7 +1,6 @@
 from fastapi.testclient import TestClient
 from fastapi import Response
 from src.app import app
-from unittest.mock import patch
 from src.hash import hash_password, verify_password
 from src.pass_auth import create_access_token, verify_access_token, create_refresh_token, verify_refresh_token
 from http.cookies import SimpleCookie
