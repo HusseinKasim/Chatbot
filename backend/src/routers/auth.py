@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 from src.hash import hash_password, verify_password
 from src.dependencies import get_db, get_current_user_optional
 from src import models
-from src import pass_auth
+from src.pass_auth import create_access_token, create_refresh_token
 from email_validator import validate_email, EmailNotValidError
 
 router = APIRouter(prefix='/api/auth')
@@ -76,7 +76,7 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
     if not payload.password.strip() or not verify_password(payload.password, user.password):
         raise HTTPException(status_code=401, detail='Invalid login credentials')
     
-    access_token = pass_auth.create_access_token(user.id)
+    access_token = create_access_token(user.id)
     response.set_cookie(
         key='access_token',
         value=access_token,
@@ -85,7 +85,7 @@ async def login(payload: LoginData, response: Response, db: Session = Depends(ge
         samesite='none'
     )
 
-    refresh_token = pass_auth.create_refresh_token(user.id)
+    refresh_token = create_refresh_token(user.id)
     response.set_cookie(
         key='refresh_token',
         value=refresh_token,
