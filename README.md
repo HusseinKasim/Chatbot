@@ -33,6 +33,7 @@ https://chatbot-r1ui.onrender.com
 - JWT authentication using HTTP-only cookies
 - Access and refresh token support
 - Secure password hashing
+- Uploaded document viewing (PDF preview)
 
 -----
 
@@ -80,6 +81,7 @@ During retrieval, relevant document chunks are retrieved based on semantic simil
 
 #### `documents` Router
 - `GET /api/documents/` -> retrieves user documents
+- `GET /api/documents/load/{documentID}` -> retrieves a saved document from the user's AWS S3 storage
 
 -----
 
