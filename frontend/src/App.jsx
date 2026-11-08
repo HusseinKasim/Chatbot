@@ -13,6 +13,7 @@ import UploadButton from './components/UploadButton.jsx'
 import useUpload from './hooks/useUpload.jsx'
 import { SidebarInset, SidebarProvider } from './components/ui/sidebar'
 import useDocument from './hooks/useDocument'
+import DocumentViewerDialog from './components/DocumentViewerDialog'
 
 function App() {
   const [ prompt, setPrompt ] = useState('');
@@ -20,7 +21,7 @@ function App() {
   const [ toggleRegisterCard, setRegisterCard ] = useState(false);
 
   const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat } = useChat();
-  const { documents, updateDocumentSidebar } = useDocument();
+  const { document, documents, updateDocumentSidebar, loadS3Document, clearDocument } = useDocument();
   
   const { uploadDocument } = useUpload();
 
@@ -57,9 +58,12 @@ function App() {
       
       {/* Sidepanel */}
       <SidebarProvider>
-        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} documents={documents} setLoginCard={setLoginCard} setRegisterCard={setRegisterCard} />
+        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} documents={documents} setLoginCard={setLoginCard} setRegisterCard={setRegisterCard} document={document} loadS3Document={loadS3Document}/>
         <SidebarInset className='relative flex min-h-svh flex-col'>
-          
+
+          { /* Document Viewer */}
+          <DocumentViewerDialog document={document} onClose={clearDocument}/>
+
           {/* Chat Area */}
           <div className='min-h-0 flex-1 overflow-y-auto'>
             <div className='mx-auto flex w-[75%] flex-col gap-5 pb-32 pt-[4%]'>
