@@ -138,6 +138,10 @@ The automated tests are run on GitHub Actions as part of the CI pipeline.
 - `test_user_documents_fetch_empty` -> Test `/api/documents/` endpoint for user with no uploaded documents 
 - `test_user_documents_fetch_invalid_user` -> Test behavior of `/api/documents/` endpoint when a guest user attempts to retrieve chats
 
+
+### End-to-End Tests
+- `test_successful_user_workflow_no_doc` -> Test the entire workflow of a new user, including registration, login, LLM prompting in a new chat, LLM prompting in an existing chat, and logout
+
 -----
 
 ## Infrastructure & Deployment
