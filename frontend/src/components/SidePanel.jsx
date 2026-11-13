@@ -36,11 +36,16 @@ export default function SidePanel({user, firstName, lastName, chats, clearChat, 
               <text>Recent Chats</text>
             </div>
             {chats.map(chat => (
-              <UserChat key={chat.chatID} title={chat.title} onClick={() => {
-                setSelectedChat(chat.chatID);
-                updateUserChat(chat.chatID);
-              }
-            } onDelete={() => deleteUserChat(chat.chatID)} isSelected={selectedChat == chat.chatID}/>
+              <>
+                <UserChat key={chat.chatID} title={chat.title} onClick={() => {
+                  setSelectedChat(chat.chatID);
+                  updateUserChat(chat.chatID);
+                }
+              }>
+                  <DotsMenu onClick={() => deleteUserChat(chat.chatID)}/>
+                </UserChat>
+              
+            </>
             ))}
           </>
         ) : null }
