@@ -2,8 +2,9 @@ name: Tests
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
   
 jobs:
   test:
