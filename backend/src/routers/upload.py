@@ -5,6 +5,7 @@ import shutil
 from sqlalchemy.orm import Session
 from src.dependencies import get_db, get_current_user
 import boto3
+from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 import os
 import uuid
@@ -45,8 +46,8 @@ async def upload(pdfFile: UploadFile = File(...), db: Session = Depends(get_db),
             s3_key = f"users/{user['sub']}/documents/{pdfFile.filename}--{uuid.uuid4()}"
 
             s3_client.upload_fileobj(pdfFile.file, AWS_BUCKET, s3_key)
-        except Exception as e:
-            print(f'S3 upload failed: {e}')
+        except ClientError as e:
+            print(f'S3 document upload failed: {e}')
             raise
             
     # Call ingest

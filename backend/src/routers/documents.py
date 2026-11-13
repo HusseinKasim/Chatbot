@@ -1,8 +1,10 @@
+from pathlib import Path
 from fastapi import APIRouter, Depends, HTTPException
 from src.dependencies import get_current_user, get_current_user_optional, get_db
 from src import models
 from sqlalchemy.orm import Session
 import boto3
+from botocore.exceptions import ClientError
 import os
 
 router = APIRouter(prefix='/api/documents')
@@ -42,4 +44,38 @@ async def load_user_document_(documentID: int, user=Depends(get_current_user), d
         return {'response': 'AWS S3 document successfully retrieved!', 'documentID': documentID, 'documentTitle': str(document.document_name), 's3_url': presigned_url}
     else:
         raise HTTPException(status_code=403, detail= 'Invalid envrionment! Must be on production to use this feature.')
+
+
+@router.delete('/delete/{documentID}')
+def delete_user_document(documentID: int, user=Depends(get_current_user), db: Session = Depends(get_db)):
+    # Get document from DB
+    document = db.query(models.Documents).filter(models.Documents.id == documentID, models.Documents.user_id == user['sub']).first()
+    if not document:
+        raise HTTPException(status_code=404, detail='Document not found!')
+
+    # Delete document chunks
+    db.query(models.Chunks).filter(models.Chunks.document_id == document.id).delete()
+    
+    # Delete document
+    db.query(models.Documents).filter(models.Documents.id == document.id).delete()
+    db.commit()
         
+    # Delete document from uploads folder
+    UPLOAD_DIR = Path('uploads') / user['sub']
+    local_document = document.document_name + '.pdf'
+    file_path = UPLOAD_DIR / local_document
+    if file_path.exists():
+        os.remove(Path(file_path))
+
+    # Delete document from AWS
+    s3_client = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_ACCESS_KEY, region_name=AWS_REGION)
+    key = document.s3_key
+    if ENVIRONMENT == 'production':
+        try:
+            s3_client.delete_object(
+                Bucket = AWS_BUCKET,
+                Key = key
+            )
+        except ClientError as e:
+            print(f'S3 document deletion failed: {e}')
+            raise

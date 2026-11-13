@@ -66,6 +66,23 @@ export default function useDocument()
         }
     }
 
+    async function deleteDocument(documentID){
+        setDocumentID(documentID)
+        
+        // Fetch delete user document from DB, local storage, and S3 via backend via HTTP DELETE
+        try{
+            let response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/documents/delete/${documentID}`, {
+            method: 'DELETE',
+            credentials: 'include'
+            })
+
+            const data = await response.json();
+        }
+        catch(err){
+            console.log('Error when loading the document: ' + err);
+        }
+    }
+
     async function fetchWithAuth(url, options={}){
         let response = await fetch(url, options)
         if(response.status == 401) // Unauthorized (bad access token)
@@ -92,5 +109,5 @@ export default function useDocument()
         })
     }
 
-    return { document, documents, updateDocumentSidebar, loadS3Document, clearDocument};
+    return { document, documents, updateDocumentSidebar, loadS3Document, deleteDocument, clearDocument};
 }

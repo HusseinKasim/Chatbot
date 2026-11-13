@@ -6,8 +6,9 @@ import LogoutButton from './LogoutButton';
 import UserChat from './UserChat';
 import { useState } from 'react';
 import UserDocument from './UserDocument';
+import DotsMenu from './DotsMenu';
 
-export default function SidePanel({user, firstName, lastName, chats, clearChat, updateUserChat, deleteUserChat, documents, setLoginCard, setRegisterCard, document, loadS3Document}) {
+export default function SidePanel({user, firstName, lastName, chats, clearChat, updateUserChat, deleteUserChat, documents, setLoginCard, setRegisterCard, document, loadS3Document, deleteDocument}) {
   const { open } = useSidebar();
   const [ selectedChat, setSelectedChat ] = useState(null);
 
@@ -52,7 +53,11 @@ export default function SidePanel({user, firstName, lastName, chats, clearChat, 
               <text>My Documents</text>
             </div>
             {documents.map(document => (
-              <UserDocument key={document.documentID} title={document.title} onClick={() => loadS3Document(document.documentID)}/>
+              <>
+                <UserDocument key={document.documentID} title={document.title} onClick={() => loadS3Document(document.documentID)}>
+                  <DotsMenu onClick={() => deleteDocument(document.documentID)}/>
+                </UserDocument> 
+              </>
             ))}
           </>
         ) : null }

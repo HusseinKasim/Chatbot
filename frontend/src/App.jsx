@@ -21,7 +21,7 @@ function App() {
   const [ toggleRegisterCard, setRegisterCard ] = useState(false);
 
   const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat } = useChat();
-  const { document, documents, updateDocumentSidebar, loadS3Document, clearDocument } = useDocument();
+  const { document, documents, updateDocumentSidebar, loadS3Document, deleteDocument, clearDocument } = useDocument();
   
   const { uploadDocument } = useUpload();
 
@@ -58,7 +58,7 @@ function App() {
       
       {/* Sidepanel */}
       <SidebarProvider>
-        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} documents={documents} setLoginCard={setLoginCard} setRegisterCard={setRegisterCard} document={document} loadS3Document={loadS3Document}/>
+        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} documents={documents} setLoginCard={setLoginCard} setRegisterCard={setRegisterCard} document={document} loadS3Document={loadS3Document} deleteDocument={deleteDocument}/>
         <SidebarInset className='relative flex min-h-svh flex-col'>
 
           { /* Document Viewer */}
