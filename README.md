@@ -197,3 +197,5 @@ python -m uvicorn src.app:app --host 0.0.0.0 --port 8003
 - [Add] (https://www.flaticon.com/free-icon/add_3416075?term=add&page=1&position=5&origin=search&related_id=3416075)
 
 - [Upload] (https://www.flaticon.com/free-icon/up-loading_10009684?term=upload&page=1&position=7&origin=search&related_id=10009684)
+
+- [Ellipsis] (https://icons8.com/icon/102729/ellipsis)
