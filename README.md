@@ -33,6 +33,7 @@ https://chatbot-r1ui.onrender.com
 - JWT authentication using HTTP-only cookies
 - Access and refresh token support
 - Secure password hashing
+- Uploaded document viewing (PDF preview)
 
 -----
 
@@ -80,6 +81,7 @@ During retrieval, relevant document chunks are retrieved based on semantic simil
 
 #### `documents` Router
 - `GET /api/documents/` -> retrieves user documents
+- `GET /api/documents/load/{documentID}` -> retrieves a saved document from the user's AWS S3 storage
 
 -----
 
@@ -135,6 +137,10 @@ The automated tests are run on GitHub Actions as part of the CI pipeline.
 - `test_user_documents_fetch` -> Test `/api/documents/` endpoint
 - `test_user_documents_fetch_empty` -> Test `/api/documents/` endpoint for user with no uploaded documents 
 - `test_user_documents_fetch_invalid_user` -> Test behavior of `/api/documents/` endpoint when a guest user attempts to retrieve chats
+
+
+### End-to-End Tests
+- `test_successful_user_workflow_no_doc` -> Test the entire successful workflow of a new user, including registration, login, LLM prompting in a new chat, LLM prompting in an existing chat, and logout (excluding document upload)
 
 -----
 
