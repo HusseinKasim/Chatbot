@@ -82,6 +82,7 @@ During retrieval, relevant document chunks are retrieved based on semantic simil
 #### `documents` Router
 - `GET /api/documents/` -> retrieves user documents
 - `GET /api/documents/load/{documentID}` -> retrieves a saved document from the user's AWS S3 storage
+- `DELETE /api/documents/delete/{documentID}` -> deletes a saved document from the DB, user's AWS S3 storage, and local storage (if exists)
 
 -----
 
