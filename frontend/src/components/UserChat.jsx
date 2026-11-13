@@ -1,4 +1,3 @@
-import deleteIcon from '/assets/delete.png';
 import { Button } from '@/components/ui/button';
 
 export default function UserChat({title, onClick, children, isSelected}) {
