@@ -5,7 +5,7 @@ export default function useChat()
 {
     const [loading, isLoading] = useState(false)
     const [messages, setMessages] = useState([
-        {'role': 'assistant', 'content': 'Hello! Please enter a prompt.'} 
+        {'id': 0, 'role': 'assistant', 'content': 'Hello! Please enter a prompt.'} 
     ])
     const [chatID, setChatID] = useState(0);
     const [chats, setChats] = useState([
@@ -146,6 +146,7 @@ export default function useChat()
             {
                 setMessages(
                     data.messages.map(message => ({
+                        id: message.id,
                         role: message.role,
                         content: message.message_text
                     }))

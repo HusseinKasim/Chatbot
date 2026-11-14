@@ -1,10 +1,11 @@
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { memo } from "react"
 
-export default function ChatbotChatBubble({key, value, loading}) {
+function ChatbotChatBubble({value, loading}) {
   return(
     <>
-      <div className={`w-3/4 h-auto p-2 rounded-[20px] break-words min-w-0 ${loading ? 'text-gray-500 animate-[pulse_1.5s_ease-in-out_infinite]' : 'text-[var(--color-text)]'}`} key={key}>
+      <div className={`w-3/4 h-auto p-2 rounded-[20px] break-words min-w-0 ${loading ? 'text-gray-500 animate-[pulse_1.5s_ease-in-out_infinite]' : 'text-[var(--color-text)]'}`}>
           <div className='
         text-base
         [&>*+*]:mt-4
@@ -49,4 +50,4 @@ export default function ChatbotChatBubble({key, value, loading}) {
   )
 }
 
- 
+export default memo(ChatbotChatBubble);

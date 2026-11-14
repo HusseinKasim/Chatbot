@@ -86,13 +86,13 @@ function App() {
                 {
                 return(
                   <div className='flex flex-col items-end'>
-                    <UserChatBubble value={message.content} />
+                    <UserChatBubble key={message.id} value={message.content} />
                   </div>
                   );
                 }
                 return(
                   <div className='flex flex-col items-start pb-5'>
-                    <ChatbotChatBubble value = {message.content} />
+                    <ChatbotChatBubble key={message.id} value = {message.content} />
                   </div>
                   );
                 }

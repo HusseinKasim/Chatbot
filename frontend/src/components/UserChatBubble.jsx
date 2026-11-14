@@ -1,8 +1,11 @@
+import { memo } from "react"
 
-export default function UserChatBubble({key, value}) {
+function UserChatBubble({value}) {
   return(
     <>
-    <div className='text-base bg-[var(--color-user-message)] rounded-[20px] border-none py-[11px] px-[15px] break-words text-[var(--color-text)]' key={key}>{value}</div>
+    <div className='text-base bg-[var(--color-user-message)] rounded-[20px] border-none py-[11px] px-[15px] break-words text-[var(--color-text)]'>{value}</div>
     </>
   )
 }
+
+export default memo(UserChatBubble);
