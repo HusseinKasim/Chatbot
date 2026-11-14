@@ -10,7 +10,6 @@ import LoginCard from './components/LoginCard'
 import RegisterCard from './components/RegisterCard'
 import AuthContext from './context/AuthContext.jsx'
 import UploadButton from './components/UploadButton.jsx'
-import useUpload from './hooks/useUpload.jsx'
 import { SidebarInset, SidebarProvider } from './components/ui/sidebar'
 import useDocument from './hooks/useDocument'
 import DocumentViewerDialog from './components/DocumentViewerDialog'
@@ -21,9 +20,7 @@ function App() {
   const [ toggleRegisterCard, setRegisterCard ] = useState(false);
 
   const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat } = useChat();
-  const { document, documents, updateDocumentSidebar, loadS3Document, deleteDocument, clearDocument } = useDocument();
-  
-  const { uploadDocument } = useUpload();
+  const { document, documents, updateDocumentSidebar, uploadDocument, loadS3Document, deleteDocument, clearDocument } = useDocument();
 
   const { user, firstName, lastName, checkAuth } = useContext(AuthContext);
 

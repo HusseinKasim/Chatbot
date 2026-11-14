@@ -40,6 +40,23 @@ export default function useDocument()
         }
     }
 
+    async function uploadDocument(document){
+
+        const formData = new FormData();
+        formData.append('pdfFile', document)
+
+        const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/documents/upload/`, {
+            method: 'POST',
+            body: formData,
+            credentials: 'include'
+        })
+
+        const data = await response.json();
+
+        if(data['response'] == 'success')
+            console.log('File successfully uploaded');
+    }
+
     async function loadS3Document(documentID){
         setDocumentID(documentID)
 
@@ -109,5 +126,5 @@ export default function useDocument()
         })
     }
 
-    return { document, documents, updateDocumentSidebar, loadS3Document, deleteDocument, clearDocument};
+    return { document, documents, uploadDocument, updateDocumentSidebar, loadS3Document, deleteDocument, clearDocument};
 }
