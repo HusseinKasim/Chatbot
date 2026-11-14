@@ -15,7 +15,7 @@ export default function ChatbotChatBubble({key, value, loading}) {
 
         [&_p]:leading-7
 
-        [&_ul]:pl-6
+        [&_ul]:list-disc [&_ul]:pl-6
         [&_ol]:list-decimal [&_ol]:pl-6
         [&_li]:pl-1 [&_li]:mt-2
 
