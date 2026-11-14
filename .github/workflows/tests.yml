@@ -7,9 +7,36 @@ on:
       - '**.md'
   
 jobs:
-  test:
+  unit-tests:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Unit Tests
+        working-directory: backend
+        env:
+          JWT_ACCESS_TOKEN_SECRET_KEY: ${{ secrets.ACCESS_TOKEN_SECRET_KEY }}
+          JWT_REFRESH_TOKEN_SECRET_KEY: ${{ secrets.REFRESH_TOKEN_SECRET_KEY }}
+        run: |
+          export PYTHONPATH='.'
+          pytest src/tests/unit --no-header -v --color=yes
+
+
+  integration-tests:
+    needs: unit-tests
+    runs-on: ubuntu-latest
+    
     services:
       postgres:
         image: pgvector/pgvector:pg17
@@ -28,7 +55,9 @@ jobs:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-
+      JWT_ACCESS_TOKEN_SECRET_KEY: ${{ secrets.ACCESS_TOKEN_SECRET_KEY }}
+      JWT_REFRESH_TOKEN_SECRET_KEY: ${{ secrets.REFRESH_TOKEN_SECRET_KEY }}
+      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -48,20 +77,21 @@ jobs:
           PGPASSWORD: ${{ secrets.POSTGRES_TEST_PASSWORD }}
         run: |
           psql -h localhost -U ${{ secrets.POSTGRES_TEST_USER }} -d ${{ secrets.POSTGRES_TEST_DB }} -c 'CREATE EXTENSION IF NOT EXISTS vector;'
-
-      - name: Run pytest
+        
+      - name: Run Integration Tests
         working-directory: backend
-        env:
-          JWT_ACCESS_TOKEN_SECRET_KEY: ${{ secrets.ACCESS_TOKEN_SECRET_KEY }}
-          JWT_REFRESH_TOKEN_SECRET_KEY: ${{ secrets.REFRESH_TOKEN_SECRET_KEY }}
         run: |
           export PYTHONPATH='.'
-          pytest --no-header -v --color=yes
+          pytest src/tests/integration --no-header -v --color=yes
+
 
   deploy:
-      needs: test
+      needs: integration-tests
       runs-on: ubuntu-latest
       steps:
           - name: Trigger Render
             run: curl '${{ secrets.RENDER_DEPLOY_HOOK }}'
+
+
+
 
