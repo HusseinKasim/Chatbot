@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState, useRef } from 'react'
 import './App.css'
 import useChat from './hooks/useChat'
 import UserTextArea from './components/UserTextArea'
@@ -25,6 +25,8 @@ function App() {
 
   const { user, firstName, lastName, checkAuth } = useContext(AuthContext);
 
+  const chatEndRef = useRef(null);
+
   const assistantLoadingMessages = ['Thinking', 'Give me a second', 'Let me think about that one', 'Trying to understand', 'Hmmm', 'Processing request'];
   
   // User login persistence after refresh
@@ -34,14 +36,18 @@ function App() {
     updateDocumentSidebar();
   }, []);
 
-
   // Loading randomizer
   useEffect(() => {
     if(loading){
       const randomLoadingMessageIndex = Math.floor(Math.random() * assistantLoadingMessages.length);
-      setLoadingMessageIndex(randomLoadingMessageIndex)
-    }
+      setLoadingMessageIndex(randomLoadingMessageIndex)}
   }, [loading])
+
+  // Scroll chat to end
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, loading]);
+
   function handlePromptChange(e) {
     setPrompt(e.target.value);
   }
@@ -67,7 +73,7 @@ function App() {
       {/* Sidepanel */}
       <SidebarProvider>
         <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} documents={documents} setLoginCard={setLoginCard} setRegisterCard={setRegisterCard} document={document} loadS3Document={loadS3Document} deleteDocument={deleteDocument}/>
-        <SidebarInset className='relative flex min-h-svh flex-col'>
+        <SidebarInset className='relative flex h-svh min-h-0 flex-col'>
 
           { /* Document Viewer */}
           <DocumentViewerDialog document={document} onClose={clearDocument}/>
@@ -96,6 +102,7 @@ function App() {
               { loading && 
                 <ChatbotChatBubble value={assistantLoadingMessages[loadingMessageIndex]} loading={loading}/>    
               }
+              <div ref={chatEndRef} />
             </div>
           </div>
 
