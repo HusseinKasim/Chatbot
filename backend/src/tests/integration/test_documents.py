@@ -76,7 +76,7 @@ def test_upload_dev_environment(mock_ingest_doc, db, db_user_auth, sample_pdf_fi
         app.dependency_overrides[get_current_user] = lambda: db_user_auth
         
         mock_ingest_doc.return_value = {'document_id': 1, 'chunks': 5}
-        response = client.post('/api/upload/', files={'pdfFile': sample_pdf_file})
+        response = client.post('/api/documents/upload/', files={'pdfFile': sample_pdf_file})
 
         # Assert successful response
         assert response.status_code == 200
@@ -114,7 +114,7 @@ def test_upload_unsupported_file_type(mock_ingest_doc, db, db_user_auth, sample_
         app.dependency_overrides[get_current_user] = lambda: db_user_auth
             
         mock_ingest_doc.return_value = {'document_id': 1, 'chunks': 5}
-        response = client.post('/api/upload/', files={'pdfFile': sample_exe_file})
+        response = client.post('/api/documents/upload/', files={'pdfFile': sample_exe_file})
     
         # Assert unsupported media type response
         assert response.status_code == 415
