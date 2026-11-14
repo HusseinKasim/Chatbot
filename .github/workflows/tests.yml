@@ -114,8 +114,60 @@ jobs:
           pytest src/tests/integration --no-header -v --color=yes
 
 
+  e2e-tests:
+    needs: integration-tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_TEST_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_TEST_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_TEST_DB }}
+        ports:
+          - 5432:5432
+
+    env:
+      DB_URL: ${{ secrets.TEST_DB_URL }}
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      JWT_ACCESS_TOKEN_SECRET_KEY: ${{ secrets.ACCESS_TOKEN_SECRET_KEY }}
+      JWT_REFRESH_TOKEN_SECRET_KEY: ${{ secrets.REFRESH_TOKEN_SECRET_KEY }}
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          pip install -r requirements.txt
+        
+      - name: Enable pgvector
+        env:
+          PGPASSWORD: ${{ secrets.POSTGRES_TEST_PASSWORD }}
+        run: |
+          psql -h localhost -U ${{ secrets.POSTGRES_TEST_USER }} -d ${{ secrets.POSTGRES_TEST_DB }} -c 'CREATE EXTENSION IF NOT EXISTS vector;'
+        
+      - name: Run End-to-End Tests
+        working-directory: backend
+        run: |
+          export PYTHONPATH='.'
+          pytest src/tests/e2e --no-header -v --color=yes
+
+
   deploy:
-      needs: integration-tests
+      needs: e2e-tests
       runs-on: ubuntu-latest
       steps:
           - name: Trigger Render
