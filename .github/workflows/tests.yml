@@ -6,6 +6,7 @@ on:
     paths-ignore:
       - '**.md'
   
+      
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
@@ -19,9 +20,17 @@ jobs:
           POSTGRES_DB: ${{ secrets.POSTGRES_TEST_DB }}
         ports:
           - 5432:5432
-          
+
     env:
       DB_URL: ${{ secrets.TEST_DB_URL }}
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      JWT_ACCESS_TOKEN_SECRET_KEY: ${{ secrets.ACCESS_TOKEN_SECRET_KEY }}
+      JWT_REFRESH_TOKEN_SECRET_KEY: ${{ secrets.REFRESH_TOKEN_SECRET_KEY }}
 
     steps:
       - name: Checkout repository
