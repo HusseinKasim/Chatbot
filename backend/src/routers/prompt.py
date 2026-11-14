@@ -26,7 +26,7 @@ class ChatMessages(BaseModel):
 
 # Guest prompt endpoint
 @router.post('/guest')
-async def captureUserInput(chatMessages: ChatMessages):
+async def capture_guest_user_input(chatMessages: ChatMessages):
     # Raise exception if empty prompt
     for msg in chatMessages.messages:
         if msg.role == 'user' and msg.content == '':
@@ -53,7 +53,7 @@ async def captureUserInput(chatMessages: ChatMessages):
 
 # User prompt endpoint
 @router.post('/user')   
-async def captureUserInput(promptData: LoggedInUserPromptData, user = Depends(get_current_user), db: Session = Depends(get_db)):
+async def capture_user_input(promptData: LoggedInUserPromptData, user = Depends(get_current_user), db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=400, detail='Invalid user')
 

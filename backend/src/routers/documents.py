@@ -1,19 +1,26 @@
 from pathlib import Path
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from src.dependencies import get_current_user, get_current_user_optional, get_db
 from src import models
+from src.rag.ingest import ingest_doc
 from sqlalchemy.orm import Session
 import boto3
 from botocore.exceptions import ClientError
+from dotenv import load_dotenv
 import os
+import shutil
+import uuid
 
 router = APIRouter(prefix='/api/documents')
+
+load_dotenv()
 
 AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_REGION = os.getenv('AWS_REGION')
 AWS_BUCKET = os.getenv('AWS_BUCKET')
 ENVIRONMENT = os.getenv('ENVIRONMENT')
+
 
 @router.get('/')
 async def get_user_documents(user=Depends(get_current_user_optional), db: Session = Depends(get_db)):
@@ -22,6 +29,42 @@ async def get_user_documents(user=Depends(get_current_user_optional), db: Sessio
     
     documents = db.query(models.Documents).filter(models.Documents.user_id == int(user['sub'])).all()
     return {'documents': documents}
+
+
+@router.post('/upload')
+async def upload(pdfFile: UploadFile = File(...), db: Session = Depends(get_db), user = Depends(get_current_user)):
+    # Check if file type is supported (pdf)
+    if pdfFile.content_type != 'application/pdf': # add other types as required
+        raise HTTPException(status_code=415, detail='File type is not supported. Uploaded file must be a PDF.')
+
+    # Create uploads folder (if not already created)
+    UPLOAD_DIR = Path('uploads') / user['sub']
+    UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Save PDF
+    file_path = UPLOAD_DIR / pdfFile.filename
+    with open(file_path, 'wb') as result_file:
+        shutil.copyfileobj(pdfFile.file, result_file)
+
+    s3_key = None
+
+    if ENVIRONMENT == 'production':
+        # Push to AWS S3
+        try: 
+            pdfFile.file.seek(0)
+
+            s3_client = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_ACCESS_KEY, region_name=AWS_REGION)
+            s3_key = f"users/{user['sub']}/documents/{pdfFile.filename}--{uuid.uuid4()}"
+
+            s3_client.upload_fileobj(pdfFile.file, AWS_BUCKET, s3_key)
+        except ClientError as e:
+            print(f'S3 document upload failed: {e}')
+            raise
+            
+    # Call ingest
+    results = ingest_doc(file_path, db, user, s3_key=s3_key)
+
+    return {'response': 'success', 'document_added': results['document_id'], 'chunks_added': results['chunks']}
 
 
 @router.get('/load/{documentID}')
