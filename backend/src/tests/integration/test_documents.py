@@ -67,7 +67,7 @@ def test_user_documents_fetch_invalid_user(db):
 
 
 # Test case: Test_Upload_Dev_Environment
-@patch('src.routers.upload.ingest_doc')
+@patch('src.routers.documents.ingest_doc')
 def test_upload_dev_environment(mock_ingest_doc, db, db_user_auth, sample_pdf_file, monkeypatch):
     try:
         monkeypatch.setenv('ENVIRONMENT', 'development')
@@ -105,7 +105,7 @@ def test_ingest_doc_dev_environment(db, db_user_auth, sample_pdf_file_path):
 
 
 # Test case: Test_Upload_Unsupported_File_Type
-@patch('src.routers.upload.ingest_doc')
+@patch('src.routers.documents.ingest_doc')
 def test_upload_unsupported_file_type(mock_ingest_doc, db, db_user_auth, sample_exe_file, monkeypatch):
     try:
         monkeypatch.setenv('ENVIRONMENT', 'development')
