@@ -30,4 +30,5 @@ __pycache__/
 *.pem
 *.key
 *.crt
+uploads/
 Tests to Add.txt
