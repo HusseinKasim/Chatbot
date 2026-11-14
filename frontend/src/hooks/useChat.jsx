@@ -3,6 +3,7 @@ import AuthContext from '../context/AuthContext';
 
 export default function useChat()
 {
+    const [loading, isLoading] = useState(false)
     const [messages, setMessages] = useState([
         {'role': 'assistant', 'content': 'Hello! Please enter a prompt.'} 
     ])
@@ -43,6 +44,9 @@ export default function useChat()
     }
 
     async function handleGuestInput(prompt){
+        // Set loading state
+        isLoading(true);
+
         // Add prompt to messages list
         const updatedMessages = [...messages, {'role': 'user', 'content': prompt}]
         setMessages(updatedMessages);
@@ -65,10 +69,17 @@ export default function useChat()
         catch(err){
             console.log('Prompt error: ' + err);
         }
+        finally{
+            isLoading(false);
+        }
     }
 
     async function handleLoggedInUserInput(prompt)
     {
+        // Set loading state
+        isLoading(true);
+
+        // Add prompt to messages list
         setMessages(prev => [...prev, {'role': 'user', 'content': prompt}]);
         
         // Send prompt to backend via HTTP POST
@@ -90,6 +101,9 @@ export default function useChat()
         }
         catch(err){
             console.log('Prompt error: ' + err);
+        }
+        finally{
+            isLoading(false);
         }
     }
 
@@ -178,5 +192,5 @@ export default function useChat()
         return response;
     }
 
-    return { messages, handleUserInput, clearChat, fetchWithAuth, chats, updateChatSidebar, updateUserChat, deleteUserChat };
+    return { messages, handleUserInput, clearChat, fetchWithAuth, chats, updateChatSidebar, updateUserChat, deleteUserChat, loading };
 }

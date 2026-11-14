@@ -18,12 +18,15 @@ function App() {
   const [ prompt, setPrompt ] = useState('');
   const [ toggleLoginCard, setLoginCard ] = useState(false);
   const [ toggleRegisterCard, setRegisterCard ] = useState(false);
+  const [ loadingMessageIndex, setLoadingMessageIndex ] = useState(0)
 
-  const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat } = useChat();
+  const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat, loading } = useChat();
   const { document, documents, updateDocumentSidebar, uploadDocument, loadS3Document, deleteDocument, clearDocument } = useDocument();
 
   const { user, firstName, lastName, checkAuth } = useContext(AuthContext);
 
+  const assistantLoadingMessages = ['Thinking', 'Give me a second', 'Let me think about that one', 'Trying to understand', 'Hmmm', 'Processing request'];
+  
   // User login persistence after refresh
   useEffect(() => {
     checkAuth();
@@ -31,6 +34,14 @@ function App() {
     updateDocumentSidebar();
   }, []);
 
+
+  // Loading randomizer
+  useEffect(() => {
+    if(loading){
+      const randomLoadingMessageIndex = Math.floor(Math.random() * assistantLoadingMessages.length);
+      setLoadingMessageIndex(randomLoadingMessageIndex)
+    }
+  }, [loading])
   function handlePromptChange(e) {
     setPrompt(e.target.value);
   }
@@ -75,11 +86,16 @@ function App() {
                 }
                 return(
                   <div className='flex flex-col items-start pb-5'>
-                    <ChatbotChatBubble value={message.content} />
+                    <ChatbotChatBubble value = {message.content} />
                   </div>
                   );
                 }
               )}
+
+              {/* Loading State */}
+              { loading && 
+                <ChatbotChatBubble value={assistantLoadingMessages[loadingMessageIndex]} loading={loading}/>    
+              }
             </div>
           </div>
 

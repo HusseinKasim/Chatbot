@@ -34,15 +34,30 @@ async def capture_guest_user_input(chatMessages: ChatMessages):
         
     try:
         chat_completion = client.chat.completions.create(
-            messages=
-            [
+        messages=[
+            {
+                'role': 'system',
+                'content': """
+                    You are a helpful AI assistant.
+
+                    Formatting requirements:
+                    - Always use valid GitHub-Flavored Markdown.
+                    - Never escape HTML tags with backslashes.
+                    - Prefer Markdown syntax over HTML.
+                    - Format tables, lists, headings and code blocks correctly.
+                    - Avoid HTML tags inside Markdown tables.
+                    - Never output literal escaped HTML such as \\<br>.
+                """
+            },
+            *[
                 {
-                    'role': msg.role,  
+                    'role': msg.role,
                     'content': msg.content,
-                }   
+                }
                 for msg in chatMessages.messages
-            ], 
-            model=GROQ_MODEL,
+            ]
+        ], 
+        model=GROQ_MODEL,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail='Groq LLM request failed')
@@ -76,14 +91,31 @@ async def capture_user_input(promptData: LoggedInUserPromptData, user = Depends(
     db.add(new_message)
     db.commit()
     db.refresh(new_message)
-    
+
     llm_messages = [
-                {
-                    'role': msg.role,  
-                    'content': msg.message_text,
-                }   
-                for msg in messages_query
-            ]
+        {
+            'role': 'system',
+            'content': """
+                You are a helpful AI assistant.
+
+                Formatting requirements:
+                - Always use valid GitHub-Flavored Markdown.
+                - Never escape HTML tags with backslashes.
+                - Prefer Markdown syntax over HTML.
+                - Format tables, lists, headings and code blocks correctly.
+                - Avoid HTML tags inside Markdown tables.
+                - Never output literal escaped HTML such as \\<br>.
+            """
+        }
+    ]
+
+    llm_messages.extend([
+        {
+            'role': msg.role,  
+            'content': msg.message_text,
+        }   
+        for msg in messages_query
+    ])
 
     try:
         # Add RAG context to prompt and llm_messages
