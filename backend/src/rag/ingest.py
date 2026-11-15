@@ -11,10 +11,9 @@ def ingest_doc(uploadedFilePath: Path, db, user, s3_key):
     loader = PyPDFLoader(str(uploadedFilePath))
     documents = loader.load()
 
-    # Extract document title and file type from source
-    doc_source_split = Path(documents[0].metadata['source']).name
-    doc_title = Path(doc_source_split).stem
-    doc_file_type = Path(doc_source_split).suffix.replace('.','')
+    # Extract document title and file type
+    doc_title = uploadedFilePath.stem
+    doc_file_type = uploadedFilePath.suffix.lstrip('.')
 
     # Store documents to db
     new_doc = models.Documents(document_name=doc_title, user_id=int(user['sub']), s3_key=str(s3_key), file_type=doc_file_type)
