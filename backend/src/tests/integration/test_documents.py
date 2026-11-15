@@ -96,6 +96,7 @@ def test_ingest_doc_dev_environment(db, db_user_auth, sample_pdf_file_path):
         new_db_document = db.query(models.Documents).filter(models.Documents.user_id == db_user_auth['sub']).order_by(models.Documents.id.desc()).first()
         assert new_db_document is not None
         assert results['document_id'] == new_db_document.id
+        assert results['document_name'] is not None
 
         # Assert document chunks added to db
         new_db_document_chunks = db.query(models.Chunks).join(models.Documents).filter(models.Documents.user_id == db_user_auth['sub'], models.Chunks.document_id == new_db_document.id).all()
@@ -113,7 +114,7 @@ def test_upload_unsupported_file_type(mock_ingest_doc, db, db_user_auth, sample_
         app.dependency_overrides[get_db] = lambda: db
         app.dependency_overrides[get_current_user] = lambda: db_user_auth
             
-        mock_ingest_doc.return_value = {'document_id': 1, 'chunks': 5}
+        mock_ingest_doc.return_value = {'document_id': 1, 'document_name': 'Test Document', 'chunks': 5}
         response = client.post('/api/documents/upload/', files={'pdfFile': sample_exe_file})
     
         # Assert unsupported media type response
