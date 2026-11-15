@@ -96,6 +96,18 @@ export default function useChat()
         
         // Update ChatID if it was null
         setChatID(data.chatID);
+
+        // Update sidebar chats immediately on new chat creation
+        if(chatID == 0)
+        {   
+            setChats(prev => [
+            {
+                chatID: data.chatID,
+                title: prompt.slice(0, 40)
+            },
+            ...prev
+            ]);
+        }       
         
         setMessages(prev => [...prev, {'role': 'assistant', 'content': data.response}]);
         }
@@ -168,7 +180,10 @@ export default function useChat()
 
             // Add error handling for when no response 
             const data = await response.json();
-        }
+
+            // Update sidebar chats immediately on chat deletion 
+            setChats(prev => prev.filter(chat => chat.chatID !== chatID));
+        }       
         catch(err){
             console.log('Error when deleting user chat: ' + err);
         }
