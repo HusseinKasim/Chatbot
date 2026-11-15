@@ -5,9 +5,7 @@ export default function useDocument()
 {
     const [documentID, setDocumentID] = useState(0);
     const [document, setDocument] = useState({'documentID': 0, 's3_url': ''});
-    const [documents, setDocuments] = useState([
-        {'documentID': 0, 'title': 'New Document'}
-    ])
+    const [documents, setDocuments] = useState([])
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
@@ -53,8 +51,20 @@ export default function useDocument()
 
         const data = await response.json();
 
+        // Update DocumentID if it was null
+        setDocumentID(data.document_id);
+
+        // Update sidebar documents immediately on new document upload
+        setDocuments(prev => [
+        {
+            documentID: data.document_id,
+            title: data.document_name
+        },
+        ...prev
+        ]);
+
         if(data['response'] == 'success')
-            console.log('File successfully uploaded');
+            console.log('Document successfully uploaded!');
     }
 
     async function loadS3Document(documentID){
@@ -77,6 +87,9 @@ export default function useDocument()
                     }
                 );
             }
+
+            if(data['response'] == 'success')
+            console.log('Document successfully retrieved!');
         }
         catch(err){
             console.log('Error when loading the document: ' + err);
@@ -94,6 +107,12 @@ export default function useDocument()
             })
 
             const data = await response.json();
+
+            // Update sidebar documents immediately on document deletion 
+            setDocuments(prev => prev.filter(document => document.documentID !== documentID));
+
+            if(data['response'] == 'success')
+            console.log('Document successfully deleted!');
         }
         catch(err){
             console.log('Error when loading the document: ' + err);

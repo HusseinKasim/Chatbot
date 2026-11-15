@@ -33,7 +33,6 @@ function App() {
   useEffect(() => {
     checkAuth();
     updateChatSidebar();
-    updateDocumentSidebar();
   }, []);
 
   // Loading randomizer

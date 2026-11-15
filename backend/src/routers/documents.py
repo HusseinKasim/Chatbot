@@ -64,7 +64,7 @@ async def upload(pdfFile: UploadFile = File(...), db: Session = Depends(get_db),
     # Call ingest
     results = ingest_doc(file_path, db, user, s3_key=s3_key)
 
-    return {'response': 'success', 'document_added': results['document_id'], 'chunks_added': results['chunks']}
+    return {'response': 'Document successfully uploaded!', 'document_id': results['document_id'], 'document_name': results['document_name'], 'chunks_added': results['chunks']}
 
 
 @router.get('/load/{documentID}')
@@ -122,3 +122,4 @@ def delete_user_document(documentID: int, user=Depends(get_current_user), db: Se
         except ClientError as e:
             print(f'S3 document deletion failed: {e}')
             raise
+    return {'response': 'Document successfully deleted!'}

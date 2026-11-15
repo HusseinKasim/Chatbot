@@ -39,4 +39,4 @@ def ingest_doc(uploadedFilePath: Path, db, user, s3_key):
         db.commit()
         db.refresh(new_chunk)
     
-    return {'document_id': new_doc.id, 'chunks': len(document_chunks)} 
+    return {'document_id': new_doc.id, 'document_name': new_doc.document_name, 'chunks': len(document_chunks)} 

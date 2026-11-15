@@ -34,4 +34,4 @@ async def delete_chat(chatID: int, user=Depends(get_current_user), db: Session =
     db.delete(chat)
     db.commit()
 
-    return {'response': 'success'}
+    return {'response': 'Chat successfully deleted!'}

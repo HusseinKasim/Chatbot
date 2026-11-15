@@ -183,6 +183,9 @@ export default function useChat()
 
             // Update sidebar chats immediately on chat deletion 
             setChats(prev => prev.filter(chat => chat.chatID !== chatID));
+
+            if(data['response'] == 'success')
+            console.log('Chat successfully deleted!');
         }       
         catch(err){
             console.log('Error when deleting user chat: ' + err);
