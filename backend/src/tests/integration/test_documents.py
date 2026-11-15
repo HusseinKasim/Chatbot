@@ -75,7 +75,7 @@ def test_upload_dev_environment(mock_ingest_doc, db, db_user_auth, sample_pdf_fi
         app.dependency_overrides[get_db] = lambda: db
         app.dependency_overrides[get_current_user] = lambda: db_user_auth
         
-        mock_ingest_doc.return_value = {'document_id': 1, 'chunks': 5}
+        mock_ingest_doc.return_value = {'document_id': 1, 'document_name': 'Test Document', 'chunks': 5}
         response = client.post('/api/documents/upload/', files={'pdfFile': sample_pdf_file})
 
         # Assert successful response
