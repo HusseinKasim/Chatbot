@@ -1,4 +1,5 @@
 
+import os
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,7 +11,11 @@ app = FastAPI()
 
 load_dotenv()
 
-models.Base.metadata.create_all(bind=engine)
+try:
+    models.Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"Connection to the DB port failed. Is the DB up?")
+    exit(1)
 
 # CORS
 app.add_middleware(
