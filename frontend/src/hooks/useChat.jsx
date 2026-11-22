@@ -170,6 +170,31 @@ export default function useChat()
         }
     }
 
+    async function renameUserChat(chatID, title){
+        const previousTitle = chats.find(chat => chat.chatID == chatID)?.title;
+        setChats(prev => prev.map(chat => (
+            chat.chatID === chatID ? {...chat, title} : chat
+        )));
+
+        try{
+            let response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/chats/rename/${chatID}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({chatTitle: title }),
+            credentials: 'include'
+            })
+
+            // Add error handling for when no response 
+            const data = await response.json();
+
+            if(data['response'] != null)
+                console.log('Chat successfully renamed!');
+        }       
+        catch(err){
+            console.log('Error when deleting user chat: ' + err);
+        }
+    }
+
     async function deleteUserChat(chatID){
         // Delete user chat from DB via HTTP DELETE
         try{
@@ -211,5 +236,5 @@ export default function useChat()
         return response;
     }
 
-    return { messages, handleUserInput, clearChat, fetchWithAuth, chats, updateChatSidebar, updateUserChat, deleteUserChat, loading };
+    return { messages, handleUserInput, clearChat, fetchWithAuth, chats, updateChatSidebar, updateUserChat, renameUserChat, deleteUserChat, loading };
 }

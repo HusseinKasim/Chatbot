@@ -20,8 +20,8 @@ function App() {
   const [ toggleRegisterCard, setRegisterCard ] = useState(false);
   const [ loadingMessageIndex, setLoadingMessageIndex ] = useState(0)
 
-  const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, deleteUserChat, loading } = useChat();
-  const { document, documents, updateDocumentSidebar, uploadDocument, loadS3Document, deleteDocument, clearDocument } = useDocument();
+  const { messages, handleUserInput, clearChat, chats, updateChatSidebar, updateUserChat, renameUserChat, deleteUserChat, loading } = useChat();
+  const { document, documents, uploadDocument, loadS3Document, deleteDocument, clearDocument } = useDocument();
 
   const { user, firstName, lastName, checkAuth } = useContext(AuthContext);
 
@@ -71,7 +71,7 @@ function App() {
       
       {/* Sidepanel */}
       <SidebarProvider>
-        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} deleteUserChat={deleteUserChat} documents={documents} setLoginCard={setLoginCard} setRegisterCard={setRegisterCard} document={document} loadS3Document={loadS3Document} deleteDocument={deleteDocument}/>
+        <SidePanel user={user} firstName={firstName} lastName={lastName} chats={chats} clearChat={clearChat} updateUserChat={updateUserChat} renameUserChat={renameUserChat} deleteUserChat={deleteUserChat} documents={documents} setLoginCard={setLoginCard} setRegisterCard={setRegisterCard} document={document} loadS3Document={loadS3Document} deleteDocument={deleteDocument}/>
         <SidebarInset className='relative flex h-svh min-h-0 flex-col'>
 
           { /* Document Viewer */}

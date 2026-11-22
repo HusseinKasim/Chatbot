@@ -6,11 +6,15 @@ import LogoutButton from './LogoutButton';
 import UserChat from './UserChat';
 import { useState } from 'react';
 import UserDocument from './UserDocument';
-import DotsMenu from './DotsMenu';
+import ChatsDotsMenu from './ChatsDotsMenu';
+import DocumentsDotsMenu from './DocumentsDotsMenu';
 
-export default function SidePanel({user, firstName, lastName, chats, clearChat, updateUserChat, deleteUserChat, documents, setLoginCard, setRegisterCard, document, loadS3Document, deleteDocument}) {
+export default function SidePanel({user, firstName, lastName, chats, clearChat, updateUserChat, renameUserChat, deleteUserChat, documents, setLoginCard, setRegisterCard, document, loadS3Document, deleteDocument}) {
   const { open } = useSidebar();
   const [ selectedChat, setSelectedChat ] = useState(null);
+
+  const [ renamingChatID, setRenamingChatID ] = useState(null);
+  const [ newChatTitle, setNewChatTitle ] = useState('');
 
   return(
     <Sidebar collapsible='icon'>
@@ -37,14 +41,44 @@ export default function SidePanel({user, firstName, lastName, chats, clearChat, 
             </div>
             {chats.map(chat => (
               <>
-                <UserChat key={chat.chatID} title={chat.title} onClick={() => {
-                  setSelectedChat(chat.chatID);
-                  updateUserChat(chat.chatID);
-                }
-              }>
-                  <DotsMenu onClick={() => deleteUserChat(chat.chatID)}/>
-                </UserChat>
-              
+              {renamingChatID == chat.chatID ? (
+                  <div className="px-[15px] py-[8px]">
+                  <input
+                    autoFocus
+                    value={newChatTitle}
+                    onChange={(event) => setNewChatTitle(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        const title = newChatTitle.trim();
+
+                        if (title) {
+                          renameUserChat(chat.chatID, title);
+                          setRenamingChatID(null);
+                        }
+                      }
+
+                      if (event.key === 'Escape') {
+                        setRenamingChatID(null);
+                      }
+                    }}
+                    onBlur={() => setRenamingChatID(null)}
+                    className="w-full rounded-md border px-3 py-2 text-[var(--color-text)]"
+                  />
+                </div>
+                ) : (
+                  <UserChat key={chat.chatID} title={chat.title} onClick={() => {
+                    setSelectedChat(chat.chatID);
+                    updateUserChat(chat.chatID);
+                  }}>
+                    <ChatsDotsMenu
+                      onClickRename={() => {
+                        setRenamingChatID(chat.chatID);
+                        setNewChatTitle(chat.title);
+                      }}
+                      onClickDelete={() => deleteUserChat(chat.chatID)}
+                    />
+                  </UserChat>
+              )}
             </>
             ))}
           </>
@@ -60,7 +94,7 @@ export default function SidePanel({user, firstName, lastName, chats, clearChat, 
             {documents.map(document => (
               <>
                 <UserDocument key={document.documentID} title={document.title} onClick={() => loadS3Document(document.documentID)}>
-                  <DotsMenu onClick={() => deleteDocument(document.documentID)}/>
+                  <DocumentsDotsMenu onClickDelete={() => deleteDocument(document.documentID)} />
                 </UserDocument> 
               </>
             ))}
