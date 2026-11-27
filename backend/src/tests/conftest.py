@@ -21,7 +21,7 @@ def sample_pdf_file():
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font('Helvetica', size=11)
-    pdf.cell(text='This is a sample pdf file for testing purposes.')
+    pdf.cell(text='This is a sample pdf file for testing purposes. It contains some sample text to simulate a real PDF document.')
 
     return ('sample.pdf', io.BytesIO(pdf.output()), 'application/pdf')
 

@@ -58,3 +58,51 @@ def test_successful_user_workflow_no_doc(sample_user, db):
     # Log out
     response = client.post('/api/auth/logout')
     assert response.status_code == 200
+
+
+# Test case: Test_Successful_User_Workflow_With_Doc
+def test_successful_user_workflow_with_doc(sample_user, db, sample_pdf_file):
+    first_prompt = 'What is the content of the uploaded document?'
+    chatID = 0 # New chat
+
+    # Register new user successfully
+    response = client.post('/api/auth/register', json={'firstName': sample_user['first_name'], 'lastName': sample_user['last_name'], 'email': sample_user['email'], 'password': sample_user['password']})
+    assert response.status_code == 200
+
+    data = response.json()
+    assert data['registered_user_email'] == sample_user['email']
+
+    # Log into user successfully
+    response = client.post('/api/auth/login', json={'email': sample_user['email'], 'password': sample_user['password']})
+    assert response.status_code == 200
+
+    data = response.json()
+    assert data['response'] == 'authenticated'
+
+    # Upload a document
+    response = client.post('/api/documents/upload', files={'pdfFile': sample_pdf_file})
+    assert response.status_code == 200
+
+    # Submit prompt successfully
+    response = client.post('/api/prompt/user', json={'prompt': first_prompt, 'chatID': chatID})
+    assert response.status_code == 200
+
+    data = response.json()
+    llm_response = data['response']
+    new_chat_id = data['chatID']
+
+    assert new_chat_id != 0
+    assert llm_response is not None
+
+    # Check if one user message and one bot response exist in the db for this new chat ID
+    messages = db.query(models.Messages).filter(models.Messages.chat_id == new_chat_id).all()
+
+    user_messages = [m for m in messages if m.role == 'user']
+    assert len(user_messages) == 1 # Verify the user query exists
+
+    assistant_messages = [m for m in messages if m.role == 'assistant']
+    assert len(assistant_messages) == 1 # Verify the bot response exists    
+
+    # Log out
+    response = client.post('/api/auth/logout')
+    assert response.status_code == 200
