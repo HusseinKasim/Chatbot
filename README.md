@@ -142,6 +142,7 @@ The automated tests are run on GitHub Actions as part of the CI pipeline.
 
 ### End-to-End Tests
 - `test_successful_user_workflow_no_doc` -> Test the entire successful workflow of a new user, including registration, login, LLM prompting in a new chat, LLM prompting in an existing chat, and logout (excluding document upload)
+- `test_successful_user_workflow_with_doc` -> Test the entire successful workflow of a new user, including registration, login, document upload, LLM prompting in a new chat, and logout
 
 -----
 
